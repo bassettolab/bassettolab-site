@@ -9,15 +9,16 @@
 <div class="bsl-home" data-bsl-blog data-view="list">
   <div class="bsl-home-top">
     <p class="bsl-archive-lead">Procurando posts mais antigos? <a href="{{ "/archives/" | relURL }}">Veja o arquivo completo →</a></p>
-
-    <div class="bsl-view-toggle" role="group" aria-label="Visualização dos posts">
-      <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ Lista</button>
-      <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ Grade</button>
-    </div>
   </div>
 
   <div class="bsl-home-layout">
     <main class="bsl-main-column">
+      <div class="bsl-main-toolbar">
+        <div class="bsl-view-toggle" role="group" aria-label="Visualização dos posts">
+          <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ Lista</button>
+          <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ Grade</button>
+        </div>
+      </div>
       {{- if gt (len $featured) 0 }}
       <section class="bsl-featured">
         <div class="bsl-featured-header">
