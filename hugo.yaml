@@ -5,6 +5,20 @@ languageCode: "pt-BR"
 defaultContentLanguage: "pt-br"
 enableEmoji: true
 
+languages:
+  pt-br:
+    languageName: "Português"
+    languageCode: "pt-BR"
+    weight: 1
+  es:
+    languageName: "Español"
+    languageCode: "es"
+    weight: 2
+  en:
+    languageName: "English"
+    languageCode: "en"
+    weight: 3
+
 outputs:
   home: [HTML, RSS]
 
@@ -47,6 +61,10 @@ menu:
       url: "/index.xml"
       params:
         icon: rss
+    - name: Idioma
+      weight: 6
+      params:
+        type: language-switch
 
 params:
   navbar:
