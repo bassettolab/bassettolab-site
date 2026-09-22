@@ -1,5 +1,5 @@
 ---
-title: BassettoLab
+title: ""
 toc: false
 ---
 
