@@ -1,6 +1,12 @@
 # Hugo configuration file
 baseURL: "https://bassettolab.com/"
 title: "BassettoLab"
+languageCode: "pt-BR"
+defaultContentLanguage: "pt-br"
+enableEmoji: true
+
+outputs:
+  home: [HTML, RSS]
 
 # import hextra as module
 module:
@@ -8,42 +14,59 @@ module:
     - path: github.com/imfing/hextra
 
 markup:
-  # allow raw html
   goldmark:
     renderer:
       unsafe: true
 
-  # enable hextra syntax highlight
   highlight:
     noClasses: false
 
 menu:
   main:
-    - name: Oracle
-      pageRef: /oracle
-      weight: 1
-    - name: About
-      pageRef: /about
-      weight: 2
-    - name: Search
-      weight: 3
+    - name: Tema
+      weight: 0
       params:
-        type: search
+        type: theme-toggle
+    - name: Sobre
+      pageRef: /about
+      weight: 1
+    - name: Arquivo
+      pageRef: /archives
+      weight: 2
     - name: GitHub
-      weight: 4
+      weight: 3
       url: "https://github.com/bassettolab/bassettolab-site"
       params:
         icon: github
+    - name: Buscar
+      weight: 4
+      params:
+        type: search
+    - name: RSS
+      weight: 5
+      url: "/index.xml"
+      params:
+        icon: rss
 
 params:
   navbar:
     displayTitle: true
     displayLogo: false
 
+  search:
+    enable: true
+    type: flexsearch
+
+  theme:
+    default: system
+    displayToggle: true
+
   footer:
-    displayCopyright: false
+    displayCopyright: true
     displayPoweredBy: true
 
   editURL:
     enable: true
     base: "https://github.com/bassettolab/bassettolab-site/edit/main/content"
+
+  description: "BassettoLab — base pessoal de conhecimento sobre Oracle, tecnologia, produtividade, livros, ideias e experimentos."
