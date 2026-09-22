@@ -5,6 +5,12 @@
   {{- $featured = first 3 $posts -}}
 {{- end -}}
 {{- $groups := $posts.GroupByDate "2006-01" -}}
+{{- $currentMonthID := "" -}}
+{{- if gt (len $groups) 0 -}}
+  {{- $firstGroup := index $groups 0 -}}
+  {{- $firstPage := index $firstGroup.Pages 0 -}}
+  {{- $currentMonthID = $firstPage.Date.Format "2006-01" -}}
+{{- end -}}
 
 <div class="bsl-home" data-bsl-blog data-view="list">
   <div class="bsl-page-grid">
@@ -122,7 +128,7 @@
         {{- range $groups }}
           {{- $first := index .Pages 0 -}}
           {{- $monthID := $first.Date.Format "2006-01" -}}
-          <a href="#month-{{ $monthID }}" class="{{ if eq $monthID ((index $groups 0).Pages | index 0).Date.Format "2006-01" }}is-current{{ end }}">{{ $first.Date | time.Format "2006 - January" }}</a>
+          <a href="#month-{{ $monthID }}" class="{{ if eq $monthID $currentMonthID }}is-current{{ end }}">{{ $first.Date | time.Format "2006 - January" }}</a>
         {{- end }}
       </nav>
     </aside>
