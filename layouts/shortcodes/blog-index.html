@@ -16,100 +16,104 @@
     </div>
   </div>
 
-  {{- if gt (len $featured) 0 }}
-  <section class="bsl-featured">
-    <div class="bsl-featured-header">
-      <h2>Destaques</h2>
-      <button type="button" class="bsl-featured-toggle" data-bsl-featured-toggle aria-expanded="true">Esconder</button>
-    </div>
-    <div class="bsl-featured-body" data-bsl-featured-body>
-      <div class="bsl-list-view">
-        <ul class="bsl-post-list">
-          {{- range $featured }}
-          <li class="bsl-post-list-item">
-            <span class="bsl-post-date">{{ .Date | time.Format "02 Jan" }}</span>
-            <div class="bsl-post-list-content">
-              <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
-              {{- with .Params.tags }}
-              <div class="bsl-tags">
-                {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
-              </div>
-              {{- end }}
-            </div>
-          </li>
-          {{- end }}
-        </ul>
-      </div>
-
-      <div class="bsl-grid-view">
-        <div class="bsl-post-grid">
-          {{- range $featured }}
-          <article class="bsl-card">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            {{- with .Params.tags }}
-            <div class="bsl-tags">
-              {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
-            </div>
-            {{- end }}
-            {{- with .Description }}<p>{{ . }}</p>{{- end }}
-          </article>
-          {{- end }}
-        </div>
-      </div>
-    </div>
-  </section>
-  {{- end }}
-
   <div class="bsl-home-layout">
-    <div class="bsl-months">
-      {{- if eq (len $posts) 0 }}
-        <p>Nenhum artigo publicado ainda.</p>
-      {{- else }}
-        {{- range $groups }}
-          {{- $first := index .Pages 0 -}}
-          {{- $monthID := $first.Date.Format "2006-01" -}}
-          <section id="month-{{ $monthID }}" class="bsl-month">
-            <h2>{{ $first.Date | time.Format "2006 - January" }}</h2>
-
-            <div class="bsl-list-view">
-              <ul class="bsl-post-list">
-                {{- range .Pages }}
-                <li class="bsl-post-list-item">
-                  <span class="bsl-diamond">◆</span>
-                  <div class="bsl-post-list-content">
-                    <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
-                    {{- with .Params.tags }}
-                    <div class="bsl-tags">
-                      {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
-                    </div>
-                    {{- end }}
-                  </div>
-                </li>
-                {{- end }}
-              </ul>
-            </div>
-
-            <div class="bsl-grid-view">
-              <div class="bsl-post-grid">
-                {{- range .Pages }}
-                <article class="bsl-card">
-                  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
-                  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <main class="bsl-main-column">
+      {{- if gt (len $featured) 0 }}
+      <section class="bsl-featured">
+        <div class="bsl-featured-header">
+          <h2>Destaques</h2>
+          <button type="button" class="bsl-featured-toggle" data-bsl-featured-toggle aria-expanded="true">Esconder</button>
+        </div>
+        <div class="bsl-featured-body" data-bsl-featured-body>
+          <div class="bsl-list-view">
+            <ul class="bsl-post-list">
+              {{- range $featured }}
+              <li class="bsl-post-list-item">
+                <span class="bsl-post-date">{{ .Date | time.Format "02 Jan" }}</span>
+                <div class="bsl-post-list-content">
+                  <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
                   {{- with .Params.tags }}
                   <div class="bsl-tags">
                     {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
                   </div>
                   {{- end }}
-                  {{- with .Description }}<p>{{ . }}</p>{{- end }}
-                </article>
+                </div>
+              </li>
+              {{- end }}
+            </ul>
+          </div>
+
+          <div class="bsl-grid-view">
+            <div class="bsl-post-grid">
+              {{- range $featured }}
+              <article class="bsl-card">
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                {{- with .Params.tags }}
+                <div class="bsl-tags">
+                  {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
+                </div>
                 {{- end }}
-              </div>
+                {{- with .Description }}<p>{{ . }}</p>{{- end }}
+              </article>
+              {{- end }}
             </div>
-          </section>
-        {{- end }}
+          </div>
+        </div>
+      </section>
       {{- end }}
-    </div>
+
+      <div class="bsl-months">
+        {{- if eq (len $posts) 0 }}
+          <p>Nenhum artigo publicado ainda.</p>
+        {{- else }}
+          {{- range $groups }}
+            {{- $first := index .Pages 0 -}}
+            {{- $monthID := $first.Date.Format "2006-01" -}}
+            <section id="month-{{ $monthID }}" class="bsl-month">
+              <h2>{{ $first.Date | time.Format "2006 - January" }}</h2>
+
+              <div class="bsl-list-view">
+                <ul class="bsl-post-list">
+                  {{- range .Pages }}
+                  <li class="bsl-post-list-item">
+                    <span class="bsl-diamond">◆</span>
+                    <div class="bsl-post-list-content">
+                      <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
+                      {{- with .Params.tags }}
+                      <div class="bsl-tags">
+                        {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
+                      </div>
+                      {{- end }}
+                    </div>
+                  </li>
+                  {{- end }}
+                </ul>
+              </div>
+
+              <div class="bsl-grid-view">
+                <div class="bsl-post-grid">
+                  {{- range .Pages }}
+                  <article class="bsl-card">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
+                    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                    {{- with .Params.tags }}
+                    <div class="bsl-tags">
+                      {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
+                    </div>
+                    {{- end }}
+                    {{- with .Description }}<p>{{ . }}</p>{{- end }}
+                  </article>
+                  {{- end }}
+                </div>
+              </div>
+            </section>
+          {{- end }}
+        {{- end }}
+      </div>
+
+      <p class="bsl-archive-bottom"><a href="{{ "/archives/" | relURL }}">Arquivo completo →</a></p>
+    </main>
 
     {{- if gt (len $groups) 0 }}
     <aside class="bsl-month-nav" aria-label="Navegação por mês">
@@ -124,6 +128,4 @@
     </aside>
     {{- end }}
   </div>
-
-  <p class="bsl-archive-bottom"><a href="{{ "/archives/" | relURL }}">Arquivo completo →</a></p>
 </div>
