@@ -1,14 +1,14 @@
 <style>
   :root {
-    --bsl-accent: #2563eb;
+    --bsl-accent: #65a30d;
     --bsl-accent-soft: color-mix(in srgb, #2563eb 16%, transparent);
-    --bsl-accent-secondary: #7c3aed;
+    --bsl-accent-secondary: #84cc16;
   }
 
   html.dark {
-    --bsl-accent: #60a5fa;
-    --bsl-accent-soft: color-mix(in srgb, #60a5fa 18%, transparent);
-    --bsl-accent-secondary: #a78bfa;
+    --bsl-accent: #b7ff4a;
+    --bsl-accent-soft: color-mix(in srgb, #b7ff4a 18%, transparent);
+    --bsl-accent-secondary: #d4ff7a;
   }
 
   .bsl-home, .bsl-archive { width: 100%; }
@@ -87,12 +87,12 @@
 
   .bsl-home-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 210px;
+    grid-template-columns: minmax(0, 1fr) 220px;
     gap: 4rem;
     align-items: start;
   }
 
-  .bsl-months { min-width: 0; }
+  .bsl-main-column, .bsl-months { min-width: 0; }
 
   .bsl-month { scroll-margin-top: 5rem; }
   .bsl-month > h2 {
@@ -168,7 +168,7 @@
     font-size: .85rem;
     border-left: 1px solid color-mix(in srgb, currentColor 18%, transparent);
     padding-left: 1.25rem;
-    min-height: 7rem;
+    min-height: 10rem;
   }
 
   .bsl-month-nav strong {
