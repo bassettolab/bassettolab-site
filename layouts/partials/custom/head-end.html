@@ -338,6 +338,52 @@
   html.dark .bsl-tldr-menu a { color: #e5e7eb; }
   html.dark .bsl-tldr-menu a:hover { background: #374151; }
 
+
+  .bsl-language-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: .38rem;
+    white-space: nowrap;
+    font-size: .78rem;
+    line-height: 1;
+  }
+
+  .bsl-language-link {
+    color: rgb(156 163 175);
+    text-decoration: none !important;
+    font-weight: 400;
+    transition: color .15s ease;
+  }
+
+  .bsl-language-link:hover {
+    color: rgb(229 231 235);
+    text-decoration: none !important;
+  }
+
+  .bsl-language-link.is-active {
+    color: rgb(243 244 246);
+    font-weight: 700;
+  }
+
+  .bsl-language-separator {
+    color: rgb(75 85 99);
+    font-weight: 400;
+    user-select: none;
+  }
+
+  html:not(.dark) .bsl-language-link {
+    color: rgb(107 114 128);
+  }
+
+  html:not(.dark) .bsl-language-link:hover,
+  html:not(.dark) .bsl-language-link.is-active {
+    color: rgb(17 24 39);
+  }
+
+  html:not(.dark) .bsl-language-separator {
+    color: rgb(209 213 219);
+  }
+
 </style>
 
 <script>
