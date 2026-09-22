@@ -1,7 +1,7 @@
 <style>
   :root {
     --bsl-accent: #65a30d;
-    --bsl-accent-soft: color-mix(in srgb, #2563eb 16%, transparent);
+    --bsl-accent-soft: color-mix(in srgb, #65a30d 16%, transparent);
     --bsl-accent-secondary: #84cc16;
   }
 
@@ -13,7 +13,7 @@
 
   .bsl-home, .bsl-archive { width: 100%; }
   .bsl-home {
-    width: min(1040px, calc(100vw - 3rem));
+    width: min(980px, calc(100vw - 3rem));
     max-width: none;
     margin-left: 50%;
     transform: translateX(-50%);
@@ -66,7 +66,7 @@
   .bsl-featured {
     border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
     border-radius: .75rem;
-    margin: 1rem 0 2rem;
+    margin: 0 0 2rem;
     overflow: hidden;
   }
 
@@ -85,10 +85,10 @@
 
   .bsl-featured-body { padding: 0 1rem .9rem; }
 
-  .bsl-home-layout {
+  .bsl-page-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 720px) 180px;
+    gap: 3.25rem;
     align-items: start;
   }
 
@@ -97,7 +97,7 @@
   .bsl-main-toolbar {
     display: flex;
     justify-content: flex-end;
-    margin: 0 0 .55rem;
+    margin: .8rem 0 .75rem;
   }
 
   .bsl-month { scroll-margin-top: 5rem; }
@@ -195,27 +195,34 @@
   .bsl-month-nav {
     position: sticky;
     top: 5.5rem;
-    font-size: .85rem;
-    padding-left: .25rem;
+    font-size: .82rem;
+    padding: .05rem 0 0;
     min-height: 10rem;
   }
 
   .bsl-month-nav strong {
     display: block;
-    margin-bottom: .65rem;
-    font-size: .9rem;
+    margin-bottom: .75rem;
+    font-size: .86rem;
+    font-weight: 700;
   }
 
   .bsl-month-nav nav {
     display: flex;
     flex-direction: column;
-    gap: .55rem;
+    gap: .52rem;
   }
 
   .bsl-month-nav a {
     color: inherit;
-    opacity: .68;
+    opacity: .62;
     text-transform: capitalize;
+    line-height: 1.25;
+  }
+
+  .bsl-month-nav a.is-current {
+    opacity: 1;
+    font-weight: 700;
   }
 
   .bsl-month-nav a:hover {
@@ -237,7 +244,7 @@
       transform: none;
     }
 
-    .bsl-home-layout {
+    .bsl-page-grid {
       grid-template-columns: 1fr;
       gap: 1rem;
     }
