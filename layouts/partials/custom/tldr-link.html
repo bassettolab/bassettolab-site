@@ -1,0 +1,50 @@
+{{- $permalink := .Permalink -}}
+{{- if and (eq .Kind "page") (not .IsHome) -}}
+  {{- $prompt := printf "Abra esta URL e leia o artigo completo: %s\n\nDepois: 1) resuma os 5 pontos mais importantes e a conclusão; 2) destaque riscos, decisões e detalhes técnicos relevantes; 3) sugira duas perguntas de follow-up." $permalink -}}
+  {{- $encodedPrompt := querify "q" $prompt -}}
+  {{- $claudeURL := printf "https://claude.ai/new?%s" $encodedPrompt -}}
+  {{- $chatgptURL := printf "https://chatgpt.com/?%s" $encodedPrompt -}}
+  {{- $grokURL := printf "https://grok.com/?%s" $encodedPrompt -}}
+
+  <div class="bsl-tldr">
+    <em>Se tem preguiça de ler, clique <a id="bsl-tldr-link" href="{{ $chatgptURL }}" data-claude="{{ $claudeURL }}" data-chatgpt="{{ $chatgptURL }}" data-grok="{{ $grokURL }}" target="_blank" rel="noopener">aqui</a> pro TL;DR</em>
+  </div>
+
+  <div id="bsl-tldr-menu" class="bsl-tldr-menu" hidden role="menu" aria-label="Escolha uma IA">
+    <a href="#" data-provider="claude" role="menuitem" target="_blank" rel="noopener">Claude</a>
+    <a href="#" data-provider="chatgpt" role="menuitem" target="_blank" rel="noopener">ChatGPT</a>
+    <a href="#" data-provider="grok" role="menuitem" target="_blank" rel="noopener">Grok</a>
+  </div>
+
+  <script>
+    (function(){
+      var link = document.getElementById("bsl-tldr-link");
+      var menu = document.getElementById("bsl-tldr-menu");
+      if(!link || !menu) return;
+
+      menu.querySelector('[data-provider="claude"]').href = link.dataset.claude;
+      menu.querySelector('[data-provider="chatgpt"]').href = link.dataset.chatgpt;
+      menu.querySelector('[data-provider="grok"]').href = link.dataset.grok;
+
+      function hide(){ menu.hidden = true; }
+      function show(x,y){
+        menu.hidden = false;
+        var w = menu.offsetWidth;
+        var h = menu.offsetHeight;
+        menu.style.left = Math.max(8, Math.min(x, window.innerWidth - w - 8)) + "px";
+        menu.style.top = Math.max(8, Math.min(y, window.innerHeight - h - 8)) + "px";
+      }
+
+      link.addEventListener("contextmenu", function(e){
+        e.preventDefault();
+        show(e.clientX, e.clientY);
+      });
+
+      menu.addEventListener("click", function(){ setTimeout(hide, 0); });
+      document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) hide(); });
+      document.addEventListener("keydown", function(e){ if(e.key === "Escape") hide(); });
+      window.addEventListener("resize", hide);
+      window.addEventListener("scroll", hide, true);
+    })();
+  </script>
+{{- end -}}
