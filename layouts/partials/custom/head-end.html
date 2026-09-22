@@ -13,7 +13,7 @@
 
   .bsl-home, .bsl-archive { width: 100%; }
   .bsl-home {
-    width: min(1120px, calc(100vw - 3rem));
+    width: min(1040px, calc(100vw - 3rem));
     max-width: none;
     margin-left: 50%;
     transform: translateX(-50%);
@@ -94,6 +94,12 @@
 
   .bsl-main-column, .bsl-months { min-width: 0; }
 
+  .bsl-main-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 .55rem;
+  }
+
   .bsl-month { scroll-margin-top: 5rem; }
   .bsl-month > h2 {
     margin: 1.7rem 0 .9rem;
@@ -143,6 +149,30 @@
 
   .bsl-tags a { color: inherit; }
 
+  .bsl-home .bsl-post-title,
+  .bsl-home .bsl-card h3 a,
+  .bsl-home .bsl-archive-lead a,
+  .bsl-home .bsl-archive-bottom a {
+    color: #b7ff4a !important;
+  }
+
+  .bsl-home .bsl-view-button.is-active {
+    color: #b7ff4a !important;
+    background: rgba(183, 255, 74, .14) !important;
+  }
+
+  .bsl-home .bsl-diamond {
+    color: #cfff73 !important;
+  }
+
+  html:not(.dark) .bsl-home .bsl-post-title,
+  html:not(.dark) .bsl-home .bsl-card h3 a,
+  html:not(.dark) .bsl-home .bsl-archive-lead a,
+  html:not(.dark) .bsl-home .bsl-archive-bottom a,
+  html:not(.dark) .bsl-home .bsl-view-button.is-active {
+    color: #4d7c0f !important;
+  }
+
   .bsl-post-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -166,8 +196,7 @@
     position: sticky;
     top: 5.5rem;
     font-size: .85rem;
-    border-left: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-    padding-left: 1.25rem;
+    padding-left: .25rem;
     min-height: 10rem;
   }
 
