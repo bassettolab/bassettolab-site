@@ -12,6 +12,9 @@ tags:
 categories:
   - Oracle
 toc: true
+type: post
+featured: true
+draft: false
 ---
 
 # Variance Tax Rate no Oracle Cloud
