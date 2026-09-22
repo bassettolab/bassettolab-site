@@ -371,7 +371,9 @@
         featuredButton.addEventListener("click", function () {
           var expanded = featuredButton.getAttribute("aria-expanded") === "true";
           featuredButton.setAttribute("aria-expanded", expanded ? "false" : "true");
-          featuredButton.textContent = expanded ? "Mostrar" : "Esconder";
+          featuredButton.textContent = expanded
+            ? (featuredButton.getAttribute("data-bsl-show") || "Mostrar")
+            : (featuredButton.getAttribute("data-bsl-hide") || "Esconder");
           featuredBody.hidden = expanded;
         });
       }
