@@ -25,9 +25,14 @@
   .bsl-home-top {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 1.25rem;
     align-items: center;
+    min-height: 2.35rem;
     margin: .25rem 0 1.25rem;
+  }
+
+  .bsl-home-top .bsl-view-toggle {
+    flex: 0 0 auto;
   }
 
   .bsl-archive-lead, .bsl-archive-bottom { margin: 0; }
@@ -93,12 +98,6 @@
   }
 
   .bsl-main-column, .bsl-months { min-width: 0; }
-
-  .bsl-main-toolbar {
-    display: flex;
-    justify-content: flex-end;
-    margin: .8rem 0 .75rem;
-  }
 
   .bsl-month { scroll-margin-top: 5rem; }
   .bsl-month > h2 {
@@ -195,16 +194,18 @@
   .bsl-month-nav {
     position: sticky;
     top: 5.5rem;
+    align-self: start;
     font-size: .82rem;
-    padding: .05rem 0 0;
+    padding: .55rem 0 0;
     min-height: 10rem;
   }
 
   .bsl-month-nav strong {
     display: block;
-    margin-bottom: .75rem;
+    margin: 0 0 .75rem;
     font-size: .86rem;
     font-weight: 700;
+    line-height: 1.25rem;
   }
 
   .bsl-month-nav nav {
@@ -253,7 +254,15 @@
   }
 
   @media (max-width: 680px) {
-    .bsl-home-top { align-items: flex-start; flex-direction: column; }
+    .bsl-home-top {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .bsl-home-top .bsl-view-toggle {
+      align-self: flex-end;
+    }
+
     .bsl-post-grid { grid-template-columns: 1fr; }
   }
 
