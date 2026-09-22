@@ -1,0 +1,32 @@
+{{- $page := .context -}}
+{{- $current := site.Language.Lang -}}
+
+{{- if hugo.IsMultilingual -}}
+  <nav class="bsl-language-inline" aria-label="Language">
+    {{- $sites := partial "utils/hugo-compat/sites.html" . -}}
+    {{- range $index, $site := $sites -}}
+      {{- $lang := $site.Language.Lang -}}
+      {{- $link := partial "utils/lang-link" (dict "lang" $lang "context" $page) -}}
+      {{- $label := upper $lang -}}
+      {{- if eq $lang "pt-br" -}}
+        {{- $label = "PT" -}}
+      {{- else if eq $lang "es" -}}
+        {{- $label = "ES" -}}
+      {{- else if eq $lang "en" -}}
+        {{- $label = "EN" -}}
+      {{- end -}}
+
+      {{- if gt $index 0 -}}
+        <span class="bsl-language-separator" aria-hidden="true">|</span>
+      {{- end -}}
+
+      <a
+        href="{{ $link }}"
+        class="bsl-language-link{{ if eq $lang $current }} is-active{{ end }}"
+        lang="{{ $lang }}"
+        hreflang="{{ $lang }}"
+        {{ if eq $lang $current }}aria-current="page"{{ end }}
+      >{{ $label }}</a>
+    {{- end -}}
+  </nav>
+{{- end -}}
