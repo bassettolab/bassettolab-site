@@ -1,0 +1,206 @@
+<style>
+  .bsl-home, .bsl-archive { width: 100%; }
+  .bsl-home a, .bsl-archive a { text-decoration: none; }
+  .bsl-home a:hover, .bsl-archive a:hover { text-decoration: underline; }
+
+  .bsl-home-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    margin: .25rem 0 1.25rem;
+  }
+
+  .bsl-archive-lead, .bsl-archive-bottom { margin: 0; }
+  .bsl-archive-lead a, .bsl-archive-bottom a, .bsl-post-title, .bsl-card h3 a {
+    color: #c98532;
+  }
+
+  .bsl-view-toggle {
+    display: inline-flex;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: .6rem;
+    padding: .2rem;
+    gap: .15rem;
+    white-space: nowrap;
+  }
+
+  .bsl-view-button, .bsl-featured-toggle {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    border-radius: .45rem;
+  }
+
+  .bsl-view-button { padding: .45rem .7rem; opacity: .7; }
+  .bsl-view-button.is-active {
+    opacity: 1;
+    background: color-mix(in srgb, #c98532 18%, transparent);
+    color: #c98532;
+  }
+
+  .bsl-featured {
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: .75rem;
+    margin: 1rem 0 2rem;
+    overflow: hidden;
+  }
+
+  .bsl-featured-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .85rem 1rem;
+  }
+
+  .bsl-featured-header h2 { margin: 0; font-size: 1.45rem; }
+  .bsl-featured-toggle {
+    border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    padding: .3rem .75rem;
+  }
+  .bsl-featured-body { padding: 0 1rem .9rem; }
+
+  .bsl-home-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 12rem;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .bsl-month { scroll-margin-top: 5rem; }
+  .bsl-month > h2 {
+    margin: 1.7rem 0 .9rem;
+    padding-bottom: .55rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    text-transform: capitalize;
+  }
+
+  .bsl-post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bsl-post-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    padding: .55rem 0;
+  }
+
+  .bsl-post-date {
+    flex: 0 0 auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .82rem;
+    opacity: .62;
+    padding-top: .16rem;
+  }
+
+  .bsl-diamond {
+    color: #c98532;
+    font-size: .72rem;
+    padding-top: .35rem;
+  }
+
+  .bsl-post-list-content { min-width: 0; }
+  .bsl-post-title { font-size: 1.02rem; line-height: 1.45; }
+
+  .bsl-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem .55rem;
+    margin-top: .18rem;
+    font-size: .72rem;
+    opacity: .58;
+  }
+
+  .bsl-tags a { color: inherit; }
+
+  .bsl-post-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .85rem;
+  }
+
+  .bsl-card {
+    border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-radius: .7rem;
+    padding: 1rem;
+  }
+
+  .bsl-card time { font-size: .75rem; opacity: .6; }
+  .bsl-card h3 { margin: .35rem 0 .45rem; font-size: 1.05rem; line-height: 1.35; }
+  .bsl-card p { margin: .65rem 0 0; font-size: .88rem; line-height: 1.5; opacity: .75; }
+
+  [data-bsl-blog][data-view="list"] .bsl-grid-view { display: none; }
+  [data-bsl-blog][data-view="grid"] .bsl-list-view { display: none; }
+
+  .bsl-month-nav {
+    position: sticky;
+    top: 5.5rem;
+    font-size: .85rem;
+  }
+
+  .bsl-month-nav strong { display: block; margin-bottom: .55rem; }
+  .bsl-month-nav nav { display: flex; flex-direction: column; gap: .55rem; }
+  .bsl-month-nav a { color: inherit; opacity: .68; text-transform: capitalize; }
+  .bsl-month-nav a:hover { opacity: 1; }
+
+  .bsl-archive-bottom { margin-top: 2rem; }
+  .bsl-archive-year > h2 { margin-top: 2rem; }
+  .bsl-archive-year > h3 { margin: 1.2rem 0 .4rem; text-transform: capitalize; }
+  .bsl-archive-list { list-style: none; padding: 0; }
+  .bsl-archive-list li { display: flex; gap: 1rem; padding: .32rem 0; }
+  .bsl-archive-list time { width: 4.6rem; flex: 0 0 auto; opacity: .58; font-size: .82rem; }
+
+  @media (max-width: 900px) {
+    .bsl-home-layout { grid-template-columns: 1fr; gap: 1rem; }
+    .bsl-month-nav { display: none; }
+  }
+
+  @media (max-width: 680px) {
+    .bsl-home-top { align-items: flex-start; flex-direction: column; }
+    .bsl-post-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-bsl-blog]").forEach(function (root) {
+      var saved = localStorage.getItem("bsl-post-view");
+      var view = saved === "grid" ? "grid" : "list";
+
+      function setView(next) {
+        view = next;
+        root.setAttribute("data-view", next);
+        localStorage.setItem("bsl-post-view", next);
+        root.querySelectorAll("[data-bsl-view]").forEach(function (button) {
+          var active = button.getAttribute("data-bsl-view") === next;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+      }
+
+      root.querySelectorAll("[data-bsl-view]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          setView(button.getAttribute("data-bsl-view"));
+        });
+      });
+
+      setView(view);
+
+      var featuredButton = root.querySelector("[data-bsl-featured-toggle]");
+      var featuredBody = root.querySelector("[data-bsl-featured-body]");
+      if (featuredButton && featuredBody) {
+        featuredButton.addEventListener("click", function () {
+          var expanded = featuredButton.getAttribute("aria-expanded") === "true";
+          featuredButton.setAttribute("aria-expanded", expanded ? "false" : "true");
+          featuredButton.textContent = expanded ? "Mostrar" : "Esconder";
+          featuredBody.hidden = expanded;
+        });
+      }
+    });
+  });
+</script>
