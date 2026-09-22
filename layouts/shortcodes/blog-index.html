@@ -1,3 +1,43 @@
+{{- $lang := site.Language.Lang -}}
+{{- $older := "Procurando posts mais antigos?" -}}
+{{- $fullArchive := "Veja o arquivo completo →" -}}
+{{- $listLabel := "Lista" -}}
+{{- $gridLabel := "Grade" -}}
+{{- $viewAria := "Visualização dos posts" -}}
+{{- $featuredLabel := "Destaques" -}}
+{{- $hideLabel := "Esconder" -}}
+{{- $showLabel := "Mostrar" -}}
+{{- $noPosts := "Nenhum artigo publicado ainda." -}}
+{{- $archiveBottom := "Arquivo completo →" -}}
+{{- $onPage := "Nesta página" -}}
+{{- $monthNavAria := "Navegação por mês" -}}
+{{- if eq $lang "es" -}}
+  {{- $older = "¿Buscas publicaciones anteriores?" -}}
+  {{- $fullArchive = "Ver el archivo completo →" -}}
+  {{- $listLabel = "Lista" -}}
+  {{- $gridLabel = "Cuadrícula" -}}
+  {{- $viewAria = "Visualización de publicaciones" -}}
+  {{- $featuredLabel = "Destacados" -}}
+  {{- $hideLabel = "Ocultar" -}}
+  {{- $showLabel = "Mostrar" -}}
+  {{- $noPosts = "Aún no hay artículos publicados." -}}
+  {{- $archiveBottom = "Archivo completo →" -}}
+  {{- $onPage = "En esta página" -}}
+  {{- $monthNavAria = "Navegación por mes" -}}
+{{- else if eq $lang "en" -}}
+  {{- $older = "Looking for older posts?" -}}
+  {{- $fullArchive = "View the full archive →" -}}
+  {{- $listLabel = "List" -}}
+  {{- $gridLabel = "Grid" -}}
+  {{- $viewAria = "Post view" -}}
+  {{- $featuredLabel = "Featured" -}}
+  {{- $hideLabel = "Hide" -}}
+  {{- $showLabel = "Show" -}}
+  {{- $noPosts = "No articles published yet." -}}
+  {{- $archiveBottom = "Full archive →" -}}
+  {{- $onPage = "On this page" -}}
+  {{- $monthNavAria = "Navigation by month" -}}
+{{- end -}}
 {{- $posts := where site.RegularPages "Type" "post" -}}
 {{- $posts = $posts.ByDate.Reverse -}}
 {{- $featured := where $posts "Params.featured" true -}}
@@ -16,19 +56,19 @@
   <div class="bsl-page-grid">
     <main class="bsl-main-column">
       <div class="bsl-home-top">
-        <p class="bsl-archive-lead">Procurando posts mais antigos? <a href="{{ "/archives/" | relURL }}">Veja o arquivo completo →</a></p>
+        <p class="bsl-archive-lead">{{ $older }} <a href="{{ "/archives/" | relLangURL }}">{{ $fullArchive }}</a></p>
 
-        <div class="bsl-view-toggle" role="group" aria-label="Visualização dos posts">
-          <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ Lista</button>
-          <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ Grade</button>
+        <div class="bsl-view-toggle" role="group" aria-label="{{ $viewAria }}">
+          <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ {{ $listLabel }}</button>
+          <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ {{ $gridLabel }}</button>
         </div>
       </div>
 
       {{- if gt (len $featured) 0 }}
       <section class="bsl-featured">
         <div class="bsl-featured-header">
-          <h2>Destaques</h2>
-          <button type="button" class="bsl-featured-toggle" data-bsl-featured-toggle aria-expanded="true">Esconder</button>
+          <h2>{{ $featuredLabel }}</h2>
+          <button type="button" class="bsl-featured-toggle" data-bsl-featured-toggle aria-expanded="true" data-bsl-hide="{{ $hideLabel }}" data-bsl-show="{{ $showLabel }}">{{ $hideLabel }}</button>
         </div>
         <div class="bsl-featured-body" data-bsl-featured-body>
           <div class="bsl-list-view">
@@ -71,7 +111,7 @@
 
       <div class="bsl-months">
         {{- if eq (len $posts) 0 }}
-          <p>Nenhum artigo publicado ainda.</p>
+          <p>{{ $noPosts }}</p>
         {{- else }}
           {{- range $groups }}
             {{- $first := index .Pages 0 -}}
@@ -118,12 +158,12 @@
         {{- end }}
       </div>
 
-      <p class="bsl-archive-bottom"><a href="{{ "/archives/" | relURL }}">Arquivo completo →</a></p>
+      <p class="bsl-archive-bottom"><a href="{{ "/archives/" | relLangURL }}">{{ $archiveBottom }}</a></p>
     </main>
 
     {{- if gt (len $groups) 0 }}
-    <aside class="bsl-month-nav" aria-label="Navegação por mês">
-      <strong>Nesta página</strong>
+    <aside class="bsl-month-nav" aria-label="{{ $monthNavAria }}">
+      <strong>{{ $onPage }}</strong>
       <nav>
         {{- range $groups }}
           {{- $first := index .Pages 0 -}}
