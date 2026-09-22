@@ -15,6 +15,7 @@ toc: true
 type: post
 featured: true
 draft: false
+discussionURL: "https://github.com/bassettolab/bassettolab-site/issues/1"
 ---
 
 # Variance Tax Rate no Oracle Cloud
