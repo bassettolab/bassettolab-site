@@ -17,8 +17,6 @@ featured: true
 draft: false
 ---
 
-# Oracle Cloud: Working Around the nItemPed Limit in Internal Transfers
-
 The complexity of the Brazilian fiscal and tax system is nothing new and creates important challenges for ERPs, which need to continuously adapt to local requirements and particularities.
 
 Within this context, I want to share a technical scenario that can arise in Oracle Cloud internal-transfer implementations.
