@@ -1,5 +1,5 @@
 ---
-title: "Oracle Cloud Brazil: Working Around the nItemPed Limit in Internal Transfers"
+title: "Oracle Cloud: Working Around the nItemPed Limit in Internal Transfers"
 date: 2026-09-30
 description: "A practical approach to identifying internal transfer lines in FDC when the NF-e nItemPed field cannot hold the full Oracle line identifier."
 tags:
@@ -17,11 +17,9 @@ featured: true
 draft: false
 ---
 
-# Oracle Cloud Brazil: Working Around the nItemPed Limit in Internal Transfers
+# Oracle Cloud: Working Around the nItemPed Limit in Internal Transfers
 
-I want to share a technical scenario that can appear in Oracle Cloud Brazil internal-transfer implementations and one possible way to handle it.
-
-The example is intentionally generic: no client names, environments, private URLs, internal documents, support case numbers, or real transaction identifiers are included.
+I want to share a technical scenario that can appear in Oracle Cloud internal-transfer implementations and one possible way to handle it.
 
 The scenario is common. Goods move from one unit to another and, depending on the operation, an NF-e must be issued.
 
@@ -161,10 +159,6 @@ It is also useful to restrict the rule to the required operations and keep an `o
 Before moving the change to production, validate an authorized XML and confirm that `infAdProd` contains exactly the expected identifier.
 
 Finally, `infAdProd` is a fiscal field in the NF-e. In this scenario it is used as part of a technical workaround for the size limitation of `nItemPed`, so fiscal validation remains important.
-
-## Privacy and confidentiality
-
-All examples in this article are generic. No client names, customer companies, environments, private URLs, support case numbers, internal documents, real transaction data, or real identifiers are shown.
 
 ## Public references
 
