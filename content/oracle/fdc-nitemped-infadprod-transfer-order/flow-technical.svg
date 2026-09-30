@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="560" viewBox="0 0 1600 560" role="img" aria-labelledby="t d">
+<title id="t">Technical flow of the solution</title>
+<desc id="d">Shipment Number maps to xPed while the line identifier maps to legal message text and infAdProd, then the authorized XML is transformed by Collaboration Messaging and processed by FDC.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#0f2747}.title{font-size:34px;font-weight:700}.lbl{font-size:19px;font-weight:600;text-anchor:middle}.small{font-size:17px;text-anchor:middle}.box{rx:18;ry:18;stroke:#cbd5e1;stroke-width:2}.arrow{stroke:#64748b;stroke-width:4;fill:none;marker-end:url(#a)}</style>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker></defs>
+<rect width="1600" height="560" fill="#fff"/>
+<text x="800" y="60" class="title" text-anchor="middle">Technical Solution Flow</text>
+<g>
+<rect class="box" x="60" y="120" width="180" height="90" fill="#eef6ff"/><text class="lbl" x="150" y="157"><tspan x="150">Shipment</tspan><tspan x="150" dy="24">Number</tspan></text>
+<path class="arrow" d="M240 165 H300"/>
+<rect class="box" x="305" y="120" width="150" height="90" fill="#eefbf4"/><text class="lbl" x="380" y="173">xPed</text>
+<rect class="box" x="60" y="300" width="180" height="90" fill="#f5f3ff"/><text class="lbl" x="150" y="337"><tspan x="150">Line</tspan><tspan x="150" dy="24">Identifier</tspan></text>
+<path class="arrow" d="M240 345 H300"/>
+<rect class="box" x="305" y="300" width="220" height="90" fill="#fff7ed"/><text class="lbl" x="415" y="337"><tspan x="415">LEGAL_MESSAGE_</tspan><tspan x="415" dy="24">TEXT</tspan></text>
+<path class="arrow" d="M525 345 H585"/>
+<rect class="box" x="590" y="300" width="160" height="90" fill="#eefbf4"/><text class="lbl" x="670" y="353">infAdProd</text>
+<path class="arrow" d="M455 165 C540 165 525 250 590 250 H790"/>
+<path class="arrow" d="M750 345 C785 345 780 250 790 250"/>
+<rect class="box" x="800" y="205" width="145" height="90" fill="#eef6ff"/><text class="lbl" x="872" y="258">SEFAZ</text>
+<path class="arrow" d="M945 250 H1000"/>
+<rect class="box" x="1005" y="205" width="165" height="90" fill="#eefbf4"/><text class="lbl" x="1087" y="237"><tspan x="1087">Authorized</tspan><tspan x="1087" dy="24">XML</tspan></text>
+<path class="arrow" d="M1170 250 H1225"/>
+<rect class="box" x="1230" y="195" width="185" height="110" fill="#ecfeff"/><text class="lbl" x="1322" y="235"><tspan x="1322">Collaboration</tspan><tspan x="1322" dy="24">Messaging</tspan><tspan x="1322" dy="24">(XSL)</tspan></text>
+<path class="arrow" d="M1415 250 H1460"/>
+<rect class="box" x="1465" y="205" width="90" height="90" fill="#fff7ed"/><text class="lbl" x="1510" y="258">FDC</text>
+</g>
+<text x="1322" y="355" class="small">For selected operations, XSL reads infAdProd</text>
+<text x="800" y="500" font-family="Arial,Helvetica,sans-serif" font-size="17" fill="#64748b" text-anchor="middle">Generic technical illustration — no client-specific information.</text>
+</svg>
