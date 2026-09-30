@@ -61,9 +61,9 @@ Shipment Number > xPed
 Line Identifier > infAdProd
 ```
 
-No FDG, o identificador pode ser disponibilizado em nível de linha por meio do `LEGAL_MESSAGE_TEXT`.
+Para transportar o identificador completo, passamos a utilizar a tag `infAdProd` no XML.
 
-Uma lógica possível para `TRANSFER ORDER SHIPMENT` é buscar o identificador em `ZX_LINES_DET_FACTORS`:
+Para shipments do tipo `TRANSFER ORDER SHIPMENT`, usamos uma lógica no FDG em que o valor destinado ao `infAdProd` é obtido da tabela `ZX_LINES_DET_FACTORS`:
 
 ```sql
 CASE
@@ -83,11 +83,7 @@ CASE
 END AS LEGAL_MESSAGE_TEXT
 ```
 
-Com isso, o parceiro fiscal pode mapear o valor para:
-
-```xml
-<infAdProd>...</infAdProd>
-```
+Com isso, a informação do ID da linha passa a viajar no XML por meio da tag `infAdProd`, preservando o identificador completo.
 
 ## Ajuste no Collaboration Messaging
 
@@ -147,7 +143,7 @@ Com esse desenho, o identificador completo da linha consegue percorrer o process
 O fluxo técnico fica:
 
 ```text
-Shipment > FDG > LEGAL_MESSAGE_TEXT > Parceiro Fiscal > infAdProd > SEFAZ > XML > Collaboration Messaging > SourceDocumentLine > FDC > Receipt
+Shipment > FDG > Parceiro Fiscal > infAdProd > SEFAZ > XML > Collaboration Messaging > SourceDocumentLine > FDC > Receipt
 ```
 
 É importante lembrar que `infAdProd` é um campo fiscal da NF-e. Portanto, esse tipo de uso deve ser validado com a área fiscal e com o parceiro responsável pela integração.
