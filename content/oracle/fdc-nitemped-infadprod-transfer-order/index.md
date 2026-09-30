@@ -23,7 +23,11 @@ A complexidade do sistema fiscal e tributário brasileiro não é novidade e tra
 
 Dentro desse contexto, quero compartilhar um cenário técnico que pode surgir em implementações de transferências internas no Oracle Cloud.
 
-Em uma transferência entre unidades, o Oracle pode gerar a NF-e por meio do FDG e enviar as informações para um parceiro fiscal, responsável pela comunicação com a SEFAZ. Após a autorização, o XML da NF-e retorna ao Oracle e é processado pelo FDC.
+Em uma transferência entre unidades, como entre matriz e filiais, pode ser obrigatória a emissão de uma NF-e para acompanhar o material durante o transporte.
+
+O Fiscal Document Generation (FDG) gera o documento fiscal e permite a criação de um extract file com as informações necessárias para que um parceiro fiscal formate o XML do documento e faça a comunicação com a autoridade fiscal. [Oracle — Fiscal Document Extract](https://docs.oracle.com/en/cloud/saas/financials/26b/faufa/fiscal-document-extract-fd-generation.html)
+
+Depois da autorização, o XML estruturado pode retornar para a organização de destino, ser transformado pelo Collaboration Messaging e capturado pelo Fiscal Document Capture (FDC). [Oracle — Internal Transfer of Fiscal Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/internal-transfer-of-fiscal-documents.html)
 
 Fluxo resumido:
 
@@ -42,13 +46,15 @@ No XML da NF-e, uma possibilidade é utilizar:
 <nItemPed>Shipment Line Identifier</nItemPed>
 ```
 
-A limitação aparece no `nItemPed`, que aceita apenas 6 dígitos. Quando o identificador da linha no Oracle já ultrapassa esse tamanho, não é possível transportar o valor completo nesse campo.
+A limitação aparece no `nItemPed`, que aceita apenas 6 dígitos. O `xPed`, por sua vez, aceita de 1 a 15 caracteres. [NF-e — MOC 7.0, Leiaute da NF-e/NFC-e](https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=J+I+v4eN00E%3D)
+
+Quando o identificador da linha no Oracle já ultrapassa esse tamanho, não é possível transportar o valor completo no `nItemPed`.
 
 Truncar o identificador também não é uma boa solução, porque pode gerar colisões entre linhas diferentes.
 
 ## Alternativa utilizada
 
-A alternativa foi utilizar o `infAdProd` para transportar o identificador completo da linha.
+A alternativa foi utilizar o `infAdProd` para transportar o identificador completo da linha. O campo suporta até 500 caracteres no leiaute da NF-e. [NF-e — MOC 7.0, infAdProd](https://hom.nfe.fazenda.gov.br/PORTAL/exibirArquivo.aspx?conteudo=DQFCIFUzszw%3D)
 
 O desenho fica assim:
 
@@ -95,7 +101,7 @@ O caminho no Oracle Cloud é:
 Tools > Collaboration Messaging > Manage Collaboration Message Definitions
 ```
 
-A definição utilizada para a NF-e de entrada aponta para um XSL responsável pelo mapeamento.
+A definição utilizada para a NF-e de entrada aponta para um XSL responsável pelo mapeamento. A documentação do Collaboration Messaging confirma que a definição de mensagem referencia o arquivo XSL usado na transformação. [Oracle — Collaboration Message Definitions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/facmm/create-a-collaboration-message-definition.html)
 
 O comportamento padrão pode ser semelhante a:
 
@@ -152,14 +158,7 @@ Também é recomendável evitar alterações diretas em definições seeded do C
 
 ## Referências públicas
 
-- Oracle Fusion Cloud — Fiscal Document Capture  
-  https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/
-
-- Oracle Fusion Cloud — Collaboration Messaging Framework  
-  https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/
-
-- Oracle Fusion Cloud — ZX_LINES_DET_FACTORS  
-  https://docs.oracle.com/en/cloud/saas/financials/
-
-- Portal Nacional da NF-e  
-  https://www.nfe.fazenda.gov.br/
+- [Oracle — Fiscal Document Extract](https://docs.oracle.com/en/cloud/saas/financials/26b/faufa/fiscal-document-extract-fd-generation.html)
+- [Oracle — Internal Transfer of Fiscal Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/internal-transfer-of-fiscal-documents.html)
+- [Oracle — Collaboration Message Definitions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/facmm/create-a-collaboration-message-definition.html)
+- [Portal Nacional da NF-e](https://www.nfe.fazenda.gov.br/)
