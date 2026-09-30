@@ -19,9 +19,15 @@ draft: false
 
 # Oracle Cloud: Working Around the nItemPed Limit in Internal Transfers
 
-I want to share a technical scenario that can appear in Oracle Cloud internal-transfer implementations.
+The complexity of the Brazilian fiscal and tax system is nothing new and creates important challenges for ERPs, which need to continuously adapt to local requirements and particularities.
 
-In a transfer between units, Oracle can generate the NF-e through FDG and send it to a fiscal partner, which handles the communication with SEFAZ. After authorization, the XML returns to Oracle and is processed by FDC.
+Within this context, I want to share a technical scenario that can arise in Oracle Cloud internal-transfer implementations.
+
+In a transfer between units, such as between a head office and its branches, issuing an NF-e to accompany the material during transportation may be mandatory.
+
+Fiscal Document Generation (FDG) generates the fiscal document and allows the creation of an extract file containing the information required for a fiscal partner to format the fiscal document XML and communicate with the tax authority. [Oracle — Fiscal Document Extract](https://docs.oracle.com/en/cloud/saas/financials/26b/faufa/fiscal-document-extract-fd-generation.html)
+
+After authorization, the structured XML can return to the destination organization, be transformed by Collaboration Messaging, and be captured by Fiscal Document Capture (FDC). [Oracle — Internal Transfer of Fiscal Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/internal-transfer-of-fiscal-documents.html)
 
 Summary flow:
 
@@ -31,7 +37,7 @@ Transfer Order > Shipment > FDG > Fiscal Partner > SEFAZ > NF-e XML > Collaborat
 
 ## The issue
 
-For FDC to relate the received document to the correct transfer, we need to identify the shipment and its corresponding line.
+For FDC to correctly relate the received document to the transfer, we need to identify the shipment and its corresponding line.
 
 In the NF-e XML, one possible approach is:
 
@@ -40,13 +46,15 @@ In the NF-e XML, one possible approach is:
 <nItemPed>Shipment Line Identifier</nItemPed>
 ```
 
-The limitation is that `nItemPed` accepts only 6 digits. When the Oracle line identifier is already larger than that, the complete value cannot be carried in this field.
+The limitation appears in `nItemPed`, which accepts only 6 digits. `xPed`, on the other hand, accepts from 1 to 15 characters. [NF-e — MOC 7.0, NF-e/NFC-e Layout](https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=J+I+v4eN00E%3D)
 
-Truncating the identifier is also not a good option because different lines may eventually produce the same shortened value.
+When the Oracle line identifier already exceeds that size, the complete value cannot be carried in `nItemPed`.
+
+Truncating the identifier is also not a good solution because it can create collisions between different lines.
 
 ## The alternative
 
-The alternative was to use `infAdProd` to carry the complete line identifier.
+The alternative was to use `infAdProd` to carry the complete line identifier. The field supports up to 500 characters in the NF-e layout. [NF-e — MOC 7.0, infAdProd](https://hom.nfe.fazenda.gov.br/PORTAL/exibirArquivo.aspx?conteudo=DQFCIFUzszw%3D)
 
 The design becomes:
 
@@ -77,7 +85,7 @@ CASE
 END AS LEGAL_MESSAGE_TEXT
 ```
 
-The fiscal partner can then map that value to:
+The fiscal partner can then map the value to:
 
 ```xml
 <infAdProd>...</infAdProd>
@@ -93,7 +101,7 @@ The Oracle Cloud path is:
 Tools > Collaboration Messaging > Manage Collaboration Message Definitions
 ```
 
-The inbound NF-e message definition points to an XSL responsible for the mapping.
+The definition used for the inbound NF-e points to an XSL responsible for the mapping. Collaboration Messaging documentation confirms that the message definition references the XSL file used for the transformation. [Oracle — Collaboration Message Definitions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/facmm/create-a-collaboration-message-definition.html)
 
 The standard behavior can be similar to:
 
@@ -126,38 +134,31 @@ For selected operations, the XSL can retrieve the identifier from `infAdProd` in
 </n9:SourceDocumentLine>
 ```
 
-The idea is:
+The idea is simple:
 
 ```text
 NF-e XML > infAdProd > Collaboration Messaging XSL > SourceDocumentLine > FDC
 ```
 
-Only the required CFOPs use `infAdProd`; all other documents keep the standard `nItemPed` behavior.
+Only the selected CFOPs use `infAdProd`. For all other documents, the standard `nItemPed` behavior remains unchanged.
 
 ## Result
 
-With this approach, the complete line identifier can travel through the NF-e outbound and inbound process without depending on the 6-digit limitation of `nItemPed`.
+With this design, the complete line identifier can travel through the NF-e outbound and inbound process without depending on the 6-digit limitation of `nItemPed`.
 
-Technical flow:
+The technical flow is:
 
 ```text
 Shipment > FDG > LEGAL_MESSAGE_TEXT > Fiscal Partner > infAdProd > SEFAZ > XML > Collaboration Messaging > SourceDocumentLine > FDC > Receipt
 ```
 
-It is important to remember that `infAdProd` is a fiscal field in the NF-e. This type of use should therefore be validated with the fiscal team and the fiscal integration partner.
+It is important to remember that `infAdProd` is a fiscal field in the NF-e. Therefore, this type of use should be validated with the fiscal team and with the partner responsible for the integration.
 
-It is also preferable to avoid changing seeded Collaboration Messaging definitions directly and to keep the customization separate whenever possible.
+It is also recommended to avoid direct changes to seeded Collaboration Messaging definitions and to keep the customization separate whenever possible.
 
 ## Public references
 
-- Oracle Fusion Cloud — Fiscal Document Capture  
-  https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/
-
-- Oracle Fusion Cloud — Collaboration Messaging Framework  
-  https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/
-
-- Oracle Fusion Cloud — ZX_LINES_DET_FACTORS  
-  https://docs.oracle.com/en/cloud/saas/financials/
-
-- Brazil NF-e Portal  
-  https://www.nfe.fazenda.gov.br/
+- [Oracle — Fiscal Document Extract](https://docs.oracle.com/en/cloud/saas/financials/26b/faufa/fiscal-document-extract-fd-generation.html)
+- [Oracle — Internal Transfer of Fiscal Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/internal-transfer-of-fiscal-documents.html)
+- [Oracle — Collaboration Message Definitions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/facmm/create-a-collaboration-message-definition.html)
+- [Brazil NF-e Portal](https://www.nfe.fazenda.gov.br/)
