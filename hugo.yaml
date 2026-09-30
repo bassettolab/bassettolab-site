@@ -65,6 +65,10 @@ menu:
       weight: 6
       params:
         type: language-switch
+    - name: Paleta
+      weight: 7
+      params:
+        type: palette-switch
 
 params:
   navbar:
