@@ -23,37 +23,126 @@ Quiero compartir un escenario técnico que puede aparecer en implementaciones de
 
 En una transferencia entre unidades, Oracle puede generar la NF-e mediante FDG y enviarla a un socio fiscal, que realiza la comunicación con SEFAZ. Después de la autorización, el XML vuelve a Oracle y es procesado por FDC.
 
+Flujo resumido:
+
+```text
+Transfer Order > Shipment > FDG > Socio Fiscal > SEFAZ > XML NF-e > Collaboration Messaging > FDC > Receipt
+```
+
 ## El problema
 
-Para que FDC pueda relacionar correctamente el documento recibido con la transferencia, normalmente necesitamos identificar el shipment y su línea correspondiente.
+Para que FDC pueda relacionar correctamente el documento recibido con la transferencia, necesitamos identificar el shipment y su línea correspondiente.
 
-En el XML de la NF-e, una posibilidad es utilizar `xPed` para el Shipment Number y `nItemPed` para el identificador de la línea.
+En el XML de la NF-e, una posibilidad es utilizar:
+
+```xml
+<xPed>Shipment Number</xPed>
+<nItemPed>Shipment Line Identifier</nItemPed>
+```
 
 La limitación es que `nItemPed` admite únicamente 6 dígitos. Cuando el identificador de la línea en Oracle ya supera ese tamaño, no es posible transportar el valor completo en este campo.
 
-Truncar el identificador tampoco es una buena opción, porque diferentes líneas pueden terminar generando el mismo valor reducido.
+Truncar el identificador tampoco es una buena opción porque diferentes líneas pueden terminar generando el mismo valor reducido.
 
 ## La alternativa
 
 La alternativa fue utilizar `infAdProd` para transportar el identificador completo de la línea.
 
-En FDG, el identificador puede estar disponible a nivel de línea mediante `LEGAL_MESSAGE_TEXT`. A partir de ahí, el socio fiscal puede mapearlo a `infAdProd` en el XML de la NF-e.
-
-Cuando el XML vuelve a Oracle, Collaboration Messaging se ajusta para que, en las operaciones aplicables, `SourceDocumentLine` se obtenga de `infAdProd` en lugar de `nItemPed`.
-
-La definición de mensaje utilizada para la NF-e de entrada se encuentra en:
+El diseño queda así:
 
 ```text
-Tools
-  → Collaboration Messaging
-    → Manage Collaboration Message Definitions
+Shipment Number > xPed
+Line Identifier > LEGAL_MESSAGE_TEXT > infAdProd
 ```
 
-La regla puede limitarse a los CFOP necesarios, manteniendo el comportamiento estándar con `nItemPed` para los demás documentos.
+En FDG, el identificador puede estar disponible a nivel de línea mediante `LEGAL_MESSAGE_TEXT`.
+
+Una regla posible para `TRANSFER ORDER SHIPMENT` es obtener el identificador desde `ZX_LINES_DET_FACTORS`:
+
+```sql
+CASE
+    WHEN H.EVENT_CLASS_CODE = 'TRANSFER ORDER SHIPMENT'
+    THEN TO_CHAR(
+           (
+             SELECT NVL(LINK_TO_TRX_LINE_ID, TRX_LINE_ID)
+               FROM ZX_LINES_DET_FACTORS
+              WHERE TRX_ID           = L.TRX_ID
+                AND TRX_LINE_ID      = L.TRX_LINE_ID
+                AND APPLICATION_ID   = L.APPLICATION_ID
+                AND ENTITY_CODE      = L.ENTITY_CODE
+                AND EVENT_CLASS_CODE = L.EVENT_CLASS_CODE
+           )
+         )
+    ELSE L1E_1.LEGAL_MESSAGE_TEXT
+END AS LEGAL_MESSAGE_TEXT
+```
+
+El socio fiscal puede entonces mapear el valor a:
+
+```xml
+<infAdProd>...</infAdProd>
+```
+
+## Ajuste en Collaboration Messaging
+
+Cuando el XML autorizado vuelve a Oracle, Collaboration Messaging transforma el mensaje antes de que FDC lo procese.
+
+El camino en Oracle Cloud es:
+
+```text
+Tools > Collaboration Messaging > Manage Collaboration Message Definitions
+```
+
+La definición utilizada para la NF-e de entrada apunta a un XSL responsable del mapeo.
+
+El comportamiento estándar puede ser similar a:
+
+```xml
+<n9:SourceDocumentLine>
+    <xsl:value-of select="ns3:prod/ns3:nItemPed"/>
+</n9:SourceDocumentLine>
+```
+
+Para determinadas operaciones, el XSL puede obtener el identificador desde `infAdProd`:
+
+```xml
+<n9:SourceDocumentLine>
+    <xsl:choose>
+        <xsl:when test="
+            (ns3:prod/ns3:CFOP = 6151 or
+             ns3:prod/ns3:CFOP = 5151 or
+             ns3:prod/ns3:CFOP = 6557 or
+             ns3:prod/ns3:CFOP = 5557)
+             and normalize-space(ns3:infAdProd) != ''">
+
+            <xsl:value-of select="ns3:infAdProd"/>
+
+        </xsl:when>
+
+        <xsl:otherwise>
+            <xsl:value-of select="ns3:prod/ns3:nItemPed"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</n9:SourceDocumentLine>
+```
+
+La idea es:
+
+```text
+XML NF-e > infAdProd > Collaboration Messaging XSL > SourceDocumentLine > FDC
+```
+
+Solo los CFOP necesarios utilizan `infAdProd`; los demás documentos mantienen el comportamiento estándar con `nItemPed`.
 
 ## Resultado
 
 Con este enfoque, el identificador completo de la línea puede recorrer el proceso de emisión y retorno de la NF-e sin depender del límite de 6 dígitos de `nItemPed`.
+
+Flujo técnico:
+
+```text
+Shipment > FDG > LEGAL_MESSAGE_TEXT > Socio Fiscal > infAdProd > SEFAZ > XML > Collaboration Messaging > SourceDocumentLine > FDC > Receipt
+```
 
 Es importante recordar que `infAdProd` es un campo fiscal de la NF-e. Por eso, este tipo de uso debe validarse con el equipo fiscal y con el socio responsable de la integración.
 
