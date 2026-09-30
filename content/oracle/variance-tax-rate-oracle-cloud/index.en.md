@@ -1,6 +1,7 @@
 ---
 title: "Lorem Ipsum"
 date: 2026-09-21
+article_id: "002"
 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 tags:
   - Lorem
