@@ -97,7 +97,7 @@ Tools > Collaboration Messaging > Manage Collaboration Message Definitions
 
 A definição utilizada para a NF-e de entrada aponta para um XSL responsável pelo mapeamento. A documentação do Collaboration Messaging confirma que a definição de mensagem referencia o arquivo XSL usado na transformação. [Oracle — Collaboration Message Definitions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/facmm/create-a-collaboration-message-definition.html)
 
-O comportamento padrão pode ser semelhante a:
+O comportamento padrão é:
 
 ```xml
 <n9:SourceDocumentLine>
