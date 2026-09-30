@@ -1,7 +1,7 @@
 ---
 title: "Oracle Cloud Brasil: contornando o limite do nItemPed em transferências internas"
 date: 2026-09-30
-description: "Uma solução prática para relacionar linhas de transferências internas no FDC quando o nItemPed da NF-e não comporta o identificador completo do Oracle."
+description: "Uma solução prática para relacionar linhas de transferências internas no FDC quando o nItemPed da NF-e não comporta o identificador completo."
 tags:
   - Oracle Cloud
   - Brazil Localization
@@ -19,13 +19,15 @@ draft: false
 
 # Oracle Cloud Brasil: contornando o limite do nItemPed em transferências internas
 
-Quero compartilhar um problema que apareceu em um fluxo de transferência interna no Oracle Cloud Brasil e a solução que encontramos.
+Quero compartilhar um cenário técnico que pode aparecer em implementações de transferência interna no Oracle Cloud Brasil e uma alternativa de desenho para tratá-lo.
 
-O cenário é relativamente comum: uma mercadoria sai de uma empresa ou filial e vai para outra unidade. Dependendo da operação, essa movimentação precisa de uma NF-e.
+A ideia aqui é manter o exemplo totalmente genérico: sem nomes de clientes, ambientes, URLs, documentos internos, números de chamados ou identificadores reais.
 
-No nosso fluxo, o Oracle gera o documento fiscal pelo FDG, envia as informações para o parceiro fiscal, o parceiro envia para a SEFAZ e, depois da autorização, temos o XML da NF-e.
+O cenário é relativamente comum: uma mercadoria sai de uma unidade e vai para outra. Dependendo da operação, essa movimentação precisa de uma NF-e.
 
-Na chegada da mercadoria, o caminho acontece ao contrário: o parceiro fiscal envia o XML de volta para o Oracle, o Collaboration Messaging transforma a mensagem e o FDC recebe o documento.
+Em uma arquitetura com parceiro fiscal, o Oracle pode gerar o documento pelo FDG, enviar os dados para o parceiro fiscal, o parceiro transmitir para a SEFAZ e, depois da autorização, disponibilizar o XML da NF-e.
+
+Na chegada da mercadoria, o fluxo volta para o Oracle: o XML é recebido, transformado pelo Collaboration Messaging e processado pelo FDC.
 
 De forma simplificada:
 
@@ -51,36 +53,36 @@ FDC
 Receipt
 ```
 
-## Onde apareceu o problema
+## Onde aparece a limitação
 
-Para o FDC identificar corretamente a transferência, precisamos relacionar a NF-e com o shipment e com a linha correta.
+Para o FDC identificar corretamente a transferência, é necessário relacionar a NF-e ao shipment e à linha correspondente.
 
-No nosso desenho, usamos:
+Um desenho possível é usar:
 
 ```xml
 <xPed>Shipment Number</xPed>
 <nItemPed>Shipment Line Identifier</nItemPed>
 ```
 
-O problema está no `nItemPed`.
+A dificuldade aparece quando o identificador técnico da linha é maior que o tamanho suportado pelo `nItemPed`.
 
-No leiaute da NF-e esse campo aceita apenas 6 dígitos. Só que o identificador que precisávamos enviar do Oracle, relacionado à linha do shipment, já estava com 8 dígitos e continua crescendo por ser sequencial.
+No leiaute da NF-e, esse campo aceita até 6 dígitos. Em implementações onde o identificador técnico já ultrapassou esse tamanho, o valor completo deixa de caber no campo.
 
-Truncar o número não era uma boa opção. Em algum momento poderíamos ter colisão entre identificadores diferentes terminando com os mesmos seis dígitos.
+Truncar o número não é uma boa alternativa, porque identificadores diferentes podem acabar produzindo o mesmo valor reduzido.
 
-Então a pergunta passou a ser: onde colocar o identificador completo?
+A pergunta passa a ser: onde transportar o identificador completo?
 
-## A alternativa: infAdProd
+## Uma alternativa: infAdProd
 
-A solução foi usar a tag:
+Uma opção é usar a tag:
 
 ```xml
 <infAdProd>
 ```
 
-Esse campo comporta uma informação maior e pode ser usado para levar o identificador completo da linha.
+Esse campo comporta uma informação maior e pode transportar o identificador completo da linha.
 
-O desenho ficou assim:
+O desenho fica assim:
 
 ```text
 xPed
@@ -93,25 +95,15 @@ infAdProd
   → identificador completo da linha do shipment
 ```
 
-Importante: isso é uma solução de implementação. Não significa que a SEFAZ ou a Oracle definam o `infAdProd` especificamente para transportar um identificador técnico do Oracle. O uso precisa ser alinhado com a equipe fiscal e com o parceiro fiscal.
+Isso é uma decisão de implementação. Não significa que a SEFAZ ou a Oracle definam o `infAdProd` especificamente para transportar um identificador técnico. O uso deve ser validado com a equipe fiscal e com o parceiro fiscal.
 
-## Primeiro passo: levar a informação do Oracle até o XML
+## Primeiro passo: levar a informação até o XML
 
 No FDG existe o conceito de `LEGAL_MESSAGE_TEXT` em nível de linha.
 
-O ponto que encontramos foi que o fluxo de FDG Automation utilizado não disponibilizava esse campo no Data Model da automação da forma que precisávamos.
+Em algumas versões ou desenhos de automação, pode ser necessário complementar o Data Model para preencher esse atributo automaticamente na geração do documento.
 
-Esse comportamento foi levado para o Oracle Support. O caso resultou no Enhancement Request:
-
-```text
-40078092 - FDG_AUTOMATION INCLUDE LEGAL MESSAGE TEXT TREATMENT
-```
-
-Enquanto isso, precisávamos de uma solução prática.
-
-Para `TRANSFER ORDER SHIPMENT`, passamos a preencher o `LEGAL_MESSAGE_TEXT` com o identificador da linha usando `ZX_LINES_DET_FACTORS`.
-
-A lógica ficou semelhante a esta:
+Uma lógica genérica para `TRANSFER ORDER SHIPMENT` pode buscar o identificador da linha em `ZX_LINES_DET_FACTORS`:
 
 ```sql
 CASE
@@ -131,9 +123,9 @@ CASE
 END AS LEGAL_MESSAGE_TEXT
 ```
 
-Assim, para transferências internas, conseguimos levar o identificador completo até o parceiro fiscal.
+Assim, para esse tipo de transferência, o identificador completo pode ser disponibilizado para o parceiro fiscal.
 
-O parceiro fiscal então faz o mapeamento desse valor para:
+O parceiro fiscal pode então mapear o valor para:
 
 ```xml
 <infAdProd>...</infAdProd>
@@ -141,9 +133,7 @@ O parceiro fiscal então faz o mapeamento desse valor para:
 
 ## Segundo passo: fazer o FDC ler infAdProd
 
-Depois que a NF-e é autorizada e o XML retorna para o Oracle, precisamos dizer ao FDC que, para esses casos, o identificador da linha não deve vir do `nItemPed`, mas do `infAdProd`.
-
-É aqui que entra o Collaboration Messaging.
+Depois que a NF-e é autorizada e o XML retorna para o Oracle, é necessário ajustar o mapeamento de entrada para que, nos casos desejados, o identificador da linha seja lido de `infAdProd` em vez de `nItemPed`.
 
 No Oracle Cloud, o caminho é:
 
@@ -153,15 +143,9 @@ Tools
     → Manage Collaboration Message Definitions
 ```
 
-Depois, buscamos a definição usada para processar a NF-e de entrada.
+A definição utilizada no processamento da NF-e aponta para um XSL responsável pela transformação da mensagem.
 
-No nosso ambiente, a definição estava associada a um XSL semelhante a:
-
-```text
-SEFAZ-procNFe-3_10-To-CMF-ProcessFiscalDoc.xsl
-```
-
-O comportamento padrão era basicamente:
+O comportamento padrão pode ser semelhante a:
 
 ```xml
 <n9:SourceDocumentLine>
@@ -169,9 +153,9 @@ O comportamento padrão era basicamente:
 </n9:SourceDocumentLine>
 ```
 
-A alteração foi fazer com que alguns CFOPs de transferência passassem a buscar o valor de `infAdProd`.
+Para operações específicas, o XSL pode direcionar a leitura para `infAdProd`.
 
-Exemplo simplificado:
+Exemplo genérico:
 
 ```xml
 <n9:SourceDocumentLine>
@@ -196,60 +180,66 @@ Exemplo simplificado:
 </n9:SourceDocumentLine>
 ```
 
-Com isso, somente os CFOPs definidos para esse cenário usam o `infAdProd`. Os demais documentos continuam seguindo o comportamento original com `nItemPed`.
+Os CFOPs acima são apenas um exemplo técnico de como estruturar a condição. Cada implementação deve validar quais códigos realmente pertencem ao seu cenário fiscal.
+
+Com isso, somente as operações explicitamente tratadas passam a usar `infAdProd`. Os demais documentos continuam seguindo o comportamento original com `nItemPed`.
 
 ## Fluxo final
 
-No fim, ficou assim:
+De forma genérica:
 
 ```text
-Oracle Shipment
-      │
-      ├── Shipment Number
-      │        ↓
-      │       xPed
-      │
-      └── LINK_TO_TRX_LINE_ID / TRX_LINE_ID
-               ↓
-        LEGAL_MESSAGE_TEXT
-               ↓
-          Parceiro Fiscal
-               ↓
-            infAdProd
-               ↓
-             SEFAZ
-               ↓
-          XML autorizado
-               ↓
-     Collaboration Messaging
-               ↓
-        SourceDocumentLine
-               ↓
-              FDC
-               ↓
-            Receipt
+Shipment
+   │
+   ├── Shipment Number
+   │        ↓
+   │       xPed
+   │
+   └── Line Identifier
+            ↓
+     LEGAL_MESSAGE_TEXT
+            ↓
+       Parceiro Fiscal
+            ↓
+         infAdProd
+            ↓
+          SEFAZ
+            ↓
+     XML autorizado
+            ↓
+ Collaboration Messaging
+            ↓
+   SourceDocumentLine
+            ↓
+           FDC
+            ↓
+         Receipt
 ```
 
 ## Alguns cuidados
 
-Eu evitaria alterar diretamente uma definição seeded do Collaboration Messaging. O mais seguro é trabalhar com uma definição customizada e manter o XSL padrão como referência.
+Evite alterar diretamente uma definição seeded do Collaboration Messaging. O mais seguro é trabalhar com uma definição customizada e manter o XSL padrão como referência.
 
-Também vale limitar a regra somente aos CFOPs necessários e manter um `otherwise` usando `nItemPed`. Isso reduz bastante o risco de impactar outras entradas de NF-e.
+Também vale limitar a regra somente às operações necessárias e manter um `otherwise` usando `nItemPed`. Isso reduz o risco de impactar outras entradas de NF-e.
 
-Antes de colocar a mudança em produção, o ideal é validar o XML autorizado e confirmar que o `infAdProd` está chegando exatamente com o identificador esperado.
+Antes de colocar a mudança em produção, valide o XML autorizado e confirme que o `infAdProd` está chegando exatamente com o identificador esperado.
 
-Por fim, vale reforçar que `infAdProd` é um campo fiscal da NF-e. Neste cenário ele está sendo usado como parte de uma solução técnica para contornar uma limitação de tamanho do `nItemPed`, então a validação com a área fiscal continua sendo importante.
+Por fim, `infAdProd` é um campo fiscal da NF-e. Neste cenário ele é usado como parte de uma solução técnica para contornar uma limitação de tamanho do `nItemPed`, então a validação fiscal continua sendo necessária.
 
-## Referências
+## Privacidade e confidencialidade
 
-- Oracle Fusion Cloud — Fiscal Document Capture  
+Todos os exemplos deste artigo são genéricos. Não são apresentados nomes de clientes, empresas usuárias, ambientes, URLs privadas, números de chamados, documentos internos, dados transacionais reais ou identificadores reais.
+
+## Referências públicas
+
+- Oracle Fusion Cloud — Fiscal Document Capture
   https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/
 
-- Oracle Fusion Cloud — Collaboration Messaging Framework  
+- Oracle Fusion Cloud — Collaboration Messaging Framework
   https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/
 
-- Oracle Fusion Cloud — ZX_LINES_DET_FACTORS  
+- Oracle Fusion Cloud — ZX_LINES_DET_FACTORS
   https://docs.oracle.com/en/cloud/saas/financials/
 
-- Portal Nacional da NF-e  
+- Portal Nacional da NF-e
   https://www.nfe.fazenda.gov.br/
