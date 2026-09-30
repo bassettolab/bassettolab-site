@@ -44,11 +44,11 @@ No XML da NF-e, uma possibilidade é utilizar:
 <nItemPed>Shipment Line Identifier</nItemPed>
 ```
 
-A limitação aparece no `nItemPed`, que aceita apenas 6 dígitos. O `xPed`, por sua vez, aceita de 1 a 15 caracteres. [NF-e — MOC 7.0, Leiaute da NF-e/NFC-e](https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=J+I+v4eN00E%3D)
+A limitação está no leiaute da NF-e exigido pela SEFAZ: o `nItemPed` aceita no máximo 6 dígitos, enquanto o `xPed` aceita de 1 a 15 caracteres. [NF-e — MOC 7.0, Leiaute da NF-e/NFC-e](https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=J+I+v4eN00E%3D)
 
-Quando o identificador da linha no Oracle já ultrapassa esse tamanho, não é possível transportar o valor completo no `nItemPed`.
+Quando o identificador da linha no Oracle ultrapassa 6 dígitos, o parceiro fiscal não consegue enviar o valor completo em `nItemPed` e precisa truncá-lo ou ajustá-lo antes da transmissão para a SEFAZ.
 
-Truncar o identificador também não é uma boa solução, porque pode gerar colisões entre linhas diferentes.
+Esse é justamente o ponto crítico: ao truncar o identificador, perde-se o valor original da linha e podem ocorrer colisões entre identificadores diferentes, dificultando a correlação correta do documento no FDC.
 
 ## Alternativa utilizada
 
