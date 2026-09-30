@@ -1,5 +1,5 @@
 ---
-title: "Oracle Cloud Brasil: contornando o limite do nItemPed em transferências internas"
+title: "Oracle Cloud: contornando o limite do nItemPed em transferências internas"
 date: 2026-09-30
 description: "Uma solução prática para relacionar linhas de transferências internas no FDC quando o nItemPed da NF-e não comporta o identificador completo."
 tags:
@@ -17,11 +17,9 @@ featured: true
 draft: false
 ---
 
-# Oracle Cloud Brasil: contornando o limite do nItemPed em transferências internas
+# Oracle Cloud: contornando o limite do nItemPed em transferências internas
 
-Quero compartilhar um cenário técnico que pode aparecer em implementações de transferência interna no Oracle Cloud Brasil e uma alternativa de desenho para tratá-lo.
-
-A ideia aqui é manter o exemplo totalmente genérico: sem nomes de clientes, ambientes, URLs, documentos internos, números de chamados ou identificadores reais.
+Quero compartilhar um cenário técnico que pode aparecer em implementações de transferência interna no Oracle Cloud e uma alternativa de desenho para tratá-lo.
 
 O cenário é relativamente comum: uma mercadoria sai de uma unidade e vai para outra. Dependendo da operação, essa movimentação precisa de uma NF-e.
 
@@ -207,10 +205,6 @@ Também vale limitar a regra somente às operações necessárias e manter um `o
 Antes de colocar a mudança em produção, valide o XML autorizado e confirme que o `infAdProd` está chegando exatamente com o identificador esperado.
 
 Por fim, `infAdProd` é um campo fiscal da NF-e. Neste cenário ele é usado como parte de uma solução técnica para contornar uma limitação de tamanho do `nItemPed`, então a validação fiscal continua sendo necessária.
-
-## Privacidade e confidencialidade
-
-Todos os exemplos deste artigo são genéricos. Não são apresentados nomes de clientes, empresas usuárias, ambientes, URLs privadas, números de chamados, documentos internos, dados transacionais reais ou identificadores reais.
 
 ## Referências públicas
 
