@@ -97,7 +97,7 @@ Tools > Collaboration Messaging > Manage Collaboration Message Definitions
 
 The definition used for the inbound NF-e points to an XSL responsible for the mapping. Collaboration Messaging documentation confirms that the message definition references the XSL file used for the transformation. [Oracle — Collaboration Message Definitions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/facmm/create-a-collaboration-message-definition.html)
 
-The standard behavior can be similar to:
+The standard behavior is:
 
 ```xml
 <n9:SourceDocumentLine>
