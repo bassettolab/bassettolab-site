@@ -1,6 +1,7 @@
 ---
 title: "Oracle Cloud: Working Around the nItemPed Limit in Internal Transfers"
 date: 2026-09-30
+article_id: "001"
 description: "An alternative for identifying internal transfer lines in FDC when the NF-e nItemPed field cannot hold the complete line identifier."
 tags:
   - Oracle Cloud
