@@ -1,6 +1,7 @@
 ---
 title: "Oracle Cloud: cómo sortear el límite de nItemPed en transferencias internas"
 date: 2026-09-30
+article_id: "001"
 description: "Una alternativa para identificar líneas de transferencias internas en FDC cuando nItemPed de la NF-e no admite el identificador completo."
 tags:
   - Oracle Cloud
