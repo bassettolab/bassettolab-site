@@ -1,0 +1,76 @@
+name: Translate Hugo articles
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "content/**/index.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: translate-hugo-main
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install OpenAI SDK
+        run: pip install --disable-pip-version-check openai
+
+      - name: Find Portuguese source articles
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            find content -type f -name 'index.md' | sort > /tmp/translation_sources.txt
+          else
+            BEFORE="${{ github.event.before }}"
+            if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              git diff-tree --no-commit-id --name-only -r HEAD -- 'content/**/index.md' > /tmp/translation_sources.txt
+            else
+              git diff --name-only "$BEFORE" "${{ github.sha }}" -- 'content/**/index.md' > /tmp/translation_sources.txt
+            fi
+          fi
+          cat /tmp/translation_sources.txt
+
+      - name: Translate to English and Spanish
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+        shell: bash
+        run: |
+          mapfile -t files < /tmp/translation_sources.txt
+          if [ "${#files[@]}" -eq 0 ] || [ -z "${files[0]}" ]; then
+            echo "No Portuguese source article changed."
+            exit 0
+          fi
+          python .github/scripts/translate_hugo.py "${files[@]}"
+
+      - name: Commit translations
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No translation changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content
+          git commit -m "Update EN and ES translations"
+          git push
