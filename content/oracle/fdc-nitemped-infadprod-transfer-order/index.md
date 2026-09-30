@@ -105,7 +105,7 @@ O comportamento padrão é:
 </n9:SourceDocumentLine>
 ```
 
-Para operações específicas, o XSL pode passar a buscar o identificador em `infAdProd`:
+Para nossa solução, adicionamos ao XSL uma lógica para deixar de buscar o ID em `nItemPed` e passar a buscá-lo em `infAdProd`:
 
 ```xml
 <n9:SourceDocumentLine>
