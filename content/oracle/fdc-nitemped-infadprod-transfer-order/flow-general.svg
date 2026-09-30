@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="420" viewBox="0 0 1600 420" role="img" aria-labelledby="t d">
+<title id="t">Internal transfer flow with NF-e</title>
+<desc id="d">Generic flow from Transfer Order through FDG, fiscal partner, SEFAZ, XML, Collaboration Messaging, FDC and Receipt.</desc>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#0f2747}.title{font-size:34px;font-weight:700}.box{rx:18;ry:18;stroke:#cbd5e1;stroke-width:2}.lbl{font-size:20px;font-weight:600;text-anchor:middle}.arrow{stroke:#64748b;stroke-width:4;fill:none;marker-end:url(#a)}
+</style>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker></defs>
+<rect width="1600" height="420" fill="#fff"/>
+<text x="800" y="65" class="title" text-anchor="middle">Internal Transfer Flow with NF-e</text>
+<g transform="translate(40 150)">
+<rect class="box" x="0" y="0" width="145" height="100" fill="#eef6ff"/><text class="lbl" x="72" y="45"><tspan x="72">Transfer</tspan><tspan x="72" dy="26">Order</tspan></text>
+<path class="arrow" d="M145 50 H180"/>
+<rect class="box" x="185" y="0" width="145" height="100" fill="#eefbf4"/><text class="lbl" x="257" y="58">Shipment</text>
+<path class="arrow" d="M330 50 H365"/>
+<rect class="box" x="370" y="0" width="145" height="100" fill="#fff7ed"/><text class="lbl" x="442" y="58">FDG</text>
+<path class="arrow" d="M515 50 H550"/>
+<rect class="box" x="555" y="0" width="145" height="100" fill="#f5f3ff"/><text class="lbl" x="627" y="45"><tspan x="627">Fiscal</tspan><tspan x="627" dy="26">Partner</tspan></text>
+<path class="arrow" d="M700 50 H735"/>
+<rect class="box" x="740" y="0" width="145" height="100" fill="#eef6ff"/><text class="lbl" x="812" y="58">SEFAZ</text>
+<path class="arrow" d="M885 50 H920"/>
+<rect class="box" x="925" y="0" width="145" height="100" fill="#eefbf4"/><text class="lbl" x="997" y="45"><tspan x="997">NF-e</tspan><tspan x="997" dy="26">XML</tspan></text>
+<path class="arrow" d="M1070 50 H1105"/>
+<rect class="box" x="1110" y="0" width="165" height="100" fill="#ecfeff"/><text class="lbl" x="1192" y="45"><tspan x="1192">Collaboration</tspan><tspan x="1192" dy="26">Messaging</tspan></text>
+<path class="arrow" d="M1275 50 H1310"/>
+<rect class="box" x="1315" y="0" width="110" height="100" fill="#fff7ed"/><text class="lbl" x="1370" y="58">FDC</text>
+<path class="arrow" d="M1425 50 H1460"/>
+<rect class="box" x="1465" y="0" width="95" height="100" fill="#eefbf4"/><text class="lbl" x="1512" y="58">Receipt</text>
+</g>
+<text x="800" y="360" font-family="Arial,Helvetica,sans-serif" font-size="17" fill="#64748b" text-anchor="middle">Generic technical flow — no client, project, environment or transaction data.</text>
+</svg>
