@@ -58,7 +58,7 @@ The design becomes:
 
 ```text
 Shipment Number > xPed
-Line Identifier > LEGAL_MESSAGE_TEXT > infAdProd
+Line Identifier > infAdProd
 ```
 
 In FDG, the identifier can be exposed at line level through `LEGAL_MESSAGE_TEXT`.
