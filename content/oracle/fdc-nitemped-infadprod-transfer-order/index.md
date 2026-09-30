@@ -29,29 +29,7 @@ Em uma arquitetura com parceiro fiscal, o Oracle pode gerar o documento pelo FDG
 
 Na chegada da mercadoria, o fluxo volta para o Oracle: o XML é recebido, transformado pelo Collaboration Messaging e processado pelo FDC.
 
-De forma simplificada:
-
-```text
-Transfer Order
-    ↓
-Shipment
-    ↓
-FDG
-    ↓
-Parceiro Fiscal
-    ↓
-SEFAZ
-    ↓
-XML da NF-e
-    ↓
-Parceiro Fiscal
-    ↓
-Collaboration Messaging
-    ↓
-FDC
-    ↓
-Receipt
-```
+![Fluxo geral da transferência interna com NF-e](flow-general.svg)
 
 ## Onde aparece a limitação
 
@@ -71,6 +49,8 @@ No leiaute da NF-e, esse campo aceita até 6 dígitos. Em implementações onde 
 Truncar o número não é uma boa alternativa, porque identificadores diferentes podem acabar produzindo o mesmo valor reduzido.
 
 A pergunta passa a ser: onde transportar o identificador completo?
+
+![Limitação do nItemPed e alternativa com infAdProd](nitemped-infadprod.svg)
 
 ## Uma alternativa: infAdProd
 
@@ -215,6 +195,8 @@ Shipment
             ↓
          Receipt
 ```
+
+![Fluxo técnico da solução](flow-technical.svg)
 
 ## Alguns cuidados
 
