@@ -105,7 +105,7 @@ The standard behavior is:
 </n9:SourceDocumentLine>
 ```
 
-For selected operations, the XSL can retrieve the identifier from `infAdProd` instead:
+For our solution, we added logic to the XSL so that it stops retrieving the ID from `nItemPed` and starts retrieving it from `infAdProd`:
 
 ```xml
 <n9:SourceDocumentLine>
