@@ -1,14 +1,26 @@
 <style>
   :root {
-    --bsl-accent: #65a30d;
-    --bsl-accent-soft: color-mix(in srgb, #65a30d 16%, transparent);
-    --bsl-accent-secondary: #84cc16;
+    --bsl-bg: #c9d6e2;
+    --bsl-surface: #ffffff;
+    --bsl-surface-2: #dfe8f0;
+    --bsl-border: #193b57;
+    --bsl-text: #050b14;
+    --bsl-muted: #46627a;
+    --bsl-accent: #137b61;
+    --bsl-accent-soft: color-mix(in srgb, #2ee6a6 18%, transparent);
+    --bsl-accent-secondary: #193b57;
   }
 
   html.dark {
-    --bsl-accent: #b7ff4a;
-    --bsl-accent-soft: color-mix(in srgb, #b7ff4a 18%, transparent);
-    --bsl-accent-secondary: #d4ff7a;
+    --bsl-bg: #050b14;
+    --bsl-surface: #0c1a2b;
+    --bsl-surface-2: #10243a;
+    --bsl-border: #193b57;
+    --bsl-text: #c9d6e2;
+    --bsl-muted: #8ea3b5;
+    --bsl-accent: #2ee6a6;
+    --bsl-accent-soft: color-mix(in srgb, #2ee6a6 18%, transparent);
+    --bsl-accent-secondary: #2ee6a6;
   }
 
   .bsl-home, .bsl-archive { width: 100%; }
@@ -152,16 +164,16 @@
   .bsl-home .bsl-card h3 a,
   .bsl-home .bsl-archive-lead a,
   .bsl-home .bsl-archive-bottom a {
-    color: #b7ff4a !important;
+    color: #2ee6a6 !important;
   }
 
   .bsl-home .bsl-view-button.is-active {
-    color: #b7ff4a !important;
-    background: rgba(183, 255, 74, .14) !important;
+    color: #2ee6a6 !important;
+    background: rgba(46, 230, 166, .14) !important;
   }
 
   .bsl-home .bsl-diamond {
-    color: #cfff73 !important;
+    color: #2ee6a6 !important;
   }
 
   html:not(.dark) .bsl-home .bsl-post-title,
@@ -169,7 +181,7 @@
   html:not(.dark) .bsl-home .bsl-archive-lead a,
   html:not(.dark) .bsl-home .bsl-archive-bottom a,
   html:not(.dark) .bsl-home .bsl-view-button.is-active {
-    color: #4d7c0f !important;
+    color: #137b61 !important;
   }
 
   .bsl-post-grid {
@@ -518,6 +530,121 @@
     article .content h2 {
       font-size: 1.55rem;
     }
+  }
+
+
+  /* Bassettolab palette: elegant, nocturnal, high-tech */
+  body {
+    background: var(--bsl-bg) !important;
+    color: var(--bsl-text) !important;
+  }
+
+  html.dark body {
+    background: #050b14 !important;
+    color: #c9d6e2 !important;
+  }
+
+  .hextra-nav-container,
+  nav.hextra-navbar,
+  header {
+    background: color-mix(in srgb, var(--bsl-surface) 94%, transparent) !important;
+    border-color: var(--bsl-border) !important;
+  }
+
+  article .content,
+  .bsl-article-title,
+  .bsl-home,
+  .bsl-archive {
+    color: var(--bsl-text);
+  }
+
+  article .content a,
+  .bsl-article-tags a,
+  .bsl-post-title,
+  .bsl-card h3 a,
+  .bsl-archive a {
+    color: var(--bsl-accent) !important;
+  }
+
+  article .content h2,
+  article .content h3 {
+    color: var(--bsl-text);
+  }
+
+  article .content code:not(pre code) {
+    background: color-mix(in srgb, var(--bsl-border) 34%, transparent);
+    color: var(--bsl-accent);
+    border-radius: .3rem;
+    padding: .08em .28em;
+  }
+
+  article .content pre {
+    background: var(--bsl-surface) !important;
+    border: 1px solid var(--bsl-border);
+  }
+
+  .bsl-card,
+  .bsl-featured,
+  .bsl-view-toggle {
+    background: var(--bsl-surface);
+    border-color: var(--bsl-border);
+  }
+
+  .bsl-card:hover {
+    border-color: var(--bsl-accent);
+    background: color-mix(in srgb, var(--bsl-surface) 92%, var(--bsl-accent) 8%);
+    box-shadow:
+      0 14px 30px rgba(0,0,0,.24),
+      0 0 20px color-mix(in srgb, var(--bsl-accent) 12%, transparent);
+  }
+
+  .bsl-post-date,
+  .bsl-tags,
+  .bsl-article-meta,
+  .bsl-tldr,
+  .bsl-month-nav a,
+  .bsl-archive-list time {
+    color: var(--bsl-muted);
+  }
+
+  .bsl-tldr-menu {
+    background: var(--bsl-surface);
+    border-color: var(--bsl-border);
+  }
+
+  .bsl-tldr-menu a {
+    color: var(--bsl-text);
+  }
+
+  .bsl-tldr-menu a:hover {
+    background: var(--bsl-surface-2);
+    color: var(--bsl-accent);
+  }
+
+  .bsl-language-link {
+    color: var(--bsl-muted);
+  }
+
+  .bsl-language-link:hover,
+  .bsl-language-link.is-active {
+    color: var(--bsl-accent);
+  }
+
+  .bsl-language-separator {
+    color: var(--bsl-border);
+  }
+
+  html:not(.dark) .bsl-language-link {
+    color: var(--bsl-muted);
+  }
+
+  html:not(.dark) .bsl-language-link:hover,
+  html:not(.dark) .bsl-language-link.is-active {
+    color: var(--bsl-accent);
+  }
+
+  html:not(.dark) .bsl-language-separator {
+    color: var(--bsl-border);
   }
 
 </style>
