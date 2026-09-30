@@ -19,9 +19,11 @@ draft: false
 
 # Oracle Cloud: contornando o limite do nItemPed em transferências internas
 
-Quero compartilhar um cenário técnico que pode aparecer em implementações de transferência interna no Oracle Cloud.
+A complexidade do sistema fiscal e tributário brasileiro não é novidade e traz desafios importantes para os ERPs, que precisam se adaptar constantemente às particularidades e exigências locais.
 
-Em uma transferência entre unidades, o Oracle pode gerar a NF-e pelo FDG e enviá-la para um parceiro fiscal, que faz a comunicação com a SEFAZ. Depois da autorização, o XML retorna ao Oracle e é processado pelo FDC.
+Dentro desse contexto, quero compartilhar um cenário técnico que pode surgir em implementações de transferências internas no Oracle Cloud.
+
+Em uma transferência entre unidades, o Oracle pode gerar a NF-e por meio do FDG e enviar as informações para um parceiro fiscal, responsável pela comunicação com a SEFAZ. Após a autorização, o XML da NF-e retorna ao Oracle e é processado pelo FDC.
 
 Fluxo resumido:
 
