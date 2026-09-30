@@ -9,8 +9,8 @@ categories:
   - Test
 toc: true
 type: post
-featured: true
-draft: false
+featured: false
+draft: true
 ---
 
 # Lorem Ipsum
