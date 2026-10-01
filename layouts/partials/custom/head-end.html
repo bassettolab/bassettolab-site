@@ -1316,25 +1316,100 @@
   }
 
 
-  /* Tech typography: Akita fonts */
+  /* Tech/Aquatic/Clay/Hexagonal typography: Akita fonts */
   html[data-bsl-palette="tech"] body,
+  html[data-bsl-palette="aquatic"] body,
+  html[data-bsl-palette="clay"] body,
+  html[data-bsl-palette="hexagonal"] body,
   html[data-bsl-palette="tech"] .bsl-home,
+  html[data-bsl-palette="aquatic"] .bsl-home,
+  html[data-bsl-palette="clay"] .bsl-home,
+  html[data-bsl-palette="hexagonal"] .bsl-home,
   html[data-bsl-palette="tech"] .bsl-archive,
-  html[data-bsl-palette="tech"] article .content {
+  html[data-bsl-palette="aquatic"] .bsl-archive,
+  html[data-bsl-palette="clay"] .bsl-archive,
+  html[data-bsl-palette="hexagonal"] .bsl-archive,
+  html[data-bsl-palette="tech"] article .content,
+  html[data-bsl-palette="aquatic"] article .content,
+  html[data-bsl-palette="clay"] article .content,
+  html[data-bsl-palette="hexagonal"] article .content {
     font-family: "Source Serif 4", "Charter", "Bitstream Charter", "Georgia", "Cambria", "Times New Roman", serif;
   }
 
   html[data-bsl-palette="tech"] .bsl-article-title,
+  html[data-bsl-palette="aquatic"] .bsl-article-title,
+  html[data-bsl-palette="clay"] .bsl-article-title,
+  html[data-bsl-palette="hexagonal"] .bsl-article-title,
   html[data-bsl-palette="tech"] article .content :where(h1,h2,h3,h4,h5,h6),
+  html[data-bsl-palette="aquatic"] article .content :where(h1,h2,h3,h4,h5,h6),
+  html[data-bsl-palette="clay"] article .content :where(h1,h2,h3,h4,h5,h6),
+  html[data-bsl-palette="hexagonal"] article .content :where(h1,h2,h3,h4,h5,h6),
   html[data-bsl-palette="tech"] .bsl-home :where(h1,h2,h3),
+  html[data-bsl-palette="aquatic"] .bsl-home :where(h1,h2,h3),
+  html[data-bsl-palette="clay"] .bsl-home :where(h1,h2,h3),
+  html[data-bsl-palette="hexagonal"] .bsl-home :where(h1,h2,h3),
   html[data-bsl-palette="tech"] .bsl-archive :where(h1,h2,h3),
+  html[data-bsl-palette="aquatic"] .bsl-archive :where(h1,h2,h3),
+  html[data-bsl-palette="clay"] .bsl-archive :where(h1,h2,h3),
+  html[data-bsl-palette="hexagonal"] .bsl-archive :where(h1,h2,h3),
   html[data-bsl-palette="tech"] .bsl-card h3,
+  html[data-bsl-palette="aquatic"] .bsl-card h3,
+  html[data-bsl-palette="clay"] .bsl-card h3,
+  html[data-bsl-palette="hexagonal"] .bsl-card h3,
   html[data-bsl-palette="tech"] .bsl-post-title,
+  html[data-bsl-palette="aquatic"] .bsl-post-title,
+  html[data-bsl-palette="clay"] .bsl-post-title,
+  html[data-bsl-palette="hexagonal"] .bsl-post-title,
   html[data-bsl-palette="tech"] .bsl-featured-header,
+  html[data-bsl-palette="aquatic"] .bsl-featured-header,
+  html[data-bsl-palette="clay"] .bsl-featured-header,
+  html[data-bsl-palette="hexagonal"] .bsl-featured-header,
   html[data-bsl-palette="tech"] .bsl-view-button,
+  html[data-bsl-palette="aquatic"] .bsl-view-button,
+  html[data-bsl-palette="clay"] .bsl-view-button,
+  html[data-bsl-palette="hexagonal"] .bsl-view-button,
   html[data-bsl-palette="tech"] .bsl-filter-button,
-  html[data-bsl-palette="tech"] .bsl-month-nav {
+  html[data-bsl-palette="aquatic"] .bsl-filter-button,
+  html[data-bsl-palette="clay"] .bsl-filter-button,
+  html[data-bsl-palette="hexagonal"] .bsl-filter-button,
+  html[data-bsl-palette="tech"] .bsl-month-nav,
+  html[data-bsl-palette="aquatic"] .bsl-month-nav,
+  html[data-bsl-palette="clay"] .bsl-month-nav,
+  html[data-bsl-palette="hexagonal"] .bsl-month-nav {
     font-family: "Source Sans 3", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  }
+
+  /* Match Tech card sizing and spacing on Aquatic, Clay and Hexagonal. */
+  html[data-bsl-palette="aquatic"] .bsl-home .bsl-card time,
+  html[data-bsl-palette="clay"] .bsl-home .bsl-card time,
+  html[data-bsl-palette="hexagonal"] .bsl-home .bsl-card time {
+    font-size: .78rem;
+    line-height: 1.08;
+    margin: 0 0 .06rem !important;
+  }
+
+  html[data-bsl-palette="aquatic"] .bsl-home .bsl-card h3,
+  html[data-bsl-palette="clay"] .bsl-home .bsl-card h3,
+  html[data-bsl-palette="hexagonal"] .bsl-home .bsl-card h3 {
+    margin: 0 !important;
+    font-size: 1.04rem;
+    line-height: 1.26;
+  }
+
+  html[data-bsl-palette="aquatic"] .bsl-home .bsl-card .bsl-tags,
+  html[data-bsl-palette="clay"] .bsl-home .bsl-card .bsl-tags,
+  html[data-bsl-palette="hexagonal"] .bsl-home .bsl-card .bsl-tags {
+    margin-top: .4rem;
+    font-size: .71rem;
+    line-height: 1.34;
+  }
+
+  html[data-bsl-palette="aquatic"] .bsl-home .bsl-card p,
+  html[data-bsl-palette="clay"] .bsl-home .bsl-card p,
+  html[data-bsl-palette="hexagonal"] .bsl-home .bsl-card p {
+    margin-top: .66rem;
+    font-size: .88rem;
+    line-height: 1.45;
   }
 
 
