@@ -386,11 +386,13 @@
   .bsl-card {
     display: flex;
     flex-direction: column;
-    min-height: 0;
-    align-self: start;
+    height: 17.5rem;
+    min-height: 17.5rem;
+    align-self: stretch;
+    overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--bsl-accent) 26%, currentColor 12%);
     border-radius: .55rem;
-    padding: .9rem .95rem;
+    padding: .8rem .9rem;
     background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--bsl-accent) 2%, transparent) 0%,
@@ -424,17 +426,21 @@
   }
 
   .bsl-card time {
-    font-size: .68rem;
-    line-height: 1.1;
+    font-size: .66rem;
+    line-height: 1;
     opacity: .6;
-    margin-bottom: .25rem;
+    margin: 0;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
 
   .bsl-card h3 {
-    margin: .32rem 0 .38rem;
-    font-size: .98rem;
-    line-height: 1.22;
+    margin: .08rem 0 .28rem;
+    font-size: .96rem;
+    line-height: 1.16;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .bsl-card h3 a {
@@ -447,20 +453,22 @@
   }
 
   .bsl-card .bsl-tags {
-    margin-top: .04rem;
-    margin-bottom: .38rem;
-    font-size: .68rem;
-    line-height: 1.18;
-    gap: .16rem .38rem;
+    margin-top: 0;
+    margin-bottom: .28rem;
+    font-size: .66rem;
+    line-height: 1.1;
+    gap: .12rem .34rem;
+    max-height: 2.35em;
+    overflow: hidden;
   }
 
   .bsl-card p {
     margin: 0;
-    font-size: .86rem;
-    line-height: 1.42;
+    font-size: .82rem;
+    line-height: 1.28;
     opacity: .74;
     display: -webkit-box;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -548,6 +556,11 @@
     }
 
     .bsl-post-grid { grid-template-columns: 1fr; }
+
+    .bsl-card {
+      height: auto;
+      min-height: 15.5rem;
+    }
   }
 
   .bsl-article-tags {
