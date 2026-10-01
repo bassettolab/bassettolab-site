@@ -14,7 +14,7 @@ categories:
 toc: true
 type: post
 featured: true
-draft: false
+draft: true
 ---
 
 I finished reading *Red Notice*, by Bill Browder, and found the story much more interesting than I expected.
