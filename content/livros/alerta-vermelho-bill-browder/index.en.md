@@ -1,5 +1,5 @@
 ---
-title: "Red Notice: from investing in Russia to the story of Sergei Magnitsky"
+title: "Book: Red Notice — from investing in Russia to the story of Sergei Magnitsky"
 date: 2026-09-30
 article_id: "003"
 description: "My summary of Red Notice, by Bill Browder: Edmond Safra, the rise of Hermitage, Sergei Magnitsky, his imprisonment and death, and the origin of the Magnitsky Act."
