@@ -23,10 +23,11 @@ Este artículo complementa [Oracle Cloud: Tax Rate Variance (TRV) en FDC y su im
 
 Después de entender cómo puede generarse el TRV, la necesidad práctica es identificar qué invoices de Payables produjeron realmente una línea contable clasificada como Tax Rate Variance.
 
-El modelo de BI Publisher utiliza tres parámetros:
+El modelo de BI Publisher utiliza cuatro parámetros:
 
 ~~~text
 Business Unit
+Ledger
 Fecha inicial
 Fecha final
 ~~~
@@ -70,9 +71,31 @@ Oracle documenta SOURCE como el feeder system de la invoice. En el flujo CMF, CM
 WITH bu AS
 (
     SELECT bu_id,
-           bu_name
+           bu_name,
+           primary_ledger_id
       FROM fun_all_business_units_v
      WHERE bu_name = :P_BU_NAME
+),
+ledger AS
+(
+    SELECT DISTINCT
+           gl.ledger_id,
+           gl.name ledger_name
+      FROM gl_ledgers gl
+      JOIN
+           (
+               SELECT primary_ledger_id ledger_id
+                 FROM bu
+
+               UNION
+
+               SELECT glr.target_ledger_id ledger_id
+                 FROM gl_ledger_relationships glr
+                 JOIN bu
+                   ON bu.primary_ledger_id = glr.primary_ledger_id
+           ) bu_ledgers
+        ON bu_ledgers.ledger_id = gl.ledger_id
+     WHERE gl.name = :P_LEDGER_NAME
 ),
 po_base AS
 (
@@ -142,6 +165,8 @@ trv_accounting AS
            xal.accounted_dr,
            xal.accounted_cr
       FROM xla_ae_headers xah
+      JOIN ledger
+        ON ledger.ledger_id = xah.ledger_id
       JOIN xla_ae_lines xal
         ON xal.application_id = xah.application_id
        AND xal.ae_header_id   = xah.ae_header_id
@@ -209,6 +234,7 @@ Todas las fechas mostradas en el resultado se formatean como `DD/MM/RRRR` con `T
 
 ~~~text
 P_BU_NAME
+P_LEDGER_NAME
 P_DATE_FROM
 P_DATE_TO
 ~~~
@@ -222,6 +248,33 @@ SELECT bu_name display_value,
  WHERE status = 'A'
  ORDER BY bu_name
 ~~~
+
+Para `P_LEDGER_NAME`, usaría una LOV dependiente de la Business Unit. Después de seleccionar la BU, el usuario puede elegir entre sus ledgers relacionados, por ejemplo un ledger **Local** o **Global**:
+
+~~~sql
+SELECT DISTINCT
+       gl.name display_value,
+       gl.name return_value
+  FROM gl_ledgers gl
+  JOIN
+       (
+           SELECT fbu.primary_ledger_id ledger_id
+             FROM fun_all_business_units_v fbu
+            WHERE fbu.bu_name = :P_BU_NAME
+
+           UNION
+
+           SELECT glr.target_ledger_id ledger_id
+             FROM fun_all_business_units_v fbu
+             JOIN gl_ledger_relationships glr
+               ON glr.primary_ledger_id = fbu.primary_ledger_id
+            WHERE fbu.bu_name = :P_BU_NAME
+       ) bu_ledgers
+    ON bu_ledgers.ledger_id = gl.ledger_id
+ ORDER BY gl.name
+~~~
+
+La Business Unit expone `PRIMARY_LEDGER_ID`, mientras que `GL_LEDGER_RELATIONSHIPS` mantiene las relaciones entre ledgers primarios, secundarios y de reporting. El valor seleccionado se utiliza para filtrar `XLA_AE_HEADERS.LEDGER_ID`. [Oracle — FUN_ALL_BUSINESS_UNITS_V](https://docs.oracle.com/en/cloud/saas/financials/26b/oedmf/funallbusinessunitsv-5106.html) [Oracle — GL_LEDGER_RELATIONSHIPS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/glledgerrelationships-6344.html) [Oracle — XLA_AE_HEADERS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xlaaeheaders-7221.html)
 
 ## Cómo se encuentra la invoice
 
