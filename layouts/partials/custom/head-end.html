@@ -455,6 +455,20 @@
     opacity: .76;
   }
 
+  /* Subtle visual distinction for book posts on the home page */
+  .bsl-home [data-bsl-category="livros"] {
+    background: color-mix(in srgb, var(--bsl-surface) 94%, #9a6b45 6%);
+  }
+
+  .bsl-home .bsl-card[data-bsl-category="livros"] {
+    border-color: color-mix(in srgb, var(--bsl-border) 78%, #9a6b45 22%);
+  }
+
+  .bsl-home .bsl-post-list-item[data-bsl-category="livros"] {
+    border-radius: .5rem;
+    padding-inline: .55rem;
+  }
+
   [data-bsl-blog][data-view="list"] .bsl-grid-view { display: none; }
   [data-bsl-blog][data-view="grid"] .bsl-list-view { display: none; }
 
