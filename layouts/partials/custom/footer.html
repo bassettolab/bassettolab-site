@@ -1,0 +1,17 @@
+{{- $lang := .context.Site.Language.Lang -}}
+
+{{- $line1 := "Bassettolab é um site pessoal independente e não é afiliado, patrocinado ou endossado pela Oracle Corporation." -}}
+{{- $line2 := "Oracle, Java, MySQL e NetSuite são marcas registradas da Oracle e/ou de suas afiliadas. Outros nomes podem ser marcas de seus respectivos proprietários." -}}
+
+{{- if eq $lang "en" -}}
+  {{- $line1 = "Bassettolab is an independent personal website and is not affiliated with, sponsored by, or endorsed by Oracle Corporation." -}}
+  {{- $line2 = "Oracle, Java, MySQL, and NetSuite are registered trademarks of Oracle and/or its affiliates. Other names may be trademarks of their respective owners." -}}
+{{- else if eq $lang "es" -}}
+  {{- $line1 = "Bassettolab es un sitio web personal e independiente y no está afiliado, patrocinado ni respaldado por Oracle Corporation." -}}
+  {{- $line2 = "Oracle, Java, MySQL y NetSuite son marcas registradas de Oracle y/o sus afiliadas. Otros nombres pueden ser marcas de sus respectivos propietarios." -}}
+{{- end -}}
+
+<div class="bsl-legal-footer">
+  <p>{{ $line1 }}</p>
+  <p>{{ $line2 }}</p>
+</div>
