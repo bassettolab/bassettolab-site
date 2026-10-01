@@ -2,7 +2,7 @@
   (function () {
     var root = document.documentElement;
     var dark = root.classList.contains("dark");
-    var validDark = ["tech", "cinematic", "editorial", "slate", "hexagonal"];
+    var validDark = ["tech", "cinematic", "clay", "editorial", "slate", "hexagonal"];
     var validLight = ["aquatic", "clay", "editorial", "slate", "hexagonal"];
 
     try {
@@ -19,8 +19,8 @@
 <style>
   /* Palette system
      Dark only: Tech, Cinematic
-     Light only: Aquatic, Clay
-     Both modes: Editorial, Slate, Hexagonal
+     Light only: Aquatic
+     Both modes: Clay, Editorial, Slate, Hexagonal
   */
 
   :root,
@@ -107,6 +107,19 @@
     --bsl-accent: #7ea2b8;
     --bsl-accent-soft: color-mix(in srgb, #7ea2b8 20%, transparent);
     --bsl-accent-secondary: #dde7ee;
+  }
+
+
+  html.dark[data-bsl-palette="clay"] {
+    --bsl-bg: #0a1e33;
+    --bsl-surface: #24415f;
+    --bsl-surface-2: color-mix(in srgb, #24415f 76%, #5a7d8f 24%);
+    --bsl-border: #5a7d8f;
+    --bsl-text: #f2e6d8;
+    --bsl-muted: color-mix(in srgb, #f2e6d8 68%, #5a7d8f 32%);
+    --bsl-accent: #c37a57;
+    --bsl-accent-soft: color-mix(in srgb, #c37a57 18%, transparent);
+    --bsl-accent-secondary: #f2e6d8;
   }
 
   html.dark[data-bsl-palette="editorial"] {
@@ -887,7 +900,7 @@
     };
 
     var paletteSets = {
-      dark: ["tech", "cinematic", "editorial", "slate", "hexagonal"],
+      dark: ["tech", "cinematic", "clay", "editorial", "slate", "hexagonal"],
       light: ["aquatic", "clay", "editorial", "slate", "hexagonal"]
     };
 
