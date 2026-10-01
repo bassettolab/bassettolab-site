@@ -14,7 +14,7 @@ categories:
 toc: true
 type: post
 featured: true
-draft: false
+draft: true
 ---
 
 Terminei de ler *Alerta Vermelho* (*Red Notice*), do Bill Browder, e achei a história muito mais interessante do que eu esperava.
