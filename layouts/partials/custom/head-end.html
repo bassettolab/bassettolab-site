@@ -2,8 +2,8 @@
   (function () {
     var root = document.documentElement;
     var dark = root.classList.contains("dark");
-    var validDark = ["tech", "cinematic", "editorial", "slate"];
-    var validLight = ["aquatic", "clay", "editorial", "slate"];
+    var validDark = ["tech", "cinematic", "editorial", "slate", "hexagonal"];
+    var validLight = ["aquatic", "clay", "editorial", "slate", "hexagonal"];
 
     try {
       var palette = localStorage.getItem("bsl-palette-v3");
@@ -20,7 +20,7 @@
   /* Palette system
      Dark only: Tech, Cinematic
      Light only: Aquatic, Clay
-     Both modes: Editorial, Slate
+     Both modes: Editorial, Slate, Hexagonal
   */
 
   :root,
@@ -72,6 +72,19 @@
     --bsl-accent-secondary: #4b6177;
   }
 
+
+  html[data-bsl-palette="hexagonal"] {
+    --bsl-bg: #e5e5e5;
+    --bsl-surface: color-mix(in srgb, #e5e5e5 88%, white 12%);
+    --bsl-surface-2: color-mix(in srgb, #34343a 12%, #e5e5e5 88%);
+    --bsl-border: #34343a;
+    --bsl-text: #111114;
+    --bsl-muted: #34343a;
+    --bsl-accent: #a4161a;
+    --bsl-accent-soft: color-mix(in srgb, #d62828 14%, transparent);
+    --bsl-accent-secondary: #d62828;
+  }
+
   html.dark[data-bsl-palette="tech"] {
     --bsl-bg: #050b14;
     --bsl-surface: #0c1a2b;
@@ -118,6 +131,19 @@
     --bsl-accent: #a7b2bc;
     --bsl-accent-soft: color-mix(in srgb, #a7b2bc 17%, transparent);
     --bsl-accent-secondary: #e6eaee;
+  }
+
+
+  html.dark[data-bsl-palette="hexagonal"] {
+    --bsl-bg: #111114;
+    --bsl-surface: #34343a;
+    --bsl-surface-2: color-mix(in srgb, #34343a 78%, #a4161a 22%);
+    --bsl-border: #a4161a;
+    --bsl-text: #e5e5e5;
+    --bsl-muted: color-mix(in srgb, #e5e5e5 68%, #34343a 32%);
+    --bsl-accent: #d62828;
+    --bsl-accent-soft: color-mix(in srgb, #d62828 18%, transparent);
+    --bsl-accent-secondary: #e5e5e5;
   }
 
   .bsl-home, .bsl-archive { width: 100%; }
@@ -809,12 +835,13 @@
       aquatic: "Aquatic",
       clay: "Argila",
       editorial: "Editorial",
-      slate: "Ardósia"
+      slate: "Ardósia",
+      hexagonal: "Hexagonal"
     };
 
     var paletteSets = {
-      dark: ["tech", "cinematic", "editorial", "slate"],
-      light: ["aquatic", "clay", "editorial", "slate"]
+      dark: ["tech", "cinematic", "editorial", "slate", "hexagonal"],
+      light: ["aquatic", "clay", "editorial", "slate", "hexagonal"]
     };
 
     function isDarkMode() {
