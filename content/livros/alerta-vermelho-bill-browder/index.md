@@ -1,5 +1,5 @@
 ---
-title: "Alerta Vermelho: de investidor na Rússia à história de Sergei Magnitsky"
+title: "Livro: Alerta Vermelho — de investidor na Rússia à história de Sergei Magnitsky"
 date: 2026-09-30
 article_id: "003"
 description: "Meu resumo de Alerta Vermelho, de Bill Browder: Edmond Safra, a ascensão do Hermitage, Sergei Magnitsky, sua prisão e morte, e a origem da Lei Magnitsky."
