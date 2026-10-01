@@ -43,10 +43,6 @@ A história de Safra tem um final estranho e trágico.
 
 Em 3 de dezembro de 1999, Edmond Safra morreu em um incêndio em sua residência em Mônaco. A própria Fundação Edmond J. Safra registra oficialmente que ele foi vítima de um incêndio criminoso (*arson*) em sua casa. [Fonte institucional](https://www.edmondjsafra.org/edmond-j-safra/)
 
-O enfermeiro Ted Maher foi posteriormente condenado pela Justiça de Mônaco por provocar o incêndio. A versão aceita no processo foi que Maher teria iniciado o fogo e inventado uma invasão, pretendendo aparecer como responsável por salvar Safra, mas a situação saiu do controle.
-
-O episódio naturalmente gerou inúmeras teorias, principalmente por causa do perfil de Safra e das pessoas e fortunas com que lidava. Mas é importante separar isso do que foi estabelecido judicialmente: não conheço decisão judicial que tenha concluído que o governo russo ou Vladimir Putin ordenaram a morte de Safra.
-
 ## Browder cresce na Rússia — e começa a comprar briga
 
 O Hermitage cresceu e se tornou um dos maiores investidores estrangeiros na Rússia.
