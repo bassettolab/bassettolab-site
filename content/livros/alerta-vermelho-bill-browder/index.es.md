@@ -1,5 +1,5 @@
 ---
-title: "Alerta Roja: de inversor en Rusia a la historia de Sergei Magnitsky"
+title: "Libro: Alerta Roja — de inversor en Rusia a la historia de Sergei Magnitsky"
 date: 2026-09-30
 article_id: "003"
 description: "Mi resumen de Alerta Roja, de Bill Browder: Edmond Safra, el ascenso de Hermitage, Sergei Magnitsky, su prisión y muerte, y el origen de la Ley Magnitsky."
