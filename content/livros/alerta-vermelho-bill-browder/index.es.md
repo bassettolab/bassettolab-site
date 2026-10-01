@@ -105,8 +105,6 @@ Sergei Magnitsky murió el 16 de noviembre de 2009, a los 37 años.
 
 El Consejo de Europa también registró que murió después de sufrir agresiones con porras de goma, aunque existen contradicciones en los registros sobre sus últimos momentos y la secuencia exacta de los acontecimientos. [Informe del Consejo de Europa](https://pace.coe.int/en/files/20084/html)
 
-Esta precisión es importante: el Tribunal Europeo estableció la responsabilidad del Estado ruso por violaciones relacionadas con su detención, atención médica, malos tratos y muerte. Eso no equivale a una decisión judicial que afirme que Vladimir Putin ordenó personalmente su muerte.
-
 ## La vida de Browder cambia por completo
 
 Después de la muerte de Magnitsky, Browder prácticamente deja de ser únicamente el inversor que aparece al comienzo del libro.
