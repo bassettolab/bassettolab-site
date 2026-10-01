@@ -88,7 +88,7 @@ params:
     displayPoweredBy: true
 
   editURL:
-    enable: true
+    enable: false
     base: "https://github.com/bassettolab/bassettolab-site/edit/main/content"
 
   description: "BassettoLab — base pessoal de conhecimento sobre Oracle, tecnologia, produtividade, livros, ideias e experimentos."
