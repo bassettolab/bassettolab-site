@@ -4,7 +4,12 @@
 {{- $onThisPage := (T "onThisPage") | default "On this page"}}
 {{- $tags := (T "tags") | default "Tags"}}
 {{- $editThisPage := (T "editThisPage") | default "Edit this page"}}
-{{- $backToTop := (T "backToTop") | default "Scroll to top" -}}
+{{- $backToTop := "Scroll to top" -}}
+{{- if eq site.Language.Lang "pt-br" -}}
+  {{- $backToTop = "Voltar ao topo" -}}
+{{- else if eq site.Language.Lang "es" -}}
+  {{- $backToTop = "Subir al inicio" -}}
+{{- end -}}
 
 <nav class="hextra-toc hx:order-last hx:hidden hx:w-64 hx:shrink-0 hx:xl:block hx:print:hidden hx:px-4" aria-label="{{ (T "tableOfContents") | default "Table of contents" }}">
   {{- if $toc }}
@@ -18,14 +23,14 @@
         {{- end -}}
       {{- end -}}
 
-      {{- $borderClass := "bsl-toc-bottom hx:mt-8 hx:border-t hx:pt-8" -}}
+      {{- $borderClass := "bsl-toc-bottom hx:mt-8 hx:pt-8" -}}
 
       {{- if not .Fragments.Headings -}}
         {{- $borderClass = "" -}}
       {{- end -}}
 
       {{/* TOC bottom part */}}
-      <div class="{{ $borderClass }} hx:sticky hx:bottom-0 hx:flex hx:flex-col hx:items-start hx:gap-2 hx:pb-8 hx:border-gray-200 hx:dark:border-neutral-800 hx:contrast-more:border-t hx:contrast-more:border-neutral-400 hx:contrast-more:shadow-none hx:contrast-more:dark:border-neutral-400">
+      <div class="{{ $borderClass }} hx:sticky hx:bottom-0 hx:flex hx:flex-col hx:items-start hx:gap-2 hx:pb-8 hx:contrast-more:shadow-none">
         {{- if and site.Params.toc.displayTags .Params.tags -}}
           <div class="hx:flex hx:items-start hx:gap-x-2 hx:font-medium hx:text-xs">
             <div class="hx:text-gray-500 hx:dark:text-gray-400 hx:contrast-more:text-gray-800 hx:contrast-more:dark:text-gray-50">{{ $tags }}</div>
