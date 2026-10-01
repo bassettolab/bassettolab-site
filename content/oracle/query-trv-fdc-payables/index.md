@@ -274,7 +274,7 @@ SELECT DISTINCT
  ORDER BY gl.name
 ~~~
 
-A Business Unit possui um `PRIMARY_LEDGER_ID`, e `GL_LEDGER_RELATIONSHIPS` mantém os relacionamentos entre o ledger primário e seus ledgers relacionados. A query usa o ledger escolhido para filtrar diretamente `XLA_AE_HEADERS.LEDGER_ID`.
+A Business Unit possui um `PRIMARY_LEDGER_ID`, e `GL_LEDGER_RELATIONSHIPS` mantém os relacionamentos entre o ledger primário e seus ledgers relacionados. A query usa o ledger escolhido para filtrar diretamente `XLA_AE_HEADERS.LEDGER_ID`. [Oracle — FUN_ALL_BUSINESS_UNITS_V](https://docs.oracle.com/en/cloud/saas/financials/26b/oedmf/funallbusinessunitsv-5106.html) [Oracle — GL_LEDGER_RELATIONSHIPS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/glledgerrelationships-6344.html) [Oracle — XLA_AE_HEADERS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xlaaeheaders-7221.html)
 
 ## Como a invoice é encontrada
 
