@@ -92,6 +92,32 @@ po_info AS
       FROM po_base
      GROUP BY invoice_id
 ),
+fdc_base AS
+(
+    /* Preferred relationship when the FDC header already stores the AP invoice. */
+    SELECT DISTINCT
+           fdh.invoice_id,
+           fdh.document_header_id,
+           fdh.document_number,
+           fdh.access_key_number,
+           fdh.total_amount
+      FROM cmf_fiscal_doc_headers fdh
+     WHERE fdh.invoice_id IS NOT NULL
+
+    UNION
+
+    /* Fallback through the source transaction carried to AP invoice lines. */
+    SELECT DISTINCT
+           ail.invoice_id,
+           fdh.document_header_id,
+           fdh.document_number,
+           fdh.access_key_number,
+           fdh.total_amount
+      FROM ap_invoice_lines_all ail
+      JOIN cmf_fiscal_doc_headers fdh
+        ON fdh.document_header_id = ail.source_trx_id
+     WHERE ail.source_trx_id IS NOT NULL
+),
 fdc_info AS
 (
     SELECT invoice_id,
@@ -100,8 +126,7 @@ fdc_info AS
            LISTAGG(access_key_number, ', ')
              WITHIN GROUP (ORDER BY access_key_number) fdc_access_key,
            SUM(total_amount) fdc_total_amount
-      FROM cmf_fiscal_doc_headers
-     WHERE invoice_id IS NOT NULL
+      FROM fdc_base
      GROUP BY invoice_id
 ),
 trv_accounting AS
@@ -230,11 +255,9 @@ TOTAL_AMOUNT
 
 A Oracle documenta INVOICE_ID como o identificador da invoice relacionada ao Fiscal Document e TOTAL_AMOUNT como o valor total do documento fiscal. [Oracle — CMF_FISCAL_DOC_HEADERS](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26a/oedsc/cmffiscaldocheaders-16080.html)
 
-Por isso a relação pode ser feita diretamente por:
+A relação mais simples é pelo `INVOICE_ID` armazenado no cabeçalho do FDC. Porém, esse campo é nullable e pode não estar preenchido em todos os registros. Por isso a query usa duas possibilidades: o `INVOICE_ID` do próprio FDC e, como fallback, o `SOURCE_TRX_ID` das linhas do Payables relacionado ao `DOCUMENT_HEADER_ID` do FDC.
 
-~~~sql
-fdc.invoice_id = ai.invoice_id
-~~~
+Isso evita perder o número, a chave de acesso e o valor total do Fiscal Document quando o vínculo direto pelo `INVOICE_ID` não estiver disponível.
 
 ## Purchase Order
 
