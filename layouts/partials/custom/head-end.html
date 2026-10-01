@@ -183,6 +183,40 @@
     flex: 0 0 auto;
   }
 
+  .bsl-home-controls {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .bsl-category-filter {
+    display: inline-flex;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: .5rem;
+    padding: .12rem;
+    gap: .1rem;
+    font-size: .78rem;
+  }
+
+  .bsl-filter-button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    border-radius: .45rem;
+    padding: .3rem .55rem;
+    opacity: .7;
+  }
+
+  .bsl-filter-button.is-active {
+    opacity: 1;
+    background: var(--bsl-accent-soft);
+    color: var(--bsl-accent);
+  }
+
   .bsl-archive-lead, .bsl-archive-bottom { margin: 0; }
   .bsl-archive-lead a,
   .bsl-archive-bottom a,
@@ -323,7 +357,8 @@
     color: var(--bsl-accent) !important;
   }
 
-  .bsl-home .bsl-view-button.is-active {
+  .bsl-home .bsl-view-button.is-active,
+  .bsl-home .bsl-filter-button.is-active {
     color: var(--bsl-accent) !important;
     background: var(--bsl-accent-soft) !important;
   }
@@ -746,7 +781,8 @@
 
   .bsl-card,
   .bsl-featured,
-  .bsl-view-toggle {
+  .bsl-view-toggle,
+  .bsl-category-filter {
     background: var(--bsl-surface);
     border-color: var(--bsl-border);
   }
@@ -864,6 +900,25 @@
     color: var(--bsl-text) !important;
   }
 
+
+  .bsl-book-article main {
+    background: color-mix(in srgb, var(--bsl-surface) 92%, #9a6b45 8%);
+    border: 1px solid color-mix(in srgb, var(--bsl-border) 72%, #9a6b45 28%);
+    border-radius: .9rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .bsl-book-article .bsl-article-title,
+  .bsl-book-article .content h2,
+  .bsl-book-article .content h3 {
+    color: color-mix(in srgb, var(--bsl-text) 86%, #9a6b45 14%);
+  }
+
+  .bsl-book-article .content img {
+    border-radius: .7rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  }
 
   article .content h2,
   article .content h3,
@@ -1000,6 +1055,38 @@
       });
 
       setView(view);
+
+      var currentFilter = "all";
+
+      function applyCategoryFilter(next) {
+        currentFilter = next || "all";
+        root.querySelectorAll("[data-bsl-category]").forEach(function (item) {
+          var match = currentFilter === "all" || item.getAttribute("data-bsl-category") === currentFilter;
+          item.hidden = !match;
+        });
+
+        root.querySelectorAll(".bsl-month").forEach(function (month) {
+          var visible = Array.prototype.some.call(
+            month.querySelectorAll("[data-bsl-category]"),
+            function (item) { return !item.hidden; }
+          );
+          month.hidden = !visible;
+        });
+
+        root.querySelectorAll("[data-bsl-filter]").forEach(function (button) {
+          var active = button.getAttribute("data-bsl-filter") === currentFilter;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+      }
+
+      root.querySelectorAll("[data-bsl-filter]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          applyCategoryFilter(button.getAttribute("data-bsl-filter"));
+        });
+      });
+
+      applyCategoryFilter("all");
 
       var featuredButton = root.querySelector("[data-bsl-featured-toggle]");
       var featuredBody = root.querySelector("[data-bsl-featured-body]");
