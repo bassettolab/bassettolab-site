@@ -42,7 +42,6 @@ FDC total
 TRV accounted amount
 Accounting combination
 Payables status
-FDC status
 ~~~
 
 Oracle documents ACCOUNTING_CLASS_CODE in XLA_AE_LINES as the classification of a Subledger Accounting line, and TRV is used for Tax Rate Variance. [Oracle — XLA_AE_LINES](https://docs.oracle.com/en/cloud/saas/financials/25d/oedmf/xlaaelines-17865.html) [Oracle — Event Cost Source Type](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26c/fabsm/enum_oraScmCoreReceiptAcctgReviewDistribution_EventCostSourceType.html)
@@ -100,17 +99,14 @@ fdc_info AS
              WITHIN GROUP (ORDER BY document_number) fdc_number,
            LISTAGG(access_key_number, ', ')
              WITHIN GROUP (ORDER BY access_key_number) fdc_access_key,
-           SUM(total_amount) fdc_total_amount,
-           MAX(document_status) fdc_document_status,
-           MAX(validation_status) fdc_validation_status
+           SUM(total_amount) fdc_total_amount
       FROM cmf_fiscal_doc_headers
      WHERE invoice_id IS NOT NULL
      GROUP BY invoice_id
 ),
 trv_accounting AS
 (
-    SELECT xah.ae_header_id,
-           xah.event_id,
+    SELECT xah.event_id,
            xah.accounting_date,
            xah.period_name,
            xah.accounting_entry_status_code,
@@ -118,8 +114,6 @@ trv_accounting AS
            xal.ae_line_num,
            xal.code_combination_id,
            xal.accounting_class_code,
-           xal.entered_dr,
-           xal.entered_cr,
            xal.accounted_dr,
            xal.accounted_cr
       FROM xla_ae_headers xah
@@ -131,35 +125,27 @@ trv_accounting AS
        AND xah.accounting_date >= :P_DATE_FROM
        AND xah.accounting_date <  :P_DATE_TO + 1
 )
-SELECT bu.bu_name business_unit,
-       trv.accounting_date,
+SELECT TO_CHAR(trv.accounting_date, 'DD/MM/RRRR') accounting_date,
        trv.period_name,
        ai.invoice_num,
-       ai.invoice_date,
-       ai.invoice_currency_code,
+       TO_CHAR(ai.invoice_date, 'DD/MM/RRRR') invoice_date,
+       ai.invoice_currency_code currency,
        ai.invoice_amount ap_invoice_amount,
-       ai.source ap_source,
        ap_invoices_utility_pkg.get_approval_status
        (
            ai.invoice_id,
            ai.invoice_amount,
            ai.payment_status_flag,
            ai.invoice_type_lookup_code
-       ) ap_validation_status,
+       ) ap_status,
        ai.wfapproval_status ap_workflow_status,
        ai.payment_status_flag ap_payment_status,
        po.po_number,
        fdc.fdc_number,
        fdc.fdc_access_key,
        fdc.fdc_total_amount,
-       fdc.fdc_document_status,
-       fdc.fdc_validation_status,
-       trv.accounting_class_code,
        NVL(trv.accounted_dr, 0)
-         - NVL(trv.accounted_cr, 0) trv_accounted_amount,
-       NVL(trv.entered_dr, 0)
-         - NVL(trv.entered_cr, 0) trv_entered_amount,
-       trv.code_combination_id,
+         - NVL(trv.accounted_cr, 0) trv_amount,
        gcc.segment1 || '.' ||
        gcc.segment2 || '.' ||
        gcc.segment3 || '.' ||
@@ -168,11 +154,7 @@ SELECT bu.bu_name business_unit,
        gcc.segment6 || '.' ||
        gcc.segment7 account_combination,
        trv.accounting_entry_status_code sla_status,
-       trv.gl_transfer_status_code gl_transfer_status,
-       trv.ae_header_id,
-       trv.ae_line_num,
-       trv.event_id,
-       ai.invoice_id
+       trv.gl_transfer_status_code gl_transfer_status
   FROM trv_accounting trv
   JOIN ap_invoices_all ai
     ON EXISTS
@@ -195,6 +177,8 @@ SELECT bu.bu_name business_unit,
           ai.invoice_num,
           trv.ae_line_num
 ~~~
+
+All dates displayed in the result are formatted as `DD/MM/RRRR` with `TO_CHAR`. The BI Publisher parameters remain Date parameters.
 
 ## BI Publisher parameters
 
@@ -234,7 +218,7 @@ This avoids depending on a fixed account.
 
 ## FDC relationship
 
-CMF_FISCAL_DOC_HEADERS contains the Payables INVOICE_ID plus DOCUMENT_NUMBER, ACCESS_KEY_NUMBER, TOTAL_AMOUNT, DOCUMENT_STATUS, and VALIDATION_STATUS. [Oracle — CMF_FISCAL_DOC_HEADERS](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26a/oedsc/cmffiscaldocheaders-16080.html)
+CMF_FISCAL_DOC_HEADERS contains the Payables INVOICE_ID plus DOCUMENT_NUMBER, ACCESS_KEY_NUMBER, and TOTAL_AMOUNT. [Oracle — CMF_FISCAL_DOC_HEADERS](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26a/oedsc/cmffiscaldocheaders-16080.html)
 
 The FDC-to-Payables relationship can therefore be made directly through:
 
@@ -250,7 +234,7 @@ LISTAGG is used because a single invoice may contain lines associated with more 
 
 ## Payables status
 
-Besides AP_INVOICES_UTILITY_PKG.GET_APPROVAL_STATUS, the output keeps WFAPPROVAL_STATUS, PAYMENT_STATUS_FLAG, SLA_STATUS, and GL_TRANSFER_STATUS.
+Besides AP_INVOICES_UTILITY_PKG.GET_APPROVAL_STATUS, returned as AP_STATUS, the output keeps WFAPPROVAL_STATUS, PAYMENT_STATUS_FLAG, SLA_STATUS, and GL_TRANSFER_STATUS.
 
 ## TRV amount and account
 
@@ -260,13 +244,7 @@ The accounted value is:
 NVL(accounted_dr, 0) - NVL(accounted_cr, 0)
 ~~~
 
-and the transaction-currency value is:
-
-~~~sql
-NVL(entered_dr, 0) - NVL(entered_cr, 0)
-~~~
-
-XLA_AE_LINES contains the code combination and debit/credit amounts used by SLA. [Oracle — XLA_AE_LINES](https://docs.oracle.com/en/cloud/saas/financials/25d/oedmf/xlaaelines-17865.html)
+XLA_AE_LINES contains the code combination and accounted debit/credit amounts used by SLA. [Oracle — XLA_AE_LINES](https://docs.oracle.com/en/cloud/saas/financials/25d/oedmf/xlaaelines-17865.html)
 
 The ACCOUNT_COMBINATION example assumes seven Chart of Accounts segments and can be adjusted when another structure is used.
 
