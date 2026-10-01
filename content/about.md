@@ -3,7 +3,7 @@ title: "Sobre"
 type: about
 ---
 
-Sou consultor e vivo no estado de São Paulo, Brasil. Gosto de música, livros e tecnologia — o que já seria suficiente para ocupar mais horas do dia do que existem. Trabalho com Oracle Cloud, principalmente tentando entender por que sistemas que deveriam simplificar a vida às vezes fazem exatamente o contrário.
+Vivo no estado de São Paulo, Brasil. Gosto de música, livros e tecnologia — o que já seria suficiente para ocupar mais horas do dia do que existem. Trabalho com Oracle Cloud, principalmente tentando entender por que sistemas que deveriam simplificar a vida às vezes fazem exatamente o contrário.
 
 Entre uma query, uma configuração e outra, gosto de estudar assuntos diferentes, escrever minhas próprias conclusões e guardar aquilo que aprendi pelo caminho.
 
