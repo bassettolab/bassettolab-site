@@ -377,22 +377,29 @@
 
   .bsl-post-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
-    gap: clamp(.75rem, 1.5vw, 1rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .9rem;
     width: 100%;
     margin-inline: auto;
   }
 
+  @media (min-width: 78rem) {
+    .bsl-post-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
   .bsl-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 17.5rem;
-    min-height: 17.5rem;
-    align-self: stretch;
+    min-width: 0;
+    min-height: 18rem;
+    margin: 0;
+    padding: 1rem;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--bsl-accent) 26%, currentColor 12%);
-    border-radius: .55rem;
-    padding: .8rem .9rem;
+    border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-radius: 8px;
     background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--bsl-accent) 2%, transparent) 0%,
@@ -426,21 +433,25 @@
   }
 
   .bsl-card time {
-    font-size: .66rem;
-    line-height: 1;
-    opacity: .6;
+    color: color-mix(in srgb, currentColor 48%, transparent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: .72rem;
+    line-height: 1.4;
+    letter-spacing: 0;
+    opacity: 1;
     margin: 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
 
   .bsl-card h3 {
-    margin: .08rem 0 .28rem;
-    font-size: .96rem;
-    line-height: 1.16;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    margin: .65rem 0 0;
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
   }
 
   .bsl-card h3 a {
@@ -453,24 +464,25 @@
   }
 
   .bsl-card .bsl-tags {
-    margin-top: 0;
-    margin-bottom: .28rem;
-    font-size: .66rem;
-    line-height: 1.1;
-    gap: .12rem .34rem;
-    max-height: 2.35em;
-    overflow: hidden;
+    margin-top: .45rem;
+    margin-bottom: 0;
+    font-size: .72rem;
+    line-height: 1.45;
+    gap: .18rem .6rem;
+    max-height: none;
+    overflow: visible;
   }
 
   .bsl-card p {
-    margin: 0;
-    font-size: .82rem;
-    line-height: 1.28;
-    opacity: .74;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    margin: .75rem 0 0;
+    font-size: .9rem;
+    line-height: 1.5;
+    letter-spacing: 0;
+    opacity: .72;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
   }
 
   [data-bsl-blog][data-view="list"] .bsl-grid-view { display: none; }
@@ -555,11 +567,10 @@
       align-self: flex-end;
     }
 
-    .bsl-post-grid { grid-template-columns: 1fr; }
+    .bsl-post-grid { grid-template-columns: minmax(0, 1fr); }
 
     .bsl-card {
-      height: auto;
-      min-height: 15.5rem;
+      min-height: 0;
     }
   }
 
