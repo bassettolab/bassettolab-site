@@ -450,23 +450,15 @@
 
   .bsl-card p {
     margin: .65rem 0 0;
-    font-size: clamp(.72rem, .9vw, .78rem);
-    line-height: 1.45;
+    font-size: clamp(.66rem, .82vw, .72rem);
+    line-height: 1.48;
     opacity: .76;
   }
 
-  /* Subtle visual distinction for book posts on the home page */
-  .bsl-home [data-bsl-category="livros"] {
-    background: color-mix(in srgb, var(--bsl-surface) 94%, #9a6b45 6%);
-  }
-
-  .bsl-home .bsl-card[data-bsl-category="livros"] {
-    border-color: color-mix(in srgb, var(--bsl-border) 78%, #9a6b45 22%);
-  }
-
-  .bsl-home .bsl-post-list-item[data-bsl-category="livros"] {
-    border-radius: .5rem;
-    padding-inline: .55rem;
+  /* Book posts use the normal palette; only their titles use a secondary palette color. */
+  .bsl-home [data-bsl-category="livros"] .bsl-post-title,
+  .bsl-home .bsl-card[data-bsl-category="livros"] h3 a {
+    color: var(--bsl-accent-secondary) !important;
   }
 
   [data-bsl-blog][data-view="list"] .bsl-grid-view { display: none; }
@@ -915,18 +907,8 @@
   }
 
 
-  .bsl-book-article main {
-    background: color-mix(in srgb, var(--bsl-surface) 92%, #9a6b45 8%);
-    border: 1px solid color-mix(in srgb, var(--bsl-border) 72%, #9a6b45 28%);
-    border-radius: .9rem;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .bsl-book-article .bsl-article-title,
-  .bsl-book-article .content h2,
-  .bsl-book-article .content h3 {
-    color: color-mix(in srgb, var(--bsl-text) 86%, #9a6b45 14%);
+  .bsl-book-article .bsl-article-title {
+    color: var(--bsl-accent-secondary) !important;
   }
 
   .bsl-book-article .content img {
