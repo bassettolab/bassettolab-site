@@ -92,6 +92,32 @@ po_info AS
       FROM po_base
      GROUP BY invoice_id
 ),
+fdc_base AS
+(
+    /* Preferred relationship when the FDC header already stores the AP invoice. */
+    SELECT DISTINCT
+           fdh.invoice_id,
+           fdh.document_header_id,
+           fdh.document_number,
+           fdh.access_key_number,
+           fdh.total_amount
+      FROM cmf_fiscal_doc_headers fdh
+     WHERE fdh.invoice_id IS NOT NULL
+
+    UNION
+
+    /* Fallback through the source transaction carried to AP invoice lines. */
+    SELECT DISTINCT
+           ail.invoice_id,
+           fdh.document_header_id,
+           fdh.document_number,
+           fdh.access_key_number,
+           fdh.total_amount
+      FROM ap_invoice_lines_all ail
+      JOIN cmf_fiscal_doc_headers fdh
+        ON fdh.document_header_id = ail.source_trx_id
+     WHERE ail.source_trx_id IS NOT NULL
+),
 fdc_info AS
 (
     SELECT invoice_id,
@@ -100,8 +126,7 @@ fdc_info AS
            LISTAGG(access_key_number, ', ')
              WITHIN GROUP (ORDER BY access_key_number) fdc_access_key,
            SUM(total_amount) fdc_total_amount
-      FROM cmf_fiscal_doc_headers
-     WHERE invoice_id IS NOT NULL
+      FROM fdc_base
      GROUP BY invoice_id
 ),
 trv_accounting AS
@@ -220,11 +245,9 @@ Así el informe no depende de una cuenta fija.
 
 CMF_FISCAL_DOC_HEADERS contiene el INVOICE_ID de Payables, además de DOCUMENT_NUMBER, ACCESS_KEY_NUMBER y TOTAL_AMOUNT. [Oracle — CMF_FISCAL_DOC_HEADERS](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26a/oedsc/cmffiscaldocheaders-16080.html)
 
-La relación FDC → Payables puede hacerse directamente por:
+La relación más simple utiliza el `INVOICE_ID` almacenado en el encabezado de FDC. Sin embargo, ese campo es nullable y puede no estar informado en todos los registros. Por eso la query utiliza dos caminos: el `INVOICE_ID` de FDC y, como fallback, `AP_INVOICE_LINES_ALL.SOURCE_TRX_ID` relacionado con el `DOCUMENT_HEADER_ID` de FDC.
 
-~~~sql
-fdc.invoice_id = ai.invoice_id
-~~~
+Esto evita perder el número del documento fiscal, la clave de acceso y el importe total cuando el vínculo directo con la invoice no está disponible.
 
 ## Purchase Order
 
