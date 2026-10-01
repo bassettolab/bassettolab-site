@@ -72,7 +72,7 @@ WITH bu AS
 (
     SELECT bu_id,
            bu_name,
-           primary_ledger_id
+           TO_NUMBER(primary_ledger_id) primary_ledger_id
       FROM fun_all_business_units_v
      WHERE bu_name = :P_BU_NAME
 ),
@@ -258,7 +258,7 @@ SELECT DISTINCT
   FROM gl_ledgers gl
   JOIN
        (
-           SELECT fbu.primary_ledger_id ledger_id
+           SELECT TO_NUMBER(fbu.primary_ledger_id) ledger_id
              FROM fun_all_business_units_v fbu
             WHERE fbu.bu_name = :P_BU_NAME
 
@@ -267,14 +267,14 @@ SELECT DISTINCT
            SELECT glr.target_ledger_id ledger_id
              FROM fun_all_business_units_v fbu
              JOIN gl_ledger_relationships glr
-               ON glr.primary_ledger_id = fbu.primary_ledger_id
+               ON glr.primary_ledger_id = TO_NUMBER(fbu.primary_ledger_id)
             WHERE fbu.bu_name = :P_BU_NAME
        ) bu_ledgers
     ON bu_ledgers.ledger_id = gl.ledger_id
  ORDER BY gl.name
 ~~~
 
-La Business Unit expone `PRIMARY_LEDGER_ID`, mientras que `GL_LEDGER_RELATIONSHIPS` mantiene las relaciones entre ledgers primarios, secundarios y de reporting. El valor seleccionado se utiliza para filtrar `XLA_AE_HEADERS.LEDGER_ID`. [Oracle — FUN_ALL_BUSINESS_UNITS_V](https://docs.oracle.com/en/cloud/saas/financials/26b/oedmf/funallbusinessunitsv-5106.html) [Oracle — GL_LEDGER_RELATIONSHIPS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/glledgerrelationships-6344.html) [Oracle — XLA_AE_HEADERS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xlaaeheaders-7221.html)
+La Business Unit expone `PRIMARY_LEDGER_ID` mediante `FUN_ALL_BUSINESS_UNITS_V`, pero esa view obtiene el valor de `ORG_INFORMATION3`. Para evitar `ORA-01790` al combinarlo con los IDs numéricos de `GL_LEDGER_RELATIONSHIPS`, la query convierte explícitamente el campo con `TO_NUMBER(PRIMARY_LEDGER_ID)`. `GL_LEDGER_RELATIONSHIPS` mantiene las relaciones entre ledgers primarios, secundarios y de reporting. El valor seleccionado se utiliza para filtrar `XLA_AE_HEADERS.LEDGER_ID`. [Oracle — FUN_ALL_BUSINESS_UNITS_V](https://docs.oracle.com/en/cloud/saas/financials/26b/oedmf/funallbusinessunitsv-5106.html) [Oracle — GL_LEDGER_RELATIONSHIPS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/glledgerrelationships-6344.html) [Oracle — XLA_AE_HEADERS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xlaaeheaders-7221.html)
 
 ## Cómo se encuentra la invoice
 
