@@ -5,15 +5,11 @@
 {{- $tags := (T "tags") | default "Tags"}}
 {{- $editThisPage := (T "editThisPage") | default "Edit this page"}}
 {{- $backToTop := (T "backToTop") | default "Scroll to top" -}}
-{{- $tableOfContents := (T "tableOfContents") | default "Table of contents" -}}
-{{- $page := . -}}
-{{- $headingData := partial "utils/headings.html" $page -}}
-{{- $headings := index $headingData "headings" -}}
 
-<nav class="hextra-toc hx:order-last hx:hidden hx:w-64 hx:shrink-0 hx:xl:block hx:print:hidden hx:px-4" aria-label="{{ $tableOfContents }}">
+<nav class="hextra-toc hx:order-last hx:hidden hx:w-64 hx:shrink-0 hx:xl:block hx:print:hidden hx:px-4" aria-label="{{ (T "tableOfContents") | default "Table of contents" }}">
   {{- if $toc }}
-    <div class="hextra-scrollbar hx:sticky hx:top-[var(--hextra-navbar-height)] hx:overflow-y-auto hx:pr-4 hx:pt-6 hx:text-sm [hyphens:auto] hx:max-h-[calc(100vh-var(--hextra-navbar-height)-env(safe-area-inset-bottom))] hx:ltr:-mr-4 hx:rtl:-ml-4">
-      {{- with $headings -}}
+    <div class="hextra-scrollbar hx:sticky hx:top-16 hx:overflow-y-auto hx:pr-4 hx:pt-6 hx:text-sm [hyphens:auto] hx:max-h-[calc(100vh-var(--navbar-height)-env(safe-area-inset-bottom))] hx:ltr:-mr-4 hx:rtl:-ml-4">
+      {{- with .Fragments.Headings -}}
         <p class="hx:mb-4 hx:font-semibold hx:tracking-tight">{{ $onThisPage }}</p>
         {{- range . -}}
           <ul>
@@ -24,7 +20,7 @@
 
       {{- $borderClass := "bsl-toc-bottom hx:mt-8 hx:border-t hx:pt-8" -}}
 
-      {{- if not $headings -}}
+      {{- if not .Fragments.Headings -}}
         {{- $borderClass = "" -}}
       {{- end -}}
 
