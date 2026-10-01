@@ -181,10 +181,11 @@
   .bsl-view-toggle {
     display: inline-flex;
     border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-    border-radius: .6rem;
-    padding: .2rem;
-    gap: .15rem;
+    border-radius: .5rem;
+    padding: .12rem;
+    gap: .1rem;
     white-space: nowrap;
+    font-size: .78rem;
   }
 
   .bsl-view-button, .bsl-featured-toggle {
@@ -196,7 +197,7 @@
     border-radius: .45rem;
   }
 
-  .bsl-view-button { padding: .45rem .7rem; opacity: .7; }
+  .bsl-view-button { padding: .3rem .5rem; opacity: .7; }
   .bsl-view-button.is-active {
     opacity: 1;
     background: var(--bsl-accent-soft);
@@ -214,13 +215,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .85rem 1rem;
+    gap: 1rem;
+    padding: .55rem 1rem .35rem;
   }
 
-  .bsl-featured-header h2 { margin: 0; font-size: 1.45rem; }
+  .bsl-home .bsl-featured-header h2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 1.6rem !important;
+    line-height: 1.15;
+  }
+
   .bsl-featured-toggle {
     border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
-    padding: .3rem .75rem;
+    padding: .22rem .55rem;
+    font-size: .76rem;
+    line-height: 1.2;
   }
 
   .bsl-featured-body { padding: 0 1rem .9rem; }
@@ -279,7 +290,7 @@
   }
 
   .bsl-post-list-content { min-width: 0; }
-  .bsl-post-title { font-size: 1.02rem; line-height: 1.45; }
+  .bsl-post-title { font-size: clamp(1.06rem, 1.25vw, 1.14rem); line-height: 1.4; }
 
   .bsl-tags {
     display: flex;
@@ -849,6 +860,16 @@
     border-bottom: none !important;
     box-shadow: none !important;
     padding-bottom: 0 !important;
+  }
+
+
+  .bsl-home .bsl-tags,
+  .bsl-home .bsl-tags a {
+    color: var(--bsl-muted) !important;
+  }
+
+  .bsl-home .bsl-tags {
+    opacity: .82;
   }
 
 </style>
