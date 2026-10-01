@@ -1,11 +1,6 @@
 name: Translate Hugo articles
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "content/**/index.md"
   workflow_dispatch:
 
 permissions:
@@ -17,39 +12,45 @@ concurrency:
 
 jobs:
   translate:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
+      - name: Check OpenAI API key
+        id: api_key
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        shell: bash
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "OPENAI_API_KEY is not configured. Translation workflow is inactive."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install OpenAI SDK
+        if: steps.api_key.outputs.enabled == 'true'
         run: pip install --disable-pip-version-check openai
 
       - name: Find Portuguese source articles
+        if: steps.api_key.outputs.enabled == 'true'
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            find content -type f -name 'index.md' | sort > /tmp/translation_sources.txt
-          else
-            BEFORE="${{ github.event.before }}"
-            if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
-              git diff-tree --no-commit-id --name-only -r HEAD -- 'content/**/index.md' > /tmp/translation_sources.txt
-            else
-              git diff --name-only "$BEFORE" "${{ github.sha }}" -- 'content/**/index.md' > /tmp/translation_sources.txt
-            fi
-          fi
+          find content -type f -name 'index.md' | sort > /tmp/translation_sources.txt
           cat /tmp/translation_sources.txt
 
       - name: Translate to English and Spanish
+        if: steps.api_key.outputs.enabled == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5.6-luna
@@ -57,12 +58,13 @@ jobs:
         run: |
           mapfile -t files < /tmp/translation_sources.txt
           if [ "${#files[@]}" -eq 0 ] || [ -z "${files[0]}" ]; then
-            echo "No Portuguese source article changed."
+            echo "No Portuguese source articles found."
             exit 0
           fi
           python .github/scripts/translate_hugo.py "${files[@]}"
 
       - name: Commit translations
+        if: steps.api_key.outputs.enabled == 'true'
         shell: bash
         run: |
           if git diff --quiet; then
