@@ -92,6 +92,32 @@ po_info AS
       FROM po_base
      GROUP BY invoice_id
 ),
+fdc_base AS
+(
+    /* Preferred relationship when the FDC header already stores the AP invoice. */
+    SELECT DISTINCT
+           fdh.invoice_id,
+           fdh.document_header_id,
+           fdh.document_number,
+           fdh.access_key_number,
+           fdh.total_amount
+      FROM cmf_fiscal_doc_headers fdh
+     WHERE fdh.invoice_id IS NOT NULL
+
+    UNION
+
+    /* Fallback through the source transaction carried to AP invoice lines. */
+    SELECT DISTINCT
+           ail.invoice_id,
+           fdh.document_header_id,
+           fdh.document_number,
+           fdh.access_key_number,
+           fdh.total_amount
+      FROM ap_invoice_lines_all ail
+      JOIN cmf_fiscal_doc_headers fdh
+        ON fdh.document_header_id = ail.source_trx_id
+     WHERE ail.source_trx_id IS NOT NULL
+),
 fdc_info AS
 (
     SELECT invoice_id,
@@ -100,8 +126,7 @@ fdc_info AS
            LISTAGG(access_key_number, ', ')
              WITHIN GROUP (ORDER BY access_key_number) fdc_access_key,
            SUM(total_amount) fdc_total_amount
-      FROM cmf_fiscal_doc_headers
-     WHERE invoice_id IS NOT NULL
+      FROM fdc_base
      GROUP BY invoice_id
 ),
 trv_accounting AS
@@ -220,11 +245,9 @@ This avoids depending on a fixed account.
 
 CMF_FISCAL_DOC_HEADERS contains the Payables INVOICE_ID plus DOCUMENT_NUMBER, ACCESS_KEY_NUMBER, and TOTAL_AMOUNT. [Oracle — CMF_FISCAL_DOC_HEADERS](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26a/oedsc/cmffiscaldocheaders-16080.html)
 
-The FDC-to-Payables relationship can therefore be made directly through:
+The simplest relationship uses the `INVOICE_ID` stored on the FDC header. However, that column is nullable and may not be populated for every record. The query therefore uses two paths: the FDC `INVOICE_ID` and, as a fallback, `AP_INVOICE_LINES_ALL.SOURCE_TRX_ID` related to the FDC `DOCUMENT_HEADER_ID`.
 
-~~~sql
-fdc.invoice_id = ai.invoice_id
-~~~
+This prevents losing the fiscal document number, access key, and total amount when the direct invoice link isn't available.
 
 ## Purchase Order
 
