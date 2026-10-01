@@ -14,7 +14,7 @@ categories:
 toc: true
 type: post
 featured: true
-draft: false
+draft: true
 ---
 
 Terminé de leer *Alerta Roja* (*Red Notice*), de Bill Browder, y la historia me pareció mucho más interesante de lo que esperaba.
