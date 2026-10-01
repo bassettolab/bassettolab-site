@@ -119,7 +119,7 @@
                   {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
                 </div>
                 {{- end }}
-                {{- with .Description }}<p>{{ . }}</p>{{- end }}
+                <p>{{ .Summary | plainify | truncate 280 }}</p>
               </article>
               {{- end }}
             </div>
@@ -167,7 +167,7 @@
                       {{- range . }}<a href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>{{- end }}
                     </div>
                     {{- end }}
-                    {{- with .Description }}<p>{{ . }}</p>{{- end }}
+                    <p>{{ .Summary | plainify | truncate 280 }}</p>
                   </article>
                   {{- end }}
                 </div>
