@@ -295,10 +295,6 @@ A concatenação de ACCOUNT_COMBINATION deste exemplo considera sete segmentos. 
 
 A pergunta que o relatório passa a responder é simples:
 
-~~~text
-Quais invoices originadas no FDC
-geraram Tax Rate Variance
-para uma BU e período específicos?
-~~~
+Quais invoices originadas no FDC geraram Tax Rate Variance para uma BU e período específicos?
 
 A principal vantagem é identificar primeiro a natureza contábil da linha, TRV, e somente depois mostrar qual conta foi derivada pelo SLA. Isso mantém a consulta útil mesmo que a regra contábil seja alterada.
