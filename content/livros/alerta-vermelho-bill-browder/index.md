@@ -19,7 +19,7 @@ draft: false
 
 Terminei de ler *Alerta Vermelho* (*Red Notice*), do Bill Browder, e achei a história muito mais interessante do que eu esperava.
 
-E fiquei bem curioso, porque até então eu não sabia da ligação do livro com Sergei Magnitsky, justamente porque recentemente tivemos no Brasil a aplicação da Lei Magnitsky a um ministro do Supremo Tribunal Federal. Em 30 de julho de 2025, o Departamento do Tesouro dos Estados Unidos anunciou sanções contra o ministro Alexandre de Moraes com base na Executive Order 13818, que implementa a Global Magnitsky Human Rights Accountability Act. As justificativas são as apresentadas pelo governo americano naquele ato e são politicamente contestadas no Brasil. [Fonte oficial: U.S. Treasury](https://home.treasury.gov/news/press-releases/sb0211)
+E fiquei bem curioso, porque até então eu não sabia da ligação do livro com Sergei Magnitsky, justamente porque recentemente tivemos no Brasil a aplicação da Lei Magnitsky a um ministro do Supremo Tribunal Federal. [Fonte oficial: U.S. Treasury](https://home.treasury.gov/news/press-releases/sb0211)
 
 O que eu não sabia era de onde vinha o nome Magnitsky e como Bill Browder estava ligado à criação desse mecanismo de sanções.
 
@@ -35,7 +35,7 @@ Safra foi um dos banqueiros mais importantes do século XX. A própria Fundaçã
 
 Browder conseguiu o apoio de Safra para criar o Hermitage Fund e investir na Rússia.
 
-Para mim, isso deixa o começo do livro especialmente interessante: de um lado um investidor relativamente jovem tentando explorar uma oportunidade gigantesca; do outro, um banqueiro extremamente experiente colocando dinheiro e reputação naquele projeto.
+Para mim, isso deixa o começo do livro especialmente interessante: por ter um investidor corajoso pronto para entrar em um mercado pouco conhecido e um investidor cuja família é bem conhecida no Brasil.
 
 ## A morte de Edmond Safra
 
