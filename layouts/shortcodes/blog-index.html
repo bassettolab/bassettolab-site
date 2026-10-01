@@ -11,6 +11,10 @@
 {{- $archiveBottom := "Arquivo completo →" -}}
 {{- $onPage := "Nesta página" -}}
 {{- $monthNavAria := "Navegação por mês" -}}
+{{- $filterLabel := "Filtrar artigos" -}}
+{{- $allLabel := "Todos" -}}
+{{- $oracleLabel := "Oracle" -}}
+{{- $booksLabel := "Livros" -}}
 {{- if eq $lang "es" -}}
   {{- $older = "¿Buscas publicaciones anteriores?" -}}
   {{- $fullArchive = "Ver el archivo completo →" -}}
@@ -24,6 +28,10 @@
   {{- $archiveBottom = "Archivo completo →" -}}
   {{- $onPage = "En esta página" -}}
   {{- $monthNavAria = "Navegación por mes" -}}
+  {{- $filterLabel = "Filtrar artículos" -}}
+  {{- $allLabel = "Todos" -}}
+  {{- $oracleLabel = "Oracle" -}}
+  {{- $booksLabel = "Libros" -}}
 {{- else if eq $lang "en" -}}
   {{- $older = "Looking for older posts?" -}}
   {{- $fullArchive = "View the full archive →" -}}
@@ -37,6 +45,10 @@
   {{- $archiveBottom = "Full archive →" -}}
   {{- $onPage = "On this page" -}}
   {{- $monthNavAria = "Navigation by month" -}}
+  {{- $filterLabel = "Filter articles" -}}
+  {{- $allLabel = "All" -}}
+  {{- $oracleLabel = "Oracle" -}}
+  {{- $booksLabel = "Books" -}}
 {{- end -}}
 {{- $posts := where site.RegularPages "Type" "post" -}}
 {{- $posts = $posts.ByDate.Reverse -}}
@@ -58,9 +70,16 @@
       <div class="bsl-home-top">
         <p class="bsl-archive-lead">{{ $older }} <a href="{{ "/archives/" | relLangURL }}">{{ $fullArchive }}</a></p>
 
+        <div class="bsl-home-controls">
+          <div class="bsl-category-filter" role="group" aria-label="{{ $filterLabel }}">
+            <button type="button" class="bsl-filter-button is-active" data-bsl-filter="all" aria-pressed="true">{{ $allLabel }}</button>
+            <button type="button" class="bsl-filter-button" data-bsl-filter="oracle" aria-pressed="false">{{ $oracleLabel }}</button>
+            <button type="button" class="bsl-filter-button" data-bsl-filter="livros" aria-pressed="false">{{ $booksLabel }}</button>
+          </div>
         <div class="bsl-view-toggle" role="group" aria-label="{{ $viewAria }}">
           <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ {{ $listLabel }}</button>
           <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ {{ $gridLabel }}</button>
+        </div>
         </div>
       </div>
 
@@ -74,7 +93,7 @@
           <div class="bsl-list-view">
             <ul class="bsl-post-list">
               {{- range $featured }}
-              <li class="bsl-post-list-item">
+              <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}">
                 <span class="bsl-post-date">{{ .Date | time.Format "02 Jan" }}</span>
                 <div class="bsl-post-list-content">
                   <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
@@ -92,7 +111,7 @@
           <div class="bsl-grid-view">
             <div class="bsl-post-grid">
               {{- range $featured }}
-              <article class="bsl-card">
+              <article class="bsl-card" data-bsl-category="{{ .Section | lower }}">
                 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
                 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                 {{- with .Params.tags }}
@@ -122,7 +141,7 @@
               <div class="bsl-list-view">
                 <ul class="bsl-post-list">
                   {{- range .Pages }}
-                  <li class="bsl-post-list-item">
+                  <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}">
                     <span class="bsl-diamond">◆</span>
                     <div class="bsl-post-list-content">
                       <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
@@ -140,7 +159,7 @@
               <div class="bsl-grid-view">
                 <div class="bsl-post-grid">
                   {{- range .Pages }}
-                  <article class="bsl-card">
+                  <article class="bsl-card" data-bsl-category="{{ .Section | lower }}">
                     <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
                     <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                     {{- with .Params.tags }}
