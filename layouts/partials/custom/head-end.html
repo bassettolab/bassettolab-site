@@ -1,52 +1,75 @@
 <script data-bsl-palette-init>
   (function () {
+    var root = document.documentElement;
+    var dark = root.classList.contains("dark");
+    var validDark = ["tech", "cinematic", "editorial", "slate"];
+    var validLight = ["aquatic", "clay", "editorial", "slate"];
+
     try {
-      var palette = localStorage.getItem("bsl-palette-v2");
-      if (palette !== "tech" && palette !== "cinematic") palette = "tech";
-      document.documentElement.setAttribute("data-bsl-palette", palette);
+      var palette = localStorage.getItem("bsl-palette-v3");
+      var valid = dark ? validDark : validLight;
+      if (valid.indexOf(palette) === -1) palette = dark ? "tech" : "aquatic";
+      root.setAttribute("data-bsl-palette", palette);
     } catch (e) {
-      document.documentElement.setAttribute("data-bsl-palette", "tech");
+      root.setAttribute("data-bsl-palette", dark ? "tech" : "aquatic");
     }
   })();
 </script>
 
 <style>
+  /* Palette system
+     Dark only: Tech, Cinematic
+     Light only: Aquatic, Clay
+     Both modes: Editorial, Slate
+  */
+
   :root,
-  html[data-bsl-palette="cinematic"] {
-    --bsl-bg: #dde7ee;
-    --bsl-surface: color-mix(in srgb, #dde7ee 86%, white 14%);
-    --bsl-surface-2: color-mix(in srgb, #7ea2b8 34%, #dde7ee 66%);
-    --bsl-border: #7ea2b8;
-    --bsl-text: #061525;
-    --bsl-muted: #3e5b72;
-    --bsl-accent: #16314a;
-    --bsl-accent-soft: color-mix(in srgb, #7ea2b8 22%, transparent);
-    --bsl-accent-secondary: #3e5b72;
+  html[data-bsl-palette="aquatic"] {
+    --bsl-bg: #eaf2ed;
+    --bsl-surface: color-mix(in srgb, #eaf2ed 84%, white 16%);
+    --bsl-surface-2: color-mix(in srgb, #6bc7b6 24%, #eaf2ed 76%);
+    --bsl-border: #6bc7b6;
+    --bsl-text: #061a30;
+    --bsl-muted: #0f2f4a;
+    --bsl-accent: #1e6f6a;
+    --bsl-accent-soft: color-mix(in srgb, #6bc7b6 22%, transparent);
+    --bsl-accent-secondary: #0f2f4a;
   }
 
-  html.dark,
-  html.dark[data-bsl-palette="cinematic"] {
-    --bsl-bg: #061525;
-    --bsl-surface: #16314a;
-    --bsl-surface-2: color-mix(in srgb, #16314a 72%, #3e5b72 28%);
-    --bsl-border: #3e5b72;
-    --bsl-text: #dde7ee;
-    --bsl-muted: #7ea2b8;
-    --bsl-accent: #7ea2b8;
-    --bsl-accent-soft: color-mix(in srgb, #7ea2b8 20%, transparent);
-    --bsl-accent-secondary: #dde7ee;
+  html[data-bsl-palette="clay"] {
+    --bsl-bg: #f2e6d8;
+    --bsl-surface: color-mix(in srgb, #f2e6d8 84%, white 16%);
+    --bsl-surface-2: color-mix(in srgb, #c37a57 14%, #f2e6d8 86%);
+    --bsl-border: #5a7d8f;
+    --bsl-text: #0a1e33;
+    --bsl-muted: #24415f;
+    --bsl-accent: #c37a57;
+    --bsl-accent-soft: color-mix(in srgb, #c37a57 17%, transparent);
+    --bsl-accent-secondary: #5a7d8f;
   }
 
-  html[data-bsl-palette="tech"] {
-    --bsl-bg: #c9d6e2;
-    --bsl-surface: #ffffff;
-    --bsl-surface-2: #dfe8f0;
-    --bsl-border: #193b57;
-    --bsl-text: #050b14;
-    --bsl-muted: #46627a;
-    --bsl-accent: #137b61;
-    --bsl-accent-soft: color-mix(in srgb, #2ee6a6 18%, transparent);
-    --bsl-accent-secondary: #193b57;
+  html[data-bsl-palette="editorial"] {
+    --bsl-bg: #e9e4d6;
+    --bsl-surface: color-mix(in srgb, #e9e4d6 86%, white 14%);
+    --bsl-surface-2: color-mix(in srgb, #c7bfae 34%, #e9e4d6 66%);
+    --bsl-border: #c7bfae;
+    --bsl-text: #081b2c;
+    --bsl-muted: #3c5a73;
+    --bsl-accent: #102a43;
+    --bsl-accent-soft: color-mix(in srgb, #3c5a73 14%, transparent);
+    --bsl-accent-secondary: #3c5a73;
+  }
+
+  html[data-bsl-palette="slate"] {
+    --bsl-bg: #e6eaee;
+    --bsl-surface: color-mix(in srgb, #e6eaee 86%, white 14%);
+    --bsl-surface-2: color-mix(in srgb, #a7b2bc 30%, #e6eaee 70%);
+    --bsl-border: #a7b2bc;
+    --bsl-text: #0a1a2f;
+    --bsl-muted: #4b6177;
+    --bsl-accent: #1b3355;
+    --bsl-accent-soft: color-mix(in srgb, #4b6177 15%, transparent);
+    --bsl-accent-secondary: #4b6177;
   }
 
   html.dark[data-bsl-palette="tech"] {
@@ -59,6 +82,42 @@
     --bsl-accent: #2ee6a6;
     --bsl-accent-soft: color-mix(in srgb, #2ee6a6 18%, transparent);
     --bsl-accent-secondary: #2ee6a6;
+  }
+
+  html.dark[data-bsl-palette="cinematic"] {
+    --bsl-bg: #061525;
+    --bsl-surface: #16314a;
+    --bsl-surface-2: color-mix(in srgb, #16314a 72%, #3e5b72 28%);
+    --bsl-border: #3e5b72;
+    --bsl-text: #dde7ee;
+    --bsl-muted: #7ea2b8;
+    --bsl-accent: #7ea2b8;
+    --bsl-accent-soft: color-mix(in srgb, #7ea2b8 20%, transparent);
+    --bsl-accent-secondary: #dde7ee;
+  }
+
+  html.dark[data-bsl-palette="editorial"] {
+    --bsl-bg: #081b2c;
+    --bsl-surface: #102a43;
+    --bsl-surface-2: color-mix(in srgb, #102a43 72%, #3c5a73 28%);
+    --bsl-border: #3c5a73;
+    --bsl-text: #e9e4d6;
+    --bsl-muted: #c7bfae;
+    --bsl-accent: #c7bfae;
+    --bsl-accent-soft: color-mix(in srgb, #c7bfae 16%, transparent);
+    --bsl-accent-secondary: #e9e4d6;
+  }
+
+  html.dark[data-bsl-palette="slate"] {
+    --bsl-bg: #0a1a2f;
+    --bsl-surface: #1b3355;
+    --bsl-surface-2: color-mix(in srgb, #1b3355 74%, #4b6177 26%);
+    --bsl-border: #4b6177;
+    --bsl-text: #e6eaee;
+    --bsl-muted: #a7b2bc;
+    --bsl-accent: #a7b2bc;
+    --bsl-accent-soft: color-mix(in srgb, #a7b2bc 17%, transparent);
+    --bsl-accent-secondary: #e6eaee;
   }
 
   .bsl-home, .bsl-archive { width: 100%; }
@@ -700,42 +759,42 @@
   }
 
 
-  .bsl-palette-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 3.4rem;
+  .bsl-palette-select {
     height: 1.9rem;
-    margin-inline: .35rem .45rem;
-    padding: .32rem .62rem;
+    min-width: 5.7rem;
+    margin-inline: .35rem .55rem;
+    padding: .28rem 1.45rem .28rem .62rem;
     border: 1px solid transparent;
     border-radius: .5rem;
-    background: transparent;
+    background-color: transparent;
     color: var(--bsl-muted);
     cursor: pointer;
+    font: inherit;
     font-size: .74rem;
     font-weight: 500;
     line-height: 1;
-    white-space: nowrap;
+    appearance: auto;
     transition: border-color .18s ease, background .18s ease, color .18s ease;
   }
 
-  .bsl-palette-toggle:hover {
+  .bsl-palette-select:hover,
+  .bsl-palette-select:focus {
     border-color: color-mix(in srgb, var(--bsl-border) 68%, transparent);
-    background: color-mix(in srgb, var(--bsl-surface-2) 72%, transparent);
+    background-color: color-mix(in srgb, var(--bsl-surface-2) 72%, transparent);
+    color: var(--bsl-text);
+    outline: none;
+  }
+
+  .bsl-palette-select option {
+    background: var(--bsl-surface);
     color: var(--bsl-text);
   }
 
-  .bsl-palette-label {
-    display: inline-block;
-    text-align: center;
-  }
-
   @media (max-width: 760px) {
-    .bsl-palette-toggle {
-      min-width: auto;
+    .bsl-palette-select {
+      min-width: 4.7rem;
       margin-inline: .2rem .3rem;
-      padding-inline: .45rem;
+      padding-left: .4rem;
       font-size: .7rem;
     }
   }
@@ -745,31 +804,91 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var paletteNames = {
+      tech: "Tech",
       cinematic: "Cinematic",
-      tech: "Tech"
+      aquatic: "Aquatic",
+      clay: "Argila",
+      editorial: "Editorial",
+      slate: "Ardósia"
     };
 
-    function applyPalette(palette) {
-      if (!paletteNames[palette]) palette = "tech";
-      document.documentElement.setAttribute("data-bsl-palette", palette);
-      try { localStorage.setItem("bsl-palette-v2", palette); } catch (e) {}
+    var paletteSets = {
+      dark: ["tech", "cinematic", "editorial", "slate"],
+      light: ["aquatic", "clay", "editorial", "slate"]
+    };
 
-      document.querySelectorAll("[data-bsl-palette-toggle]").forEach(function (button) {
-        var label = button.querySelector(".bsl-palette-label");
-        if (label) label.textContent = paletteNames[palette];
-        button.setAttribute("title", "Palette: " + paletteNames[palette]);
-        button.setAttribute("aria-label", "Palette: " + paletteNames[palette] + ". Click to change.");
+    function isDarkMode() {
+      return document.documentElement.classList.contains("dark");
+    }
+
+    function validPalettes() {
+      return isDarkMode() ? paletteSets.dark : paletteSets.light;
+    }
+
+    function defaultPalette() {
+      return isDarkMode() ? "tech" : "aquatic";
+    }
+
+    function renderPaletteOptions(select, selected) {
+      var allowed = validPalettes();
+      select.innerHTML = "";
+
+      allowed.forEach(function (palette) {
+        var option = document.createElement("option");
+        option.value = palette;
+        option.textContent = paletteNames[palette];
+        option.selected = palette === selected;
+        select.appendChild(option);
       });
     }
 
-    var currentPalette = document.documentElement.getAttribute("data-bsl-palette") || "tech";
-    applyPalette(currentPalette);
+    function applyPalette(palette, persist) {
+      var allowed = validPalettes();
+      if (allowed.indexOf(palette) === -1) palette = defaultPalette();
 
-    document.querySelectorAll("[data-bsl-palette-toggle]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        var current = document.documentElement.getAttribute("data-bsl-palette") || "tech";
-        applyPalette(current === "cinematic" ? "tech" : "cinematic");
+      document.documentElement.setAttribute("data-bsl-palette", palette);
+
+      if (persist !== false) {
+        try { localStorage.setItem("bsl-palette-v3", palette); } catch (e) {}
+      }
+
+      document.querySelectorAll("[data-bsl-palette-select]").forEach(function (select) {
+        renderPaletteOptions(select, palette);
+        select.value = palette;
+        select.setAttribute("aria-label", "Palette: " + paletteNames[palette]);
+        select.setAttribute("title", "Palette: " + paletteNames[palette]);
       });
+    }
+
+    function syncPaletteToMode() {
+      var current = document.documentElement.getAttribute("data-bsl-palette");
+      var allowed = validPalettes();
+
+      if (allowed.indexOf(current) === -1) {
+        current = defaultPalette();
+      }
+
+      applyPalette(current, true);
+    }
+
+    var currentPalette = document.documentElement.getAttribute("data-bsl-palette") || defaultPalette();
+    applyPalette(currentPalette, false);
+
+    document.querySelectorAll("[data-bsl-palette-select]").forEach(function (select) {
+      select.addEventListener("change", function () {
+        applyPalette(select.value, true);
+      });
+    });
+
+    var paletteModeObserver = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.attributeName === "class") syncPaletteToMode();
+      });
+    });
+
+    paletteModeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"]
     });
 
     document.querySelectorAll("[data-bsl-blog]").forEach(function (root) {
