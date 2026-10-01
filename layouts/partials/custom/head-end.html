@@ -6,11 +6,12 @@
   (function () {
     var root = document.documentElement;
     var dark = root.classList.contains("dark");
-    var validDark = ["tech", "cinematic", "clay", "editorial", "slate", "hexagonal", "akita"];
-    var validLight = ["aquatic", "clay", "editorial", "slate", "hexagonal", "akita"];
+    var validDark = ["tech", "clay", "editorial", "hexagonal", "akita"];
+    var validLight = ["aquatic", "clay", "editorial", "hexagonal", "akita"];
 
     try {
       var palette = localStorage.getItem("bsl-palette-v3");
+      if (palette === "cinematic" || palette === "slate") palette = null;
       var valid = dark ? validDark : validLight;
       if (valid.indexOf(palette) === -1) palette = dark ? "tech" : "aquatic";
       root.setAttribute("data-bsl-palette", palette);
@@ -1450,18 +1451,16 @@
   document.addEventListener("DOMContentLoaded", function () {
     var paletteNames = {
       tech: "Tech",
-      cinematic: "Cinematic",
       aquatic: "Aquatic",
       clay: "Argila",
       editorial: "Editorial",
-      slate: "Ardósia",
       hexagonal: "Hexagonal",
       akita: "Akita"
     };
 
     var paletteSets = {
-      dark: ["tech", "cinematic", "clay", "editorial", "slate", "hexagonal", "akita"],
-      light: ["aquatic", "clay", "editorial", "slate", "hexagonal", "akita"]
+      dark: ["tech", "clay", "editorial", "hexagonal", "akita"],
+      light: ["aquatic", "clay", "editorial", "hexagonal", "akita"]
     };
 
     function isDarkMode() {
