@@ -7,6 +7,14 @@
         {{ partial "breadcrumb.html" (dict "page" . "enable" false) }}
         <br class="hx:mt-1.5 hx:text-sm" />
 
+        {{- $homeLabel := "Início" -}}
+        {{- if eq .Site.Language.Lang "en" -}}
+          {{- $homeLabel = "Home" -}}
+        {{- else if eq .Site.Language.Lang "es" -}}
+          {{- $homeLabel = "Inicio" -}}
+        {{- end -}}
+        <a class="bsl-mobile-home-link" href="{{ "/" | relLangURL }}">← {{ $homeLabel }}</a>
+
         {{ if .Title }}
           <h1 class="bsl-article-title hx:text-center hx:mt-2 hx:text-4xl hx:font-bold hx:tracking-tight hx:text-slate-900 hx:dark:text-slate-100">{{ .Title }}</h1>
         {{ end }}
