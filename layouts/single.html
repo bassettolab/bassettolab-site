@@ -25,7 +25,7 @@
           {{- with .Params.rating }}
             <span class="bsl-meta-sep">·</span>
             <span class="bsl-book-rating" aria-label="Avaliação: {{ . }} de 5 estrelas">
-              {{- range seq 1 5 -}}{{ if le . $ }}★{{ else }}☆{{ end }}{{- end -}}
+              {{- $rating := . -}}{{- range seq 1 5 -}}{{ if le . $rating }}★{{ else }}☆{{ end }}{{- end -}}
             </span>
           {{- end }}
 
