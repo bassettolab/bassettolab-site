@@ -16,6 +16,10 @@
 {{- $oracleLabel := "TI" -}}
 {{- $booksLabel := "Livros" -}}
 {{- $securityLabel := "Segurança" -}}
+{{- $oracleSubLabel := "Oracle" -}}
+{{- $cloudLabel := "Cloud" -}}
+{{- $ebsLabel := "EBS" -}}
+{{- $fdcLabel := "FDC" -}}
 {{- if eq $lang "es" -}}
   {{- $olderPrefix = "¿Buscas publicaciones " -}}
   {{- $olderLink = "anteriores" -}}
@@ -34,6 +38,10 @@
   {{- $oracleLabel = "TI" -}}
   {{- $booksLabel = "Libros" -}}
   {{- $securityLabel = "Seguridad" -}}
+  {{- $oracleSubLabel = "Oracle" -}}
+  {{- $cloudLabel = "Cloud" -}}
+  {{- $ebsLabel = "EBS" -}}
+  {{- $fdcLabel = "FDC" -}}
 {{- else if eq $lang "en" -}}
   {{- $olderPrefix = "Looking for " -}}
   {{- $olderLink = "older" -}}
@@ -52,6 +60,10 @@
   {{- $oracleLabel = "TI" -}}
   {{- $booksLabel = "Books" -}}
   {{- $securityLabel = "Safety" -}}
+  {{- $oracleSubLabel = "Oracle" -}}
+  {{- $cloudLabel = "Cloud" -}}
+  {{- $ebsLabel = "EBS" -}}
+  {{- $fdcLabel = "FDC" -}}
 {{- end -}}
 {{- $posts := where site.RegularPages "Type" "post" -}}
 {{- $posts = $posts.ByDate.Reverse -}}
@@ -86,6 +98,22 @@
             <button type="button" class="bsl-filter-button" data-bsl-filter="livros" aria-pressed="false">{{ $booksLabel }}</button>
             <button type="button" class="bsl-filter-button" data-bsl-filter="seguranca" aria-pressed="false">{{ $securityLabel }}</button>
           </div>
+
+          <div class="bsl-tech-filter-stack" data-bsl-tech-stack hidden>
+            <div class="bsl-tech-filter-row" data-bsl-tech-row="platform">
+              <span class="bsl-tech-filter-path">TI ›</span>
+              <button type="button" class="bsl-filter-button" data-bsl-tech-filter="platform:oracle" aria-pressed="false">{{ $oracleSubLabel }}</button>
+            </div>
+            <div class="bsl-tech-filter-row" data-bsl-tech-row="product" hidden>
+              <span class="bsl-tech-filter-path">Oracle ›</span>
+              <button type="button" class="bsl-filter-button" data-bsl-tech-filter="product:cloud" aria-pressed="false">{{ $cloudLabel }}</button>
+              <button type="button" class="bsl-filter-button" data-bsl-tech-filter="product:ebs" aria-pressed="false" disabled title="Sem artigos publicados">{{ $ebsLabel }}</button>
+            </div>
+            <div class="bsl-tech-filter-row" data-bsl-tech-row="module" hidden>
+              <span class="bsl-tech-filter-path">Cloud ›</span>
+              <button type="button" class="bsl-filter-button" data-bsl-tech-filter="module:fdc" aria-pressed="false">{{ $fdcLabel }}</button>
+            </div>
+          </div>
         <div class="bsl-view-toggle" role="group" aria-label="{{ $viewAria }}">
           <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ {{ $listLabel }}</button>
           <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ {{ $gridLabel }}</button>
@@ -103,7 +131,7 @@
           <div class="bsl-list-view">
             <ul class="bsl-post-list">
               {{- range $featured }}
-              <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}">
+              <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                 <span class="bsl-post-date">{{ .Date | time.Format "02 Jan" }}</span>
                 <div class="bsl-post-list-content">
                   <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
@@ -126,7 +154,7 @@
           <div class="bsl-grid-view">
             <div class="bsl-post-grid">
               {{- range $featured }}
-              <article class="bsl-card" data-bsl-category="{{ .Section | lower }}">
+              <article class="bsl-card" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
                 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                 {{- with .Params.tags }}
@@ -161,7 +189,7 @@
               <div class="bsl-list-view">
                 <ul class="bsl-post-list">
                   {{- range .Pages }}
-                  <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}">
+                  <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                     <span class="bsl-diamond">◆</span>
                     <div class="bsl-post-list-content">
                       <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
@@ -179,7 +207,7 @@
               <div class="bsl-grid-view">
                 <div class="bsl-post-grid">
                   {{- range .Pages }}
-                  <article class="bsl-card" data-bsl-category="{{ .Section | lower }}">
+                  <article class="bsl-card" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                     <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
                     <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                     {{- with .Params.tags }}
