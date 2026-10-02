@@ -13,6 +13,7 @@ categories:
 toc: true
 type: post
 featured: true
+rating: 5
 draft: false
 ---
 
