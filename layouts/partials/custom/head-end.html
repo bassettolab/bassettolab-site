@@ -608,6 +608,10 @@
     }
   }
 
+  .bsl-mobile-home-link {
+    display: none;
+  }
+
   .bsl-article-tags {
     text-align: center;
     margin-top: .65rem;
@@ -800,6 +804,19 @@
   }
 
   @media (max-width: 680px) {
+    .bsl-mobile-home-link {
+      display: inline-block;
+      margin: 0 0 .85rem;
+      font-family: "Source Sans 3", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+      font-size: .9rem;
+      color: var(--bsl-accent);
+      text-decoration: none;
+    }
+
+    .bsl-mobile-home-link:hover {
+      text-decoration: underline;
+    }
+
     .bsl-article-title {
       font-size: 2rem !important;
       line-height: 1.12;
