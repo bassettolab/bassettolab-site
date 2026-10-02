@@ -13,10 +13,6 @@ tags:
   - Collaboration Messaging
 categories:
   - Oracle
-area: "TI"
-platform: "Oracle"
-product: "Cloud"
-module: "FDC"
 toc: true
 type: post
 featured: true
