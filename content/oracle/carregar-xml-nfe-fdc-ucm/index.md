@@ -205,31 +205,68 @@ mostra as pendências encontradas durante a validação.
 
 O fluxo oficial de [Import Fiscal Document](https://docs.oracle.com/en/cloud/saas/financials/26b/faufa/import-fiscal-document.html) orienta revisar essas pendências, corrigir o que for necessário, liberar os holds aplicáveis e validar novamente o documento.
 
-## 6. Retorno relacionado à SEFAZ
+## 6. Hold "Electronic fiscal documents need to be valid" e retorno da SEFAZ
 
-Dependendo da arquitetura da integração, além do XML recebido do fornecedor pode existir uma mensagem de retorno do parceiro responsável pela comunicação com a SEFAZ.
-
-A Oracle diferencia essas origens no próprio UCM:
+Nos testes manuais que fiz com NF-e no FDC, depois que o XML é carregado e o documento passa pela validação inicial, aparece o hold:
 
 ~~~text
-Fornecedor
+Electronic fiscal documents need to be valid
+~~~
+
+Na prática, esse é um comportamento esperado no fluxo eletrônico. A documentação pública da Oracle não apresenta uma lista com esse texto exato de hold, mas documenta que o [Collaboration Messaging Framework se comunica com a SEFAZ para confirmar a validade e o status do documento fiscal recebido](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/freight-fiscal-documents-for-inbound-flow.html).
+
+Ou seja: carregar apenas o XML da NF-e não significa necessariamente que a validação eletrônica terminou. O FDC ainda precisa receber e processar a informação que confirma a situação daquele documento perante a autoridade fiscal.
+
+No cenário que testei, o hold não é resolvido apenas executando novamente a validação do FDC. É necessário receber um novo XML/mensagem de retorno do parceiro fiscal com a confirmação relacionada à SEFAZ.
+
+A Oracle separa esse tipo de mensagem da NF-e recebida do fornecedor. O processo [Import Brazil Electronic Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/faspc/import-brazil-electronic-documents.html) monitora contas diferentes no UCM:
+
+~~~text
+XML da NF-e recebida do fornecedor
 scm/BrazilSEFAZSupplierMessages/import
 
-Parceiro / SEFAZ
+Retorno do parceiro fiscal / SEFAZ
 scm/BrazilSEFAZPartnerMessages/import
 ~~~
 
-Essas contas estão documentadas no processo [Import Brazil Electronic Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/faspc/import-brazil-electronic-documents.html).
+Esse desenho faz sentido com o funcionamento do [Collaboration Messaging Framework](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25d/faips/collaboration-messaging-framework.html), que recebe mensagens de parceiros ou provedores, transforma o XML para o formato esperado pelo Oracle e entrega a informação para a aplicação.
 
-Quando uma nova mensagem de retorno é colocada no UCM, o fluxo volta a passar pelos processos:
+Então, para reproduzir manualmente o fluxo que fiz nos testes:
 
 ~~~text
-Import Brazil Electronic Documents
+1. Carregar o XML da NF-e
 
-Import and Validate Electronic Fiscal Documents
+2. Executar:
+   Import Brazil Electronic Documents
+
+3. Executar:
+   Import and Validate Electronic Fiscal Documents
+
+4. Abrir o documento no FDC
+
+5. O documento pode ficar com o hold:
+   Electronic fiscal documents need to be valid
+
+6. Carregar o XML/mensagem de retorno do parceiro fiscal
+   em:
+   scm/BrazilSEFAZPartnerMessages/import
+
+7. Executar novamente:
+   Import Brazil Electronic Documents
+
+8. Executar novamente:
+   Import and Validate Electronic Fiscal Documents
+
+9. Validar novamente o documento no FDC
 ~~~
 
-Assim o Oracle consegue consumir a nova mensagem e continuar o processamento do documento fiscal.
+Depois que a confirmação eletrônica é processada, o FDC consegue continuar a validação do documento. Se não houver outras pendências, o fluxo pode avançar para:
+
+~~~text
+Completed Prevalidation
+~~~
+
+Um detalhe importante: o formato exato do XML de retorno depende da integração e da configuração do parceiro fiscal. O ponto principal para troubleshooting é entender que o primeiro XML representa o documento fiscal recebido, enquanto a segunda mensagem pode carregar a confirmação necessária para completar a validação eletrônica.
 
 ## 7. Validar novamente o documento
 
@@ -375,3 +412,13 @@ UCM
 ~~~
 
 A ideia deste artigo é deixar o processo operacional em uma sequência fácil de consultar. Os links ao longo do texto apontam para a documentação Oracle usada como referência quando for necessário conferir algum detalhe.
+
+## Referências
+
+- [Oracle — Import Fiscal Document](https://docs.oracle.com/en/cloud/saas/financials/26b/faufa/import-fiscal-document.html)
+- [Oracle — Import Brazil Electronic Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/26b/faspc/import-brazil-electronic-documents.html)
+- [Oracle — Import and Validate Electronic Fiscal Documents](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25d/faspc/import-and-validate-electronic-fiscal-documents.html)
+- [Oracle — Capture Fiscal Documents using XML Import](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/Untitled.html)
+- [Oracle — Freight Fiscal Documents for Inbound Flow](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/freight-fiscal-documents-for-inbound-flow.html)
+- [Oracle — Collaboration Messaging Framework](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25d/faips/collaboration-messaging-framework.html)
+- [Oracle — View Interface Exceptions](https://docs.oracle.com/en/cloud/saas/supply-chain-and-manufacturing/25c/fafdc/view-interface-exceptions.html)
