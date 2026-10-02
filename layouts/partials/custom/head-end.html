@@ -1644,9 +1644,9 @@
         var productRow = root.querySelector('[data-bsl-tech-row="product"]');
         var moduleRow = root.querySelector('[data-bsl-tech-row="module"]');
 
-        if (stack) stack.hidden = currentFilter !== "oracle";
-        if (productRow) productRow.hidden = !(currentFilter === "oracle" && techPlatform === "oracle");
-        if (moduleRow) moduleRow.hidden = !(currentFilter === "oracle" && techPlatform === "oracle" && techProduct === "cloud");
+        if (stack) stack.hidden = currentFilter !== "ti";
+        if (productRow) productRow.hidden = !(currentFilter === "ti" && techPlatform === "oracle");
+        if (moduleRow) moduleRow.hidden = !(currentFilter === "ti" && techPlatform === "oracle" && techProduct === "cloud");
 
         root.querySelectorAll("[data-bsl-tech-filter]").forEach(function (button) {
           var value = button.getAttribute("data-bsl-tech-filter") || "";
@@ -1665,10 +1665,10 @@
       function itemMatches(item) {
         var categoryMatch =
           currentFilter === "all" ||
-          item.getAttribute("data-bsl-category") === currentFilter;
+          item.getAttribute("data-bsl-area") === currentFilter;
 
         if (!categoryMatch) return false;
-        if (currentFilter !== "oracle") return true;
+        if (currentFilter !== "ti") return true;
 
         if (techPlatform && item.getAttribute("data-bsl-platform") !== techPlatform) return false;
         if (techProduct && item.getAttribute("data-bsl-product") !== techProduct) return false;
@@ -1694,7 +1694,7 @@
       function applyCategoryFilter(next) {
         currentFilter = next || "all";
 
-        if (currentFilter !== "oracle") {
+        if (currentFilter !== "ti") {
           techPlatform = "";
           techProduct = "";
           techModule = "";
