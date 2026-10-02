@@ -110,7 +110,7 @@
                   {{- end }}
                   {{- with .Params.rating }}
                   <div class="bsl-book-rating bsl-book-rating-list" aria-label="Avaliação: {{ . }} de 5 estrelas">
-                    {{- range seq 1 5 -}}{{ if le . $ }}★{{ else }}☆{{ end }}{{- end -}}
+                    {{- $rating := . -}}{{- range seq 1 5 -}}{{ if le . $rating }}★{{ else }}☆{{ end }}{{- end -}}
                   </div>
                   {{- end }}
                 </div>
@@ -132,7 +132,7 @@
                 {{- end }}
                 {{- with .Params.rating }}
                 <div class="bsl-book-rating bsl-book-rating-card" aria-label="Avaliação: {{ . }} de 5 estrelas">
-                  {{- range seq 1 5 -}}{{ if le . $ }}★{{ else }}☆{{ end }}{{- end -}}
+                  {{- $rating := . -}}{{- range seq 1 5 -}}{{ if le . $rating }}★{{ else }}☆{{ end }}{{- end -}}
                 </div>
                 {{- end }}
                 <p>{{ .Summary | plainify | truncate 280 }}</p>
