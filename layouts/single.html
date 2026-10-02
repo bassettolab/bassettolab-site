@@ -22,6 +22,13 @@
             <em>{{ partial "utils/format-date" . }}</em>
           {{- end -}}
 
+          {{- with .Params.rating }}
+            <span class="bsl-meta-sep">·</span>
+            <span class="bsl-book-rating" aria-label="Avaliação: {{ . }} de 5 estrelas">
+              {{- range seq 1 5 -}}{{ if le . $ }}★{{ else }}☆{{ end }}{{- end -}}
+            </span>
+          {{- end }}
+
           {{- with .Params.discussionURL }}
             <span class="bsl-meta-sep">·</span>
             <a href="{{ . }}" target="_blank" rel="noopener">💬 Participe da Discussão</a>
