@@ -1,6 +1,5 @@
 {{- $lang := site.Language.Lang -}}
 {{- $older := "Procurando posts mais antigos?" -}}
-{{- $fullArchive := "Veja o arquivo completo →" -}}
 {{- $listLabel := "Lista" -}}
 {{- $gridLabel := "Grade" -}}
 {{- $viewAria := "Visualização dos posts" -}}
@@ -17,7 +16,6 @@
 {{- $booksLabel := "Livros" -}}
 {{- if eq $lang "es" -}}
   {{- $older = "¿Buscas publicaciones anteriores?" -}}
-  {{- $fullArchive = "Ver el archivo completo →" -}}
   {{- $listLabel = "Lista" -}}
   {{- $gridLabel = "Cuadrícula" -}}
   {{- $viewAria = "Visualización de publicaciones" -}}
@@ -34,7 +32,6 @@
   {{- $booksLabel = "Libros" -}}
 {{- else if eq $lang "en" -}}
   {{- $older = "Looking for older posts?" -}}
-  {{- $fullArchive = "View the full archive →" -}}
   {{- $listLabel = "List" -}}
   {{- $gridLabel = "Grid" -}}
   {{- $viewAria = "Post view" -}}
@@ -68,7 +65,7 @@
   <div class="bsl-page-grid">
     <main class="bsl-main-column">
       <div class="bsl-home-top">
-        <p class="bsl-archive-lead">{{ $older }} <a href="{{ "/archives/" | relLangURL }}">{{ $fullArchive }}</a></p>
+        <p class="bsl-archive-lead"><a href="{{ "/archives/" | relLangURL }}">{{ $older }}</a></p>
 
         <div class="bsl-home-controls">
           <div class="bsl-category-filter" role="group" aria-label="{{ $filterLabel }}">
