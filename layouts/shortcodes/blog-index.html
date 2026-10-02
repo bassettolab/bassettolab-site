@@ -94,7 +94,7 @@
         <div class="bsl-home-controls">
           <div class="bsl-category-filter" role="group" aria-label="{{ $filterLabel }}">
             <button type="button" class="bsl-filter-button is-active" data-bsl-filter="all" aria-pressed="true">{{ $allLabel }}</button>
-            <button type="button" class="bsl-filter-button" data-bsl-filter="oracle" aria-pressed="false">{{ $oracleLabel }}</button>
+            <button type="button" class="bsl-filter-button" data-bsl-filter="ti" aria-pressed="false">{{ $oracleLabel }}</button>
             <button type="button" class="bsl-filter-button" data-bsl-filter="livros" aria-pressed="false">{{ $booksLabel }}</button>
             <button type="button" class="bsl-filter-button" data-bsl-filter="seguranca" aria-pressed="false">{{ $securityLabel }}</button>
           </div>
@@ -131,7 +131,7 @@
           <div class="bsl-list-view">
             <ul class="bsl-post-list">
               {{- range $featured }}
-              <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
+              <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ if .Params.area }}{{ .Params.area | lower }}{{ else }}{{ .Section | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                 <span class="bsl-post-date">{{ .Date | time.Format "02 Jan" }}</span>
                 <div class="bsl-post-list-content">
                   <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
@@ -154,7 +154,7 @@
           <div class="bsl-grid-view">
             <div class="bsl-post-grid">
               {{- range $featured }}
-              <article class="bsl-card" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
+              <article class="bsl-card" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ if .Params.area }}{{ .Params.area | lower }}{{ else }}{{ .Section | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
                 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                 {{- with .Params.tags }}
@@ -189,7 +189,7 @@
               <div class="bsl-list-view">
                 <ul class="bsl-post-list">
                   {{- range .Pages }}
-                  <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
+                  <li class="bsl-post-list-item" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ if .Params.area }}{{ .Params.area | lower }}{{ else }}{{ .Section | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                     <span class="bsl-diamond">◆</span>
                     <div class="bsl-post-list-content">
                       <a class="bsl-post-title" href="{{ .RelPermalink }}" title="{{ .Description | plainify }}">{{ .Title }}</a>
@@ -207,7 +207,7 @@
               <div class="bsl-grid-view">
                 <div class="bsl-post-grid">
                   {{- range .Pages }}
-                  <article class="bsl-card" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ with .Params.area }}{{ . | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
+                  <article class="bsl-card" data-bsl-category="{{ .Section | lower }}" data-bsl-area="{{ if .Params.area }}{{ .Params.area | lower }}{{ else }}{{ .Section | lower }}{{ end }}" data-bsl-platform="{{ with .Params.platform }}{{ . | lower }}{{ end }}" data-bsl-product="{{ with .Params.product }}{{ . | lower }}{{ end }}" data-bsl-module="{{ with .Params.module }}{{ . | lower }}{{ end }}">
                     <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02/01/2006" }}</time>
                     <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                     {{- with .Params.tags }}
