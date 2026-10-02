@@ -233,6 +233,43 @@
     font-size: .78rem;
   }
 
+  .bsl-tech-filter-stack {
+    flex: 1 0 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .3rem;
+    margin-top: .12rem;
+  }
+
+  .bsl-tech-filter-stack[hidden],
+  .bsl-tech-filter-row[hidden] {
+    display: none !important;
+  }
+
+  .bsl-tech-filter-row {
+    display: inline-flex;
+    align-items: center;
+    gap: .15rem;
+    font-size: .76rem;
+  }
+
+  .bsl-tech-filter-path {
+    opacity: .55;
+    margin-right: .18rem;
+    white-space: nowrap;
+  }
+
+  .bsl-tech-filter-row .bsl-filter-button {
+    border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    padding: .24rem .48rem;
+  }
+
+  .bsl-tech-filter-row .bsl-filter-button:disabled {
+    cursor: default;
+    opacity: .32;
+  }
+
   .bsl-filter-button {
     border: 0;
     background: transparent;
@@ -1598,12 +1635,51 @@
       setView(view);
 
       var currentFilter = "all";
+      var techPlatform = "";
+      var techProduct = "";
+      var techModule = "";
 
-      function applyCategoryFilter(next) {
-        currentFilter = next || "all";
+      function syncTechFilterUI() {
+        var stack = root.querySelector("[data-bsl-tech-stack]");
+        var productRow = root.querySelector('[data-bsl-tech-row="product"]');
+        var moduleRow = root.querySelector('[data-bsl-tech-row="module"]');
+
+        if (stack) stack.hidden = currentFilter !== "oracle";
+        if (productRow) productRow.hidden = !(currentFilter === "oracle" && techPlatform === "oracle");
+        if (moduleRow) moduleRow.hidden = !(currentFilter === "oracle" && techPlatform === "oracle" && techProduct === "cloud");
+
+        root.querySelectorAll("[data-bsl-tech-filter]").forEach(function (button) {
+          var value = button.getAttribute("data-bsl-tech-filter") || "";
+          var parts = value.split(":");
+          var level = parts[0];
+          var selected = parts[1] || "";
+          var active =
+            (level === "platform" && techPlatform === selected) ||
+            (level === "product" && techProduct === selected) ||
+            (level === "module" && techModule === selected);
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+      }
+
+      function itemMatches(item) {
+        var categoryMatch =
+          currentFilter === "all" ||
+          item.getAttribute("data-bsl-category") === currentFilter;
+
+        if (!categoryMatch) return false;
+        if (currentFilter !== "oracle") return true;
+
+        if (techPlatform && item.getAttribute("data-bsl-platform") !== techPlatform) return false;
+        if (techProduct && item.getAttribute("data-bsl-product") !== techProduct) return false;
+        if (techModule && item.getAttribute("data-bsl-module") !== techModule) return false;
+
+        return true;
+      }
+
+      function refreshPostVisibility() {
         root.querySelectorAll("[data-bsl-category]").forEach(function (item) {
-          var match = currentFilter === "all" || item.getAttribute("data-bsl-category") === currentFilter;
-          item.hidden = !match;
+          item.hidden = !itemMatches(item);
         });
 
         root.querySelectorAll(".bsl-month").forEach(function (month) {
@@ -1613,17 +1689,55 @@
           );
           month.hidden = !visible;
         });
+      }
+
+      function applyCategoryFilter(next) {
+        currentFilter = next || "all";
+
+        if (currentFilter !== "oracle") {
+          techPlatform = "";
+          techProduct = "";
+          techModule = "";
+        }
 
         root.querySelectorAll("[data-bsl-filter]").forEach(function (button) {
           var active = button.getAttribute("data-bsl-filter") === currentFilter;
           button.classList.toggle("is-active", active);
           button.setAttribute("aria-pressed", active ? "true" : "false");
         });
+
+        syncTechFilterUI();
+        refreshPostVisibility();
       }
 
       root.querySelectorAll("[data-bsl-filter]").forEach(function (button) {
         button.addEventListener("click", function () {
           applyCategoryFilter(button.getAttribute("data-bsl-filter"));
+        });
+      });
+
+      root.querySelectorAll("[data-bsl-tech-filter]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          if (button.disabled) return;
+
+          var value = button.getAttribute("data-bsl-tech-filter") || "";
+          var parts = value.split(":");
+          var level = parts[0];
+          var selected = parts[1] || "";
+
+          if (level === "platform") {
+            techPlatform = selected;
+            techProduct = "";
+            techModule = "";
+          } else if (level === "product") {
+            techProduct = selected;
+            techModule = "";
+          } else if (level === "module") {
+            techModule = selected;
+          }
+
+          syncTechFilterUI();
+          refreshPostVisibility();
         });
       });
 
