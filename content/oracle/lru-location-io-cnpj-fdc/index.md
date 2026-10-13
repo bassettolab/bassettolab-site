@@ -70,6 +70,16 @@ Quando o depósito A transfere mercadorias para o depósito B, a Oracle precisa 
 - Qual CNPJ será o remetente da nota fiscal?
 - Qual CNPJ será o destinatário?
 
+### O que cada cadastro representa?
+
+| Cadastro | Em linguagem simples | Exemplo |
+|---|---|---|
+| Legal Reporting Unit (LRU) | O estabelecimento fiscal que possui o registro do CNPJ | Filial fiscal A |
+| Inventory Organization (IO) | A organização do Oracle que controla e movimenta aquele estoque | Depósito A |
+| Location | O endereço/local usado pela operação | Endereço do Depósito A |
+
+A IO não é o CNPJ e a Location não é a LRU. São cadastros diferentes que precisam ser relacionados corretamente para cada tipo de operação.
+
 ### Como o Oracle identifica o remetente e o destinatário?
 
 Para **transferências internas**, a [documentação oficial Oracle 26D](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html) descreve duas associações distintas:
