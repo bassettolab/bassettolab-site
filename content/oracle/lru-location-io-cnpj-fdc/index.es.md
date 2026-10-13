@@ -70,6 +70,16 @@ Cuando el Almacén A transfiere mercancías al Almacén B, Oracle necesita saber
 - ¿Qué CNPJ corresponde al remitente de la nota fiscal?
 - ¿Qué CNPJ corresponde al destinatario?
 
+### ¿Qué representa cada registro?
+
+| Registro | Explicación sencilla | Ejemplo |
+|---|---|---|
+| Legal Reporting Unit (LRU) | El establecimiento fiscal en el que se registra el CNPJ | Filial fiscal A |
+| Inventory Organization (IO) | La organización de Oracle que controla el stock | Almacén A |
+| Location | La dirección/ubicación utilizada en la operación | Dirección del almacén A |
+
+La IO no es el CNPJ y la Location no es la LRU: son registros distintos que deben vincularse según el flujo fiscal.
+
 ### ¿Cómo determina Oracle remitente y destinatario?
 
 Para **transferencias internas**, la [documentación oficial de Oracle 26D](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html) define dos asociaciones:
