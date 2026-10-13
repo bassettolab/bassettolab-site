@@ -27,6 +27,63 @@ Location ─── Inventory Organization (when applicable)
 
 O desenho é conceitual, não uma exigência de relacionamento um-para-um. Para transferências internas, a Oracle documenta a associação da IO com a LRU para derivar o ship-from e a associação da localização com a LRU para o ship-to. As associações necessárias variam conforme o fluxo.
 
+## Entendendo com um exemplo simples: dois depósitos
+
+Imagine uma empresa com dois depósitos em cidades diferentes. Cada depósito tem um CNPJ próprio. O Depósito A envia mercadorias para o Depósito B por meio de uma transferência de estoque.
+
+| Papel na operação | Depósito A | Depósito B |
+|---|---|---|
+| O que faz | Envia a mercadoria | Recebe a mercadoria |
+| Papel fiscal | Remetente (*Ship-From*) | Destinatário (*Ship-To*) |
+| Identificação | CNPJ da filial A | CNPJ da filial B |
+
+Para a nota fiscal ser emitida com os estabelecimentos certos, o Oracle precisa responder a duas perguntas: **de qual estabelecimento a mercadoria está saindo?** E **para qual estabelecimento ela está indo?**
+
+### O que cada cadastro representa?
+
+| Cadastro | Em linguagem simples | Exemplo |
+|---|---|---|
+| Legal Reporting Unit (LRU) | O estabelecimento fiscal que possui o registro do CNPJ | Filial fiscal A |
+| Inventory Organization (IO) | A organização do Oracle que controla e movimenta aquele estoque | Depósito A |
+| Location | O endereço/local usado pela operação | Endereço do Depósito A |
+
+A IO não é o CNPJ e a Location não é a LRU. São cadastros diferentes que precisam ser relacionados corretamente para cada tipo de operação.
+
+### Como o Oracle identifica o remetente e o destinatário?
+
+Para **transferências internas**, a [documentação oficial Oracle 26D](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html) descreve duas associações distintas:
+
+~~~text
+REMETENTE (Ship-From)
+Inventory Organization do Depósito A
+                |
+                v
+        LRU da filial A
+                |
+                v
+          CNPJ de A
+
+DESTINATÁRIO (Ship-To)
+Location de destino do Depósito B
+                |
+                v
+        LRU da filial B
+                |
+                v
+          CNPJ de B
+~~~
+
+- Para definir o **Ship-From**, entre em `Manage Associated Business Entities`, selecione a Legal Entity e a LRU do remetente e adicione uma linha do tipo `Inventory organization` com a IO correspondente. Para transferências internas e devoluções a fornecedor, essa associação ajuda a preencher a LRU remetente na tela `Update Fiscal Attributes`.
+- Para definir o **Ship-To** de transferências internas, selecione a Legal Entity e a LRU do destinatário e adicione uma linha do tipo `Ship-from or to location` com a Location de destino. O destino é informado na tela `Edit Shipment`.
+
+Em outras palavras: **o Oracle usa a IO para encontrar a LRU de origem e a Location de destino para encontrar a LRU de destino**, nos fluxos cobertos por essa regra. Não é necessário haver uma LRU exclusiva para cada IO; a estrutura fiscal deve refletir os estabelecimentos reais.
+
+### Como isso se relaciona ao FDC?
+
+Essas instruções da Oracle explicam principalmente a determinação de LRUs no **Fiscal Document Generation (FDG)**, durante a geração de documentos fiscais de embarque. Elas não afirmam que os mesmos relacionamentos, isoladamente, garantem a seleção de CNPJ no **Fiscal Document Capture (FDC)**.
+
+No FDC, acesse `Create Fiscal Document` e pesquise pelo CNPJ em `Receiver Taxpayer ID`. Se ele estiver disponível, você confirmou que o cadastro fiscal pode ser encontrado nessa lista; ainda será necessário testar uma operação completa. Se não aparecer, confira o registro da LRU, a vigência e os vínculos relevantes, além do contexto e das permissões do usuário.
+
 ## Configuração passo a passo
 
 1. Em Manage Legal Reporting Units, confira Legal Entity, LRU e vigência.
@@ -130,7 +187,7 @@ Não utilize telas reais, CNPJs reais ou endereços de produção em documentaç
 
 ## Referências
 
-- [Oracle — Define Ship-From and Ship-To Legal Reporting Units](https://docs.oracle.com/en/cloud/saas/financials/25d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html)
+- [Oracle — Define Ship-From and Ship-To Legal Reporting Units](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html)
 - [Oracle — XLE_ASSOCIATIONS_V](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xleassociationsv-8641.html)
 - [Oracle — XLE_REGISTRATIONS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xleregistrations-28020.html)
 - [Oracle — HR_LOCATIONS_ALL_F_VL](https://docs.oracle.com/en/cloud/saas/human-resources/oedmh/hrlocationsallfvl-8019.html)
