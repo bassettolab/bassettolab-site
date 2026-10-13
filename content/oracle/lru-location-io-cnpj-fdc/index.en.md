@@ -27,6 +27,63 @@ Location ─── Inventory Organization (when applicable)
 
 This diagram is conceptual, not a universal one-to-one rule. Oracle documents the IO-to-LRU association for ship-from and Location-to-LRU association for ship-to in internal transfers.
 
+## A simple example: two warehouses
+
+Imagine a company with two warehouses, each operating under a different Brazilian CNPJ. Warehouse A ships goods to Warehouse B in an internal stock transfer.
+
+| Transaction role | Warehouse A | Warehouse B |
+|---|---|---|
+| Action | Sends the goods | Receives the goods |
+| Fiscal role | Sender (*Ship-From*) | Receiver (*Ship-To*) |
+| Tax identification | Branch A CNPJ | Branch B CNPJ |
+
+The system must answer two questions: **which legal establishment is shipping the goods?** And **which legal establishment is receiving them?**
+
+### What does each record represent?
+
+| Record | Plain-language meaning | Example |
+|---|---|---|
+| Legal Reporting Unit (LRU) | The fiscal establishment carrying the CNPJ registration | Tax branch A |
+| Inventory Organization (IO) | The Oracle organization managing stock movements | Warehouse A |
+| Location | The physical address/location used by the transaction | Warehouse A address |
+
+An IO is not itself a CNPJ, and a Location is not an LRU. They are separate records that must be associated as required by the transaction.
+
+### How does Oracle identify sender and receiver?
+
+For **internal transfers**, the [official Oracle 26D documentation](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html) defines two separate mappings:
+
+~~~text
+SENDER (Ship-From)
+Inventory Organization of Warehouse A
+                   |
+                   v
+            LRU of Branch A
+                   |
+                   v
+                CNPJ A
+
+RECEIVER (Ship-To)
+Destination Location of Warehouse B
+                   |
+                   v
+            LRU of Branch B
+                   |
+                   v
+                CNPJ B
+~~~
+
+- **Ship-From:** in `Manage Associated Business Entities`, select the ship-from Legal Entity and LRU, then create an `Inventory organization` association for the correct IO. For internal transfers and supplier returns, Oracle uses this configuration to default the ship-from LRU on `Update Fiscal Attributes`.
+- **Ship-To:** for internal transfers, select the destination Legal Entity and LRU, then create a `Ship-from or to location` association for the destination Location. The ship-to location is captured on `Edit Shipment`.
+
+In short, Oracle uses the **source IO to determine the source LRU** and the **destination Location to determine the destination LRU** for these specific fiscal shipment processes. An individual LRU is not necessarily required for every IO.
+
+### How does this affect FDC?
+
+The cited Oracle procedure primarily describes LRU determination during **Fiscal Document Generation (FDG)**. It does not establish that these associations alone guarantee CNPJ selection in **Fiscal Document Capture (FDC)**.
+
+In FDC, open `Create Fiscal Document` and search `Receiver Taxpayer ID` for the expected CNPJ. A visible result confirms the taxpayer identifier can be found in that lookup, not that the entire fiscal flow will succeed. If absent, review the registration, effective dates, relevant associations, transaction context and user access.
+
 ## Setup checklist
 
 1. Verify Legal Entity, LRU and effective dates.
@@ -130,7 +187,7 @@ Avoid publishing real tax IDs, addresses or production screenshots. Validate cha
 
 ## References
 
-- [Oracle — Define Ship-From and Ship-To Legal Reporting Units](https://docs.oracle.com/en/cloud/saas/financials/25d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html)
+- [Oracle — Define Ship-From and Ship-To Legal Reporting Units](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html)
 - [Oracle — XLE_ASSOCIATIONS_V](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xleassociationsv-8641.html)
 - [Oracle — XLE_REGISTRATIONS](https://docs.oracle.com/en/cloud/saas/financials/26a/oedmf/xleregistrations-28020.html)
 - [Oracle — HR_LOCATIONS_ALL_F_VL](https://docs.oracle.com/en/cloud/saas/human-resources/oedmh/hrlocationsallfvl-8019.html)
