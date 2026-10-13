@@ -29,25 +29,46 @@ El esquema es conceptual, no una regla obligatoria de relación uno a uno. Oracl
 
 ## Un ejemplo sencillo: dos almacenes
 
-Imagine una empresa con dos almacenes, cada uno con su propio CNPJ brasileño. El Almacén A envía mercancía al Almacén B mediante una transferencia interna de stock.
+### 1. Ejemplo práctico
 
-| Papel en la operación | Almacén A | Almacén B |
-|---|---|---|
-| Acción | Envía la mercancía | Recibe la mercancía |
-| Papel fiscal | Remitente (*Ship-From*) | Destinatario (*Ship-To*) |
-| Identificación fiscal | CNPJ de la filial A | CNPJ de la filial B |
+<style>
+.bl-lru-example { margin: 1.25rem 0; border: 1px solid rgba(150, 150, 150, .38); border-radius: 10px; padding: 1.35rem 1.15rem 1.05rem; color: inherit; }
+.bl-lru-example .bl-lru-depots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.bl-lru-example .bl-lru-depot { text-align: center; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.bl-lru-example .bl-lru-icon { width: 26px; height: 26px; margin-bottom: .15rem; opacity: .9; }
+.bl-lru-example .bl-lru-name { font-size: .96rem; font-weight: 600; }
+.bl-lru-example .bl-lru-taxid, .bl-lru-example .bl-lru-action { font-size: .8rem; line-height: 1.5; opacity: .85; overflow-wrap: anywhere; }
+.bl-lru-example .bl-lru-transfer { display: flex; align-items: center; justify-content: center; gap: .55rem; margin-top: 1.4rem; font-size: .85rem; }
+.bl-lru-example .bl-lru-transfer svg { width: 18px; height: 18px; }
+@media (max-width: 480px) {
+  .bl-lru-example { padding: 1rem .65rem; }
+  .bl-lru-example .bl-lru-depots { gap: .45rem; }
+  .bl-lru-example .bl-lru-name { font-size: .85rem; }
+  .bl-lru-example .bl-lru-taxid, .bl-lru-example .bl-lru-action { font-size: .68rem; }
+}
+</style>
+<figure class="bl-lru-example" aria-label="Transferencia de inventario">
+  <div class="bl-lru-depots">
+    <div class="bl-lru-depot">
+      <svg class="bl-lru-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20V8l9-5 9 5v12H3Z"/><path d="M7 20v-9h10v9M7 14h10M7 17h10M9 8h6"/></svg>
+      <span class="bl-lru-name">Almacén A</span>
+      <span class="bl-lru-taxid">CNPJ 12.345.678/0001-XX</span>
+      <span class="bl-lru-action">Envía mercancías</span>
+    </div>
+    <div class="bl-lru-depot">
+      <svg class="bl-lru-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20V8l9-5 9 5v12H3Z"/><path d="M7 20v-9h10v9M7 14h10M7 17h10M9 8h6"/></svg>
+      <span class="bl-lru-name">Almacén B</span>
+      <span class="bl-lru-taxid">CNPJ 12.345.678/0002-XX</span>
+      <span class="bl-lru-action">Recibe mercancías</span>
+    </div>
+  </div>
+  <figcaption class="bl-lru-transfer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17H3V6h12v11h-1M15 10h4l3 3v4h-2"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><span>Transferencia de inventario</span></figcaption>
+</figure>
 
-El sistema debe responder a dos preguntas: **¿desde qué establecimiento fiscal sale la mercancía?** Y **¿a qué establecimiento fiscal llega?**
+Cuando el Almacén A transfiere mercancías al Almacén B, Oracle necesita saber:
 
-### ¿Qué representa cada registro?
-
-| Registro | Explicación sencilla | Ejemplo |
-|---|---|---|
-| Legal Reporting Unit (LRU) | El establecimiento fiscal en el que se registra el CNPJ | Filial fiscal A |
-| Inventory Organization (IO) | La organización de Oracle que controla el stock | Almacén A |
-| Location | La dirección/ubicación utilizada en la operación | Dirección del almacén A |
-
-La IO no es el CNPJ y la Location no es la LRU: son registros distintos que deben vincularse según el flujo fiscal.
+- ¿Qué CNPJ corresponde al remitente de la nota fiscal?
+- ¿Qué CNPJ corresponde al destinatario?
 
 ### ¿Cómo determina Oracle remitente y destinatario?
 
