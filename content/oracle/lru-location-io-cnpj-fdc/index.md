@@ -29,25 +29,46 @@ O desenho é conceitual, não uma exigência de relacionamento um-para-um. Para 
 
 ## Entendendo com um exemplo simples: dois depósitos
 
-Imagine uma empresa com dois depósitos em cidades diferentes. Cada depósito tem um CNPJ próprio. O Depósito A envia mercadorias para o Depósito B por meio de uma transferência de estoque.
+### 1. Exemplo prático
 
-| Papel na operação | Depósito A | Depósito B |
-|---|---|---|
-| O que faz | Envia a mercadoria | Recebe a mercadoria |
-| Papel fiscal | Remetente (*Ship-From*) | Destinatário (*Ship-To*) |
-| Identificação | CNPJ da filial A | CNPJ da filial B |
+<style>
+.bl-lru-example { margin: 1.25rem 0; border: 1px solid rgba(150, 150, 150, .38); border-radius: 10px; padding: 1.35rem 1.15rem 1.05rem; color: inherit; }
+.bl-lru-example .bl-lru-depots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.bl-lru-example .bl-lru-depot { text-align: center; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.bl-lru-example .bl-lru-icon { width: 26px; height: 26px; margin-bottom: .15rem; opacity: .9; }
+.bl-lru-example .bl-lru-name { font-size: .96rem; font-weight: 600; }
+.bl-lru-example .bl-lru-taxid, .bl-lru-example .bl-lru-action { font-size: .8rem; line-height: 1.5; opacity: .85; overflow-wrap: anywhere; }
+.bl-lru-example .bl-lru-transfer { display: flex; align-items: center; justify-content: center; gap: .55rem; margin-top: 1.4rem; font-size: .85rem; }
+.bl-lru-example .bl-lru-transfer svg { width: 18px; height: 18px; }
+@media (max-width: 480px) {
+  .bl-lru-example { padding: 1rem .65rem; }
+  .bl-lru-example .bl-lru-depots { gap: .45rem; }
+  .bl-lru-example .bl-lru-name { font-size: .85rem; }
+  .bl-lru-example .bl-lru-taxid, .bl-lru-example .bl-lru-action { font-size: .68rem; }
+}
+</style>
+<figure class="bl-lru-example" aria-label="Transferência de estoque">
+  <div class="bl-lru-depots">
+    <div class="bl-lru-depot">
+      <svg class="bl-lru-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20V8l9-5 9 5v12H3Z"/><path d="M7 20v-9h10v9M7 14h10M7 17h10M9 8h6"/></svg>
+      <span class="bl-lru-name">Depósito A</span>
+      <span class="bl-lru-taxid">CNPJ 12.345.678/0001-XX</span>
+      <span class="bl-lru-action">Envia mercadorias</span>
+    </div>
+    <div class="bl-lru-depot">
+      <svg class="bl-lru-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20V8l9-5 9 5v12H3Z"/><path d="M7 20v-9h10v9M7 14h10M7 17h10M9 8h6"/></svg>
+      <span class="bl-lru-name">Depósito B</span>
+      <span class="bl-lru-taxid">CNPJ 12.345.678/0002-XX</span>
+      <span class="bl-lru-action">Recebe mercadorias</span>
+    </div>
+  </div>
+  <figcaption class="bl-lru-transfer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17H3V6h12v11h-1M15 10h4l3 3v4h-2"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><span>Transferência de estoque</span></figcaption>
+</figure>
 
-Para a nota fiscal ser emitida com os estabelecimentos certos, o Oracle precisa responder a duas perguntas: **de qual estabelecimento a mercadoria está saindo?** E **para qual estabelecimento ela está indo?**
+Quando o depósito A transfere mercadorias para o depósito B, a Oracle precisa saber:
 
-### O que cada cadastro representa?
-
-| Cadastro | Em linguagem simples | Exemplo |
-|---|---|---|
-| Legal Reporting Unit (LRU) | O estabelecimento fiscal que possui o registro do CNPJ | Filial fiscal A |
-| Inventory Organization (IO) | A organização do Oracle que controla e movimenta aquele estoque | Depósito A |
-| Location | O endereço/local usado pela operação | Endereço do Depósito A |
-
-A IO não é o CNPJ e a Location não é a LRU. São cadastros diferentes que precisam ser relacionados corretamente para cada tipo de operação.
+- Qual CNPJ será o remetente da nota fiscal?
+- Qual CNPJ será o destinatário?
 
 ### Como o Oracle identifica o remetente e o destinatário?
 
