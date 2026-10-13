@@ -70,6 +70,16 @@ When Warehouse A transfers goods to Warehouse B, Oracle needs to know:
 - Which CNPJ identifies the sender on the fiscal document?
 - Which CNPJ identifies the recipient?
 
+### What does each record represent?
+
+| Record | Plain-language meaning | Example |
+|---|---|---|
+| Legal Reporting Unit (LRU) | The fiscal establishment carrying the CNPJ registration | Tax branch A |
+| Inventory Organization (IO) | The Oracle organization managing stock movements | Warehouse A |
+| Location | The physical address/location used by the transaction | Warehouse A address |
+
+An IO is not itself a CNPJ, and a Location is not an LRU. They are separate records that must be associated as required by the transaction.
+
 ### How does Oracle identify sender and receiver?
 
 For **internal transfers**, the [official Oracle 26D documentation](https://docs.oracle.com/en/cloud/saas/financials/26d/faufa/define-ship-from-and-ship-to-legal-reporting-units.html) defines two separate mappings:
