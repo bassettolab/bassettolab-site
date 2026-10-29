@@ -17,7 +17,7 @@ No Oracle Fusion Cloud Redwood, **Guided Journey** é um recurso de orientação
 | **Journey informativo** | Orientar o usuário durante a execução de uma atividade | PDF, relatórios BI Publisher/OTBI, análises, vídeo e links externos |
 | **Journey com agente de IA** | Oferecer consultas interativas no contexto da tela | Tarefa do tipo Agent associada a um agente publicado no AI Agent Studio |
 
-Os exemplos utilizam a página inicial de **Self Service Procurement / Purchase Requisitions** do Redwood. A abordagem pode ser aplicada a outras páginas de Procurement e SCM **desde que exista uma propriedade de Journey suportada naquela página**. A Oracle esclarece que não é possível associar o recurso por esse método quando a página ou seção não possui a propriedade correspondente.
+O procedimento demonstrado utiliza a página inicial de **Self Service Procurement / Purchase Requisitions** do Redwood. A abordagem pode ser aplicada a outras páginas de Procurement e SCM **desde que exista uma propriedade de Journey suportada naquela página**. A Oracle esclarece que não é possível associar o recurso por esse método quando a página ou seção não possui a propriedade correspondente.
 
 ## Onde utilizar
 
@@ -58,7 +58,7 @@ Redwood > Edit Page in Visual Builder Studio
 
 1. Entre em **My Routines > Journeys Setup > Guided Journey**.
 2. Selecione **Create**.
-3. Informe **Name** e **Code**. Exemplo do material: *Requisition Manual* e `REQ_MANUAL`.
+3. Informe **Name** e **Code**. Como exemplo genérico, utilize *Guia de Requisições* e `GUIA_REQUISICOES`.
 4. Clique em **Create Draft**.
 5. Na seção **Tasks**, clique em **Add** para adicionar as tarefas.
 
@@ -66,12 +66,12 @@ Para implementações SCM/Procurement, a documentação Oracle também descreve 
 
 ### 2. Configurar tarefas
 
-**Document:** selecione `Task Type = Document`, atribua nome, descrição, instruções e anexe o PDF. O exemplo usa um manual de requisições. Depois de salvar, utilize **Translation Editor** para localizar os textos nos idiomas habilitados (o arquivo demonstra inglês, português e espanhol).
+**Document:** selecione `Task Type = Document`, atribua nome, descrição, instruções e anexe o PDF. É possível anexar um manual genérico de requisições. Depois de salvar, utilize **Translation Editor** para localizar os textos nos idiomas habilitados (o arquivo demonstra inglês, português e espanhol).
 
-**Report:** selecione `Task Type = Report` e informe o caminho de um relatório acessível ao usuário. Exemplo do material:
+**Report:** selecione `Task Type = Report` e informe o caminho de um relatório acessível ao usuário. Exemplo ilustrativo (substituir pelo caminho real do catálogo autorizado):
 
 ```text
-/Custom/Procurement/REQ and PO Pending for Approval.xdo
+/Custom/Procurement/EXEMPLO_RELATORIO.xdo
 ```
 
 O exemplo é de um relatório com extensão `.xdo` (BI Publisher); não confundir o caminho com uma análise OTBI.
@@ -79,19 +79,19 @@ O exemplo é de um relatório com extensão `.xdo` (BI Publisher); não confundi
 **Analytics:** selecione `Task Type = Analytics`, `Type of Analysis = OTBI Analysis` e indique o caminho da análise no catálogo compartilhado:
 
 ```text
-/shared/Custom/Procurement/requisition_types
+/shared/Custom/Procurement/EXEMPLO_ANALISE
 ```
 
 **Video:** selecione `Task Type = Video`, `Video Type = Embedded URL` e informe uma URL de incorporação permitida.
 
 **External URL:** selecione `Task Type = External URL` e informe a página de apoio, por exemplo a [biblioteca de vídeos Oracle Procurement 26C](https://docs.oracle.com/en/cloud/saas/procurement/26c/videos.html).
 
-No painel **Advanced** é possível configurar imagem de fundo e, conforme o tipo, rótulos das ações. Os arquivos mostram exemplos visuais de cada tarefa. Os relatórios e vídeos devem ser validados na instância em que serão utilizados.
+No painel **Advanced** é possível configurar imagem de fundo e, conforme o tipo, rótulos das ações. Cada tarefa pode ser revisada individualmente na pré-visualização. Os relatórios e vídeos devem ser validados na instância em que serão utilizados.
 
 ### 3. Testar e inserir no Redwood
 
 1. Utilize **Preview** no Journey para conferir cada tarefa.
-2. Anote o **Code** (no exemplo, `REQ_MANUAL`).
+2. Anote o **Code** (no exemplo, `GUIA_REQUISICOES`).
 3. Abra a página Redwood de **Self Service Procurement**.
 4. No menu **Settings and Actions**, selecione **Edit Page in Visual Builder Studio**.
 5. No projeto/extensão, utilize **Express mode**.
@@ -134,16 +134,16 @@ Na tarefa **Setup and Maintenance > Manage Administrator Profile Values**, procu
 ORA_ASE_SAS_INTEGRATION_ENABLED = Yes (Site)
 ```
 
-O material de segurança Oracle orienta, em seguida, executar nesta ordem em **Tools > Scheduled Processes**:
+O procedimento de configuração de segurança orienta, em seguida, executar nesta ordem em **Tools > Scheduled Processes**:
 
 1. `Import Resource Application Security Data`
 2. `Import User and Role Application Security Data`
 
-O acesso administrativo pode ser concedido por uma função administrativa adequada ou por uma **custom role** com privilégio restrito ao pilar Procurement. O exemplo do documento utiliza:
+O acesso administrativo pode ser concedido por uma função administrativa adequada ou por uma **custom role** com privilégio restrito ao pilar Procurement. Exemplo genérico de função personalizada (o nome e o código abaixo são ilustrativos):
 
 ```text
-Role Name: COE AI Agent for PRC
-Role Code: COE_AI_AGENT_PRC
+Role Name: Custom Procurement AI Administrator
+Role Code: CUSTOM_PRC_AI_ADMIN
 Category: Common - Job Roles
 ```
 
@@ -155,14 +155,14 @@ Habilite **Enable Permission Groups** e configure as duties indicadas no materia
 | Roles and Privileges (variante documentada) | `ORA_PO_PRC_AI_AGENT_MANAGEMENT_DUTY_HCM` |
 | Roles and Permission Groups | `ORA_DR_FAI_GENERATIVE_AI_AGENT_PRC_ADMINISTRATOR_DUTY` |
 
-**Atenção:** a variante terminada em `_HCM` consta no documento fornecido; confirme sua existência, aplicabilidade e necessidade na versão do ambiente antes de adicioná-la. Evite atribuir privilégios de outros pilares sem necessidade.
+**Atenção:** a variante terminada em `_HCM` aparece no roteiro de configuração; confirme sua existência, aplicabilidade e necessidade na versão do ambiente antes de adicioná-la. Evite atribuir privilégios de outros pilares sem necessidade.
 
-Para o usuário final, o segundo documento descreve a opção `ORA_HCM_VBCS_PWA_ENABLED = Y` e uma função `COE_AI_AGENT_EXPLORER` com:
+Para o usuário final, o procedimento de segurança descreve a opção `ORA_HCM_VBCS_PWA_ENABLED = Y` e uma função personalizada de acesso ao chat (nome ilustrativo: `CUSTOM_AI_CHAT_USER`) com:
 
 - `HRC_ACCESS_AI_AGENT_CHAT_PRIV` — **Access Intelligent Agent Chat**, em **Function Security Policies**.
 - `ORA_DR_FAI_GENERATIVE_AI_AGENT_RUNTIME_DUTY` — em **Roles and Permission Groups**.
 
-Essas configurações são exemplos dos materiais anexados, não uma matriz universal de segurança. Valide os pré-requisitos exigidos pela release, o acesso aos dados e as permissões mínimas para cada perfil. Teste com um usuário sem funções administrativas.
+Essas configurações representam um exemplo técnico, não uma matriz universal de segurança. Valide os pré-requisitos exigidos pela release, o acesso aos dados e as permissões mínimas para cada perfil. Teste com um usuário sem funções administrativas.
 
 ### 2. Copiar e publicar o agente
 
@@ -175,16 +175,16 @@ Essas configurações são exemplos dos materiais anexados, não uma matriz univ
 Perguntas exemplificadas no documento:
 
 ```text
-What is the status of purchase requisition REQ00022782?
-Who is the pending approver for requisition REQ00022782?
+What is the status of purchase requisition REQ_EXEMPLO?
+Who is the pending approver for requisition REQ_EXEMPLO?
 How many requisitions are pending approval under my account?
 ```
 
-Os números são fictícios para ilustração. A resposta depende das ferramentas configuradas, dos registros existentes e da segurança.
+Os identificadores são apenas placeholders ilustrativos. A resposta depende das ferramentas configuradas, dos registros existentes e da segurança.
 
 ### 3. Ativar a integração do agente com Journey
 
-No **Manage Administrator Profile Values**, o documento orienta habilitar:
+No **Manage Administrator Profile Values**, a configuração prevê habilitar:
 
 ```text
 ORA_PER_AGENT_TASK_TYPE_GUIDED_JOURNEYS_ENABLED = Y
@@ -206,7 +206,7 @@ O processo de associação é o mesmo do primeiro cenário: anote o **Code** do 
 
 ### 5. Acesso por ícone de chat (alternativa)
 
-O documento *AI Agent Requisition Redwood* também descreve criar um atalho personalizado por um **sandbox Structure**, com **Create Page Entry**. O exemplo inclui:
+Um procedimento alternativo também descreve criar um atalho personalizado por um **sandbox Structure**, com **Create Page Entry**. O exemplo inclui:
 
 ```text
 Name: AI Chat
@@ -235,4 +235,4 @@ Essa é **uma alternativa de navegação**, e não um segundo Journey. A configu
 - [Oracle — Extending Redwood Applications for HCM and SCM Using Visual Builder Studio (PDF)](https://docs.oracle.com/cd/G55130_01/trans/G34703-05/extending-redwood-applications-for-hcm-and-scm-using-visual-builder-studio.pdf)
 - [Oracle — Adoção de Redwood em SCM e Procurement](https://docs.oracle.com/en/cloud/saas/readiness/redwood-adoption/raoac/rw-scm.html)
 
-**Base deste artigo:** documentos fornecidos *Create Journey - RSSP.docx*, *AI_Agent_Requisition_Redwood.docx* e *Security and Governance.pdf*; procedimentos complementados com referências oficiais da Oracle. Valores de código e nomes de roles dos exemplos devem ser verificados na instância de destino.
+**Referências:** documentação pública da Oracle listada acima. Caminhos de catálogo, nomes de funções personalizadas, códigos de Journey e identificadores de requisição são exemplos genéricos; substitua-os pelos valores adequados ao ambiente autorizado.
