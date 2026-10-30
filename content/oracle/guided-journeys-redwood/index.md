@@ -5,6 +5,7 @@ description: "Guia prático de configuração de Guided Journeys para documentos
 categories: ["TI", "Oracle", "Cloud"]
 tags: ["Oracle Fusion Cloud", "Redwood", "Guided Journeys", "Procurement", "AI Agent Studio", "Visual Builder Studio"]
 draft: false
+featured: true
 type: post
 url: /guided-journeys-redwood/
 toc: true
