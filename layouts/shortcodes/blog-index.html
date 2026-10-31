@@ -57,7 +57,7 @@
 {{- $posts = $posts.ByDate.Reverse -}}
 {{- $featured := where $posts "Params.featured" true -}}
 {{- if eq (len $featured) 0 -}}
-  {{- $featured = first 9 $posts -}}
+  {{- $featured = first 18 $posts -}}
 {{- end -}}
 {{- $groups := $posts.GroupByDate "2006-01" -}}
 {{- $currentMonthID := "" -}}
@@ -67,7 +67,7 @@
   {{- $currentMonthID = $firstPage.Date.Format "2006-01" -}}
 {{- end -}}
 
-<div class="bsl-home" data-bsl-blog data-view="list">
+<div class="bsl-home" data-bsl-blog data-view="grid">
   <div class="bsl-page-grid">
     <main class="bsl-main-column">
       <div class="bsl-home-top">
@@ -87,8 +87,8 @@
             <button type="button" class="bsl-filter-button" data-bsl-filter="seguranca" aria-pressed="false">{{ $securityLabel }}</button>
           </div>
         <div class="bsl-view-toggle" role="group" aria-label="{{ $viewAria }}">
-          <button type="button" class="bsl-view-button is-active" data-bsl-view="list" aria-pressed="true">☰ {{ $listLabel }}</button>
-          <button type="button" class="bsl-view-button" data-bsl-view="grid" aria-pressed="false">⌘ {{ $gridLabel }}</button>
+          <button type="button" class="bsl-view-button" data-bsl-view="list" aria-pressed="false">☰ {{ $listLabel }}</button>
+          <button type="button" class="bsl-view-button is-active" data-bsl-view="grid" aria-pressed="true">⌘ {{ $gridLabel }}</button>
         </div>
         </div>
       </div>
