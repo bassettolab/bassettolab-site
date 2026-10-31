@@ -1721,7 +1721,7 @@ html[data-bsl-palette="akita"] .bsl-home .bsl-card p { -webkit-line-clamp: 5; }
         function featuredColumns() {
           // A grade CSS já resolveu quantas colunas cabem neste monitor/zoom.
           var template = window.getComputedStyle(grid).gridTemplateColumns;
-          return Math.max(1, template.split(/\\s+/).filter(Boolean).length);
+          return Math.max(1, template.trim().split(/\s+/).filter(Boolean).length);
         }
         function drawFeatured() {
           var perPage = featuredColumns();
