@@ -57,7 +57,7 @@
 {{- $posts = $posts.ByDate.Reverse -}}
 {{- $featured := where $posts "Params.featured" true -}}
 {{- if eq (len $featured) 0 -}}
-  {{- $featured = first 3 $posts -}}
+  {{- $featured = first 9 $posts -}}
 {{- end -}}
 {{- $groups := $posts.GroupByDate "2006-01" -}}
 {{- $currentMonthID := "" -}}
@@ -97,9 +97,9 @@
       <section class="bsl-featured">
         <div class="bsl-featured-header">
           <h2>{{ $featuredLabel }}</h2>
-          <button type="button" class="bsl-featured-toggle" data-bsl-featured-toggle aria-expanded="true" data-bsl-hide="{{ $hideLabel }}" data-bsl-show="{{ $showLabel }}">{{ $hideLabel }}</button>
+          <div class="bsl-featured-navigation"><span data-bsl-featured-position aria-live="polite"></span><button type="button" data-bsl-featured-prev aria-label="Anterior">‹</button><button type="button" data-bsl-featured-next aria-label="Próximo">›</button></div>
         </div>
-        <div class="bsl-featured-body" data-bsl-featured-body>
+        <div class="bsl-featured-body" data-bsl-featured-body data-bsl-featured-carousel>
           <div class="bsl-list-view">
             <ul class="bsl-post-list">
               {{- range $featured }}
