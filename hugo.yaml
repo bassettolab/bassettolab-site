@@ -96,3 +96,7 @@ params:
     base: "https://github.com/bassettolab/bassettolab-site/edit/main/content"
 
   description: "BassettoLab — base pessoal de conhecimento sobre Oracle, tecnologia, produtividade, livros, ideias e experimentos."
+
+  # Configure o endpoint após implantar analytics/app.py no servidor.
+  analytics:
+    endpoint: ""
