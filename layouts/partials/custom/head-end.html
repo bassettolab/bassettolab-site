@@ -1722,3 +1722,23 @@
     });
   });
 </script>
+
+{{- with site.Params.analytics.endpoint }}
+<script>
+(function () {
+  var endpoint = {{ . | jsonify | safeJS }};
+  if (!endpoint || navigator.doNotTrack === "1" || window.doNotTrack === "1") return;
+  function record() {
+    var path = location.pathname;
+    if (/^\/(admin|api)(\/|$)/.test(path)) return;
+    fetch(endpoint.replace(/\/$/, "") + "/api/view", {
+      method: "POST", mode: "cors", credentials: "omit", keepalive: true,
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({path:path,title:document.title})
+    }).catch(function(){});
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",record,{once:true});
+  else record();
+})();
+</script>
+{{- end }}
