@@ -37,36 +37,40 @@ markup:
 
 menu:
   main:
-    - name: Tema
-      weight: 0
-      params:
-        type: theme-toggle
+    - name: Blog
+      pageRef: /
+      weight: 1
     - name: Sobre
       pageRef: /about
-      weight: 1
+      weight: 2
     - name: Arquivo
       pageRef: /archives
-      weight: 2
-    - name: GitHub
       weight: 3
+    - name: Oracle
+      pageRef: /oracle
+      weight: 4
+    - name: Livros
+      pageRef: /livros
+      weight: 5
+    - name: GitHub
+      weight: 6
       url: "https://github.com/bassettolab/bassettolab-site"
       params:
         icon: github
     - name: Buscar
-      weight: 4
+      weight: 7
       params:
         type: search
-    - name: RSS
-      weight: 5
-      url: "/index.xml"
-      params:
-        icon: rss
     - name: Idioma
-      weight: 6
+      weight: 8
       params:
         type: language-switch
+    - name: Tema
+      weight: 9
+      params:
+        type: theme-toggle
     - name: Paleta
-      weight: 7
+      weight: 10
       params:
         type: palette-switch
 
